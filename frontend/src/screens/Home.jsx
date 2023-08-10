@@ -150,10 +150,7 @@ function HomeScreen() {
                 reviews, and ensure your furry friend gets the attention they
                 deserve.
               </p>
-              <Link
-                to='/register'
-                className='btn btn-primary mb-5 w-50 mx-auto'
-              >
+              <Link to='/patrons' className='btn btn-primary mb-5 w-50 mx-auto'>
                 Try It Out
               </Link>
             </Col>

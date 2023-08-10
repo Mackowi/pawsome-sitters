@@ -15,6 +15,7 @@ import About from './screens/About'
 import Login from './screens/Login'
 import Register from './screens/Register'
 import Help from './screens/Help'
+import Patrons from './screens/Patrons'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/help' element={<Help />} />
+      <Route path='/patrons' element={<Patrons />} />
     </Route>
   )
 )

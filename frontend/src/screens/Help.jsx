@@ -5,7 +5,7 @@ function Help() {
   return (
     <Container>
       <Row className='text-center py-5'>
-        <h2 className='mb-4'>Contact Information</h2>
+        <h2 className='mb-4 text-secondary fw-bold'>Contact Information</h2>
         <Col md={6} className='fw-bold text-primary fs-5'>
           <p>
             <i>
