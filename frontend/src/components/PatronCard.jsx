@@ -18,10 +18,15 @@ function PatronCard({ patron }) {
             </Card.Title>
           </Col>
           <Col>
-            <Card.Text className='mb-1'>{patron.description}</Card.Text>
+            <Card.Text className='mb-1 text-primary'>
+              "{patron.description}"
+            </Card.Text>
             <Card.Text className='mb-1'>{patron.location}</Card.Text>
             <Card.Text as='div' className='mb-1'>
-              <Rating value={patron.rating}></Rating>
+              <Rating
+                value={patron.rating}
+                text={`${patron.ratingCount} reviews`}
+              ></Rating>
             </Card.Text>
             <Button variant='primary'>Check</Button>
           </Col>

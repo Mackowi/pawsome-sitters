@@ -48,7 +48,7 @@ function Rating({ value, text }) {
           <FaRegStar fill='#CF6320' />
         )}
       </span>
-      <span className='rating-text'>{text && text}</span>
+      <span className='d-block'>{text && text}</span>
     </div>
   )
 }
