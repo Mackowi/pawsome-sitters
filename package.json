@@ -1,0 +1,11 @@
+{
+  "name": "pawsome-sitters",
+  "version": "1.0.0",
+  "description": "Pet walking and caring app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maciek Dzierzenga",
+  "license": "MIT"
+}
