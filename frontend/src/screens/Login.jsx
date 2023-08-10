@@ -10,7 +10,7 @@ function Login() {
   return (
     <Container>
       <Row className='py-5'>
-        <Col md={6} className='d-none d-md-block'>
+        <Col md={6} className='d-none d-md-flex'>
           <img src={Img} alt='test' className='img-fluid rounded-4' />
         </Col>
         <Col
@@ -30,7 +30,7 @@ function Login() {
                 }}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId='password'>
+            <Form.Group controlId='password' className='mt-2'>
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type='password'
@@ -41,6 +41,12 @@ function Login() {
                 }}
               ></Form.Control>
             </Form.Group>
+            <div className='mt-2'>
+              <Link to='/forgotpassword' className='text-primary'>
+                Forgot Password?
+              </Link>
+            </div>
+
             <div className='d-grid mt-4 mt-md-3'>
               <Button
                 type='submit'

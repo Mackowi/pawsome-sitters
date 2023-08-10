@@ -2,12 +2,9 @@
   font-family: "HappyChicken";
   src: url("./../fonts/HappyChicken.woff2") format("woff2"), url("./../fonts/HappyChicken.woff") format("woff");
 }
-
-
 html, body, #root {
-  min-height: 100vh;
+  height: 100%;
 }
-
 
 body {
   background-color: #F7F9F9;
