@@ -1,0 +1,15 @@
+[
+  {
+    "petOwner": "5d713a66ec8f2b88b8f830b8",
+    "type": "dog",
+    "name": "Leszek",
+    "age": 2,
+    "info": "Incredibly stupid one"  
+  },  {
+    "petOwner": "5d713a66ec8f2b88b8f830b8",
+    "type": "dog",
+    "name": "Renatka",
+    "age": 1,
+    "info": "Incredibly cute one"  
+  }
+]
