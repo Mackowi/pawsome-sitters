@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import bcrypt from 'bcryptjs'
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -15,6 +16,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
       minlength: [6, 'Password must be at least 6 characters'],
+      select: false,
     },
     isAdmin: {
       type: Boolean,
@@ -33,6 +35,18 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const User = mongoose.model('User', userSchema)
+UserSchema.pre('save', async function () {
+  if (!this.isModified('password')) {
+    next()
+  }
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+})
+
+UserSchema.methods.matchPassword = async function (receivedPassword) {
+  return await bcrypt.compare(receivedPassword, this.password)
+}
+
+const User = mongoose.model('User', UserSchema)
 
 export default User
