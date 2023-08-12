@@ -27,10 +27,9 @@ export const ReviewSchema = new mongoose.Schema(
 
 // static method to get avg rating
 ReviewSchema.statics.getAverageRating = async function (patrondId) {
-  console.log('kurwa mac')
   const obj = await this.aggregate([
     {
-      // bootcamp is the one in the model(which is just the id), the bootcampId is the one we provide to the method
+      // patron is the one in the model(which is just the id), the patronId is the one we provide to the method
       $match: { patron: patrondId },
     },
     {
@@ -41,7 +40,7 @@ ReviewSchema.statics.getAverageRating = async function (patrondId) {
     },
   ])
   try {
-    await this.model('Patron').findByIdAndUpdate(patrondId, {
+    const patron = await this.model('Patron').findByIdAndUpdate(patrondId, {
       avgRating: obj[0].avgRating,
     })
   } catch (error) {

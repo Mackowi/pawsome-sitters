@@ -65,11 +65,32 @@ const PatronSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
+        required: true,
       },
     ],
   },
   { timestamps: true }
 )
+
+PatronSchema.statics.countRatings = async function (patron) {
+  try {
+    const length = patron.reviews.length
+    patron.ratingCount = length
+    await patron.save()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// call get average cost after save
+PatronSchema.post('save', function () {
+  this.constructor.countRatings(this)
+})
+
+// call get average cost after removal
+PatronSchema.pre('removed', function () {
+  this.constructor.countRatings(this)
+})
 
 const Patron = mongoose.model('Patron', PatronSchema)
 

@@ -24,7 +24,7 @@ function PatronCard({ patron }) {
             <Card.Text className='mb-1'>{patron.location}</Card.Text>
             <Card.Text as='div' className='mb-1'>
               <Rating
-                value={patron.rating}
+                value={patron.avgRating}
                 text={`${patron.ratingCount} reviews`}
               ></Rating>
             </Card.Text>

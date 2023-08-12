@@ -1,9 +1,18 @@
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import PatronCard from '../components/PatronCard'
-import patrons from '../patrons'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 function Patrons() {
-  const size = 5
+  const [patrons, setPatrons] = useState([])
+
+  useEffect(() => {
+    const fetchPatrons = async () => {
+      const { data } = await axios.get('/api/patrons')
+      setPatrons(data)
+    }
+    fetchPatrons()
+  }, [])
 
   return (
     <Container>
@@ -11,7 +20,7 @@ function Patrons() {
         <Col md={6}>
           <h3 className='text-secondary fw-bold mb-5 pt-5'>Our Patrons</h3>
           <ul className='list-group list-unstyled'>
-            {patrons.slice(0, size).map((patron) => (
+            {patrons.map((patron) => (
               <li key={patron._id}>
                 <PatronCard patron={patron} />
               </li>
