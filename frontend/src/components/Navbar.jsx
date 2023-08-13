@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import Container from 'react-bootstrap/Container'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { ReactComponent as Logo } from '../assets/logo.svg'
 import { FaSignInAlt, FaInfoCircle, FaIdCard } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
 
 function NavBar() {
   const [navOpacity, setNavOpacity] = useState(false)
   const [isMouseOver, setIsMouseOver] = useState(false)
+
+  const { userInfo } = useSelector((state) => state.user)
 
   useEffect(() => {
     function handleNavOpacity() {
@@ -74,12 +75,23 @@ function NavBar() {
                 Help
               </Nav.Link>
             </LinkContainer>
-            <LinkContainer to='/login'>
-              <Nav.Link className='fw-bold'>
-                <FaSignInAlt className='mx-2' />
-                Sign In
-              </Nav.Link>
-            </LinkContainer>
+            {userInfo ? (
+              <NavDropdown title={userInfo.email} id='email'>
+                <LinkContainer to='/profile'>
+                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to='/logout'>
+                  <NavDropdown.Item>Logout</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
+            ) : (
+              <LinkContainer to='/login'>
+                <Nav.Link className='fw-bold'>
+                  <FaSignInAlt className='mx-2' />
+                  Sign In
+                </Nav.Link>
+              </LinkContainer>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

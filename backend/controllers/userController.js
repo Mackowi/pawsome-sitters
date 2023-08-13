@@ -26,7 +26,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     generateToken(res, user._id)
     res.status(201).json({
-      user,
+      _id: user._id,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      role: user.role,
+      roleConfigured: user.roleConfigured,
     })
   } else {
     res.status(400)
@@ -50,9 +54,13 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid credentials 123')
   }
   generateToken(res, user._id)
-  res
-    .status(200)
-    .json({ success: `User with email ${user.email} logged successfully` })
+  res.status(200).json({
+    _id: user._id,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    role: user.role,
+    roleConfigured: user.roleConfigured,
+  })
 })
 
 // desc: Logout user

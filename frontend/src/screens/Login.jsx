@@ -1,10 +1,43 @@
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../components/Loader'
+import { useLoginMutation } from '../slices/usersApiSlice'
+import { setCredentials } from '../slices/userSlice'
+import { toast } from 'react-toastify'
 import Img from '../assets/images/about3.jpg'
 
 function Login() {
-  const submitHandler = () => {
-    console.log('Submit Handler ')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [login, { isLoading }] = useLoginMutation()
+
+  const { userInfo } = useSelector((state) => state.user)
+
+  const { search } = useLocation()
+  const sp = new URLSearchParams(search)
+  const redirect = sp.get('redirect') || '/'
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect)
+    }
+  }, [navigate, redirect, userInfo])
+
+  const submitHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await login({ email, password }).unwrap()
+      dispatch(setCredentials({ ...res }))
+      navigate(redirect)
+    } catch (error) {
+      toast.error(error?.data?.message || error.error)
+    }
   }
 
   return (
@@ -24,9 +57,9 @@ function Login() {
               <Form.Control
                 type='email'
                 placeholder='Enter email'
-                value=''
+                value={email}
                 onChange={(e) => {
-                  console.log(e.target.value)
+                  setEmail(e.target.value)
                 }}
               ></Form.Control>
             </Form.Group>
@@ -35,9 +68,9 @@ function Login() {
               <Form.Control
                 type='password'
                 placeholder='Enter password'
-                value=''
+                value={password}
                 onChange={(e) => {
-                  console.log(e.target.value)
+                  setPassword(e.target.value)
                 }}
               ></Form.Control>
             </Form.Group>
@@ -57,14 +90,17 @@ function Login() {
               </Button>
             </div>
           </Form>
+          {isLoading && <Loader />}
         </Col>
       </Row>
       <Row>
         <Col className='text-center'>
           <p>
             Are you not a user yet?
-            <Link to='/register' style={{ color: '#2A4344' }}>
-              {' '}
+            <Link
+              to={redirect ? `/register?redirect=${redirect}` : '/register'}
+              style={{ color: '#2A4344' }}
+            >
               Register here
             </Link>
           </p>
