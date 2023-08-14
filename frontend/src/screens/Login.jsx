@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
@@ -19,9 +19,10 @@ function Login() {
 
   const { userInfo } = useSelector((state) => state.user)
 
-  const { search } = useLocation()
-  const sp = new URLSearchParams(search)
-  const redirect = sp.get('redirect') || '/'
+  // const { search } = useLocation()
+  // const sp = new URLSearchParams(search)
+  // const redirect = sp.get('redirect') || '/'
+  const redirect = '/dashboard'
 
   useEffect(() => {
     if (userInfo) {
@@ -36,7 +37,7 @@ function Login() {
       dispatch(setCredentials({ ...res }))
       navigate(redirect)
     } catch (error) {
-      toast.error(error?.data?.message || error.error)
+      toast.error(error?.data?.message || error?.error)
     }
   }
 
@@ -97,10 +98,7 @@ function Login() {
         <Col className='text-center'>
           <p>
             Are you not a user yet?
-            <Link
-              to={redirect ? `/register?redirect=${redirect}` : '/register'}
-              style={{ color: '#2A4344' }}
-            >
+            <Link to='/register' style={{ color: '#2A4344' }}>
               Register here
             </Link>
           </p>

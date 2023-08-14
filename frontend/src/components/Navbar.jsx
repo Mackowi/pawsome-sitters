@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { ReactComponent as Logo } from '../assets/logo.svg'
 import { FaSignInAlt, FaInfoCircle, FaIdCard } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLogoutMutation } from '../slices/usersApiSlice'
+import { logout } from '../slices/userSlice'
+import { toast } from 'react-toastify'
 
 function NavBar() {
   const [navOpacity, setNavOpacity] = useState(false)
@@ -11,7 +15,14 @@ function NavBar() {
 
   const { userInfo } = useSelector((state) => state.user)
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   useEffect(() => {
+    if (userInfo) {
+      // navigate('/dashboard')
+    }
+
     function handleNavOpacity() {
       if (window.scrollY > 50) {
         setNavOpacity(true)
@@ -45,6 +56,17 @@ function NavBar() {
   } else if (navOpacity && isMouseOver) {
     navbarClasses.filter((className) => className !== 'nav-opacity')
   }
+  const [logoutBackend, { isLoading }] = useLogoutMutation()
+
+  const logoutHandler = async () => {
+    try {
+      await logoutBackend().unwrap()
+      dispatch(logout())
+      navigate('/')
+    } catch (error) {
+      toast.error(error?.data?.message || error.error)
+    }
+  }
 
   return (
     <Navbar
@@ -76,13 +98,13 @@ function NavBar() {
               </Nav.Link>
             </LinkContainer>
             {userInfo ? (
-              <NavDropdown title={userInfo.email} id='email'>
+              <NavDropdown title={userInfo.name} id='name' className='fw-bold'>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>
-                <LinkContainer to='/logout'>
-                  <NavDropdown.Item>Logout</NavDropdown.Item>
-                </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>
+                  Logout
+                </NavDropdown.Item>
               </NavDropdown>
             ) : (
               <LinkContainer to='/login'>

@@ -18,6 +18,8 @@ import Login from './screens/Login'
 import Register from './screens/Register'
 import Help from './screens/Help'
 import Patrons from './screens/Patrons'
+import Profile from './screens/Profile'
+import Dashboard from './screens/Dashboard'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
       <Route path='/register' element={<Register />} />
       <Route path='/help' element={<Help />} />
       <Route path='/patrons' element={<Patrons />} />
+      <Route path='/profile' element={<Profile />} />
+      <Route path='/Dashboard' element={<Dashboard />} />
     </Route>
   )
 )

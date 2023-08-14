@@ -6,8 +6,8 @@ import generateToken from '../utils/generateToken.js'
 // route: POST /api/users
 // access: public
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body
-  if (!email || !password) {
+  const { name, email, password } = req.body
+  if (!name || !email || !password) {
     res.status(400)
     throw new Error('Please provide email and password')
   }
@@ -19,6 +19,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
+    name,
     email,
     password,
   })
@@ -27,6 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
     generateToken(res, user._id)
     res.status(201).json({
       _id: user._id,
+      name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       role: user.role,
@@ -56,6 +58,7 @@ const loginUser = asyncHandler(async (req, res) => {
   generateToken(res, user._id)
   res.status(200).json({
     _id: user._id,
+    name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
     role: user.role,
@@ -80,7 +83,6 @@ const logoutUser = (req, res) => {
 // route: POST /api/users/getme
 // access: public
 const getMe = (req, res) => {
-  console.log(req.user)
   res.send(req.user)
 }
 
