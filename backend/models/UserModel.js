@@ -32,15 +32,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['patron', 'petOwner'],
     },
-    roleConfigured: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 )
 
-UserSchema.pre('save', async function () {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next()
   }

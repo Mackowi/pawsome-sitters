@@ -67,9 +67,9 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 // desc: Logout user
-// route: POST /api/users/register
+// route: POST /api/users/logout
 // access: public
-const logoutUser = (req, res) => {
+const logoutUser = asyncHandler(async (req, res) => {
   res.cookie('jwt', '', {
     httpOnly: true,
     expires: new Date(0),
@@ -77,7 +77,36 @@ const logoutUser = (req, res) => {
   res.status(200).json({
     message: 'Logged out successfully',
   })
-}
+})
+
+// desc: Update user
+// route: PUT /api/users/update
+// desc: private
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+
+  user.name = req.body.name || user.name
+  user.email = req.body.email || user.email
+  user.role = req.body.role || user.role
+
+  if (req.body.password) {
+    user.password = req.body.password
+  }
+
+  const updatedUser = await user.save()
+
+  res.status(200).json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    role: updatedUser.role,
+    isAdmin: updatedUser.isAdmin,
+  })
+})
 
 // desc: get request user
 // route: POST /api/users/getme
@@ -86,4 +115,4 @@ const getMe = (req, res) => {
   res.send(req.user)
 }
 
-export { registerUser, loginUser, logoutUser, getMe }
+export { registerUser, loginUser, logoutUser, updateUser, getMe }

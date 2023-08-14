@@ -95,6 +95,15 @@ header {
   .carousel-item > * > img {
     height: 500px;
   }
+  .choice-card {
+    width: 50%;
+  } 
+  .choice-button {
+    width: 25%;
+  }
+  .choice-button > svg {
+    font-size: 30px
+  }
 }
 
 @media (min-width:992px) {
