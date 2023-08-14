@@ -21,8 +21,25 @@ const PatronSchema = new mongoose.Schema(
       enum: ['male', 'female'],
     },
     address: {
-      type: String,
-      required: [true, 'Please add an address'],
+      street: {
+        type: String,
+        required: [true, 'Please fill a street name'],
+      },
+      houseNr: {
+        type: String,
+        required: [true, 'Please fill a house Nr'],
+      },
+      addition: {
+        type: String,
+      },
+      city: {
+        type: String,
+        required: [true, 'Please fill a city'],
+      },
+      postcode: {
+        type: String,
+        required: [true, 'Please fill a postcode'],
+      },
     },
     phone: {
       type: String,

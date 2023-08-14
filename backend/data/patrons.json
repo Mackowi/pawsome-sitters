@@ -5,7 +5,12 @@
     "firstName": "John",
     "lastName": "Doe",
     "gender": "male",
-    "address": "Zielona 8, Nowy Poncz, 33-300, Polska",
+    "address": {
+      "street": "Zielona",
+      "houseNr": "8",
+      "city": "Nowy Poncz",
+      "postcode": "33-333"
+    },
     "phone": "0700880994",
     "image": "/images/pic1.jpg",
     "description": "Super handsome dude with love for furries",
@@ -20,7 +25,12 @@
     "firstName": "Diego",
     "lastName": "Doe",
     "gender": "male",
-    "address": "Super Street 69, Amsterdam, 1000XX, Netherlands",
+    "address": {
+      "street": "Example street",
+      "houseNr": "123",
+      "city": "Amsterdam",
+      "postcode": "1111XX"
+    },
     "phone": "0700880994",
     "image": "/images/pic2.jpg",
     "description": "I love dogs a lot",

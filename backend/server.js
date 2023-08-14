@@ -5,6 +5,7 @@ import connectDB from './db.js'
 import cookieParser from 'cookie-parser'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import userRoutes from './routes/userRoutes.js'
+import patronRoutes from './routes/patronRoutes.js'
 import Patron from './models/PatronModel.js'
 
 dotenv.config()
@@ -20,11 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.use('/api/users', userRoutes)
-
-app.get('/api/patrons', async (req, res) => {
-  const patrons = await Patron.find({})
-  res.status(200).json(patrons)
-})
+app.use('/api/patrons', patronRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
