@@ -46,7 +46,8 @@ const getPatrons = asyncHandler(async (req, res) => {
 // route: GET /api/patrons/:id
 // access: Private
 const getPatronById = asyncHandler(async (req, res) => {
-  const patron = await Patron.findById(req.params.id)
+  const patronId = req.params.id
+  const patron = await Patron.findById(patronId)
   if (!patron) {
     res.status(404)
     throw new Error('Not found any patrons')
@@ -74,17 +75,17 @@ const createPatron = asyncHandler(async (req, res) => {
 // route: POST /api/patrons/:id
 // access: Private
 const updatePatron = asyncHandler(async (req, res) => {
-  const patron = await Patron.findById(req.params.id)
+  const patronId = req.params.id
+  const patron = await Patron.findById(patronId)
   if (!patron) {
     res.status(400)
-    throw new Error(`No patron with the id: ${req.params.id}`)
+    throw new Error(`No patron with the id: ${patronId}`)
   }
 
-  const updatedPatron = await Patron.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true, runValidators: true }
-  )
+  const updatedPatron = await Patron.findByIdAndUpdate(patronId, req.body, {
+    new: true,
+    runValidators: true,
+  })
   res.status(200).json(updatedPatron)
 })
 

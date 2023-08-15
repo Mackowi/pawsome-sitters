@@ -7,12 +7,11 @@ const notFound = (req, res, next) => {
   next(error)
 }
 
-
 // provides non-html response, allows us to overwrite 200 error status code
 // coming from mongodb and making the answer dependent on environment
 const errorHandler = (err, req, res, next) => {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode
-  let message = err.messsage
+  let message = err.message
 
   res.status(statusCode).json({
     message: message,

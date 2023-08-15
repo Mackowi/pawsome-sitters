@@ -6,7 +6,7 @@ import { useUpdateMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/userSlice'
 import { toast } from 'react-toastify'
 
-function ProfileChoiceCard() {
+function RoleCoserCard() {
   const dispatch = useDispatch()
 
   const [update, { isLoading }] = useUpdateMutation()
@@ -51,4 +51,4 @@ function ProfileChoiceCard() {
     </>
   )
 }
-export default ProfileChoiceCard
+export default RoleCoserCard

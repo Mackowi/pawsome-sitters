@@ -1,33 +1,38 @@
 import { Container, Row, Col, Card, Button } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import ProfileChoiceCard from '../components/ProfileChoiceCard'
-import ProfileCreateForm from '../components/ProfileCreateForm'
-import patronFormPic from '../assets/images/patronFormPic.png'
+import { useNavigate } from 'react-router-dom'
+import RoleCoserCard from '../components/RoleChoserCard'
+import CreatePatronProfile from '../components/CreatePatronProfile'
 
 function Profile() {
   const { userInfo } = useSelector((state) => state.user)
+  const { patronInfo } = useSelector((state) => state.patron)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (patronInfo) {
+      navigate('/dashboard')
+    }
+  }, [navigate, patronInfo])
 
   return (
     <Container>
       {!userInfo.role ? (
-        <ProfileChoiceCard></ProfileChoiceCard>
+        <RoleCoserCard></RoleCoserCard>
       ) : userInfo.role === 'petOwner' ? (
         <Row className='my-5'>
-          <Col lg={4} className='d-flex flex-column justify-content-between'>
-            <h3>Please fill the form</h3>
-            <img
-              src={patronFormPic}
-              alt='dogcat'
-              className='img-fluid d-none d-lg-flex me-3'
-            />
-            <div></div>
-          </Col>
-          <Col lg={8}>
-            <ProfileCreateForm></ProfileCreateForm>
+          <Col>
+            <>'PetOwner profile'</>
           </Col>
         </Row>
       ) : (
-        <>'Patron profile'</>
+        <Row className='my-5'>
+          <Col>
+            <CreatePatronProfile></CreatePatronProfile>
+          </Col>
+        </Row>
       )}
     </Container>
   )
