@@ -3,10 +3,10 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
 import Loader from './Loader'
 import { toast } from 'react-toastify'
-import { useCreatePatronMutation } from '../slices/patronsApiSlice'
+import { useCreatePetOwnerMutation } from '../slices/petOwnersApiSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setPatronInfo } from '../slices/patronSlice'
+import { setPetOwnerInfo } from '../slices/petOwnerSlice'
 import { useFormik } from 'formik'
 import { petOwnerSchema } from '../validationSchemas'
 
@@ -14,7 +14,7 @@ function CreatePetOwnerProfile() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [createPatron, { isLoading }] = useCreatePatronMutation()
+  const [createPetOwner, { isLoading }] = useCreatePetOwnerMutation()
 
   const submitHandler = async () => {
     try {
@@ -30,12 +30,10 @@ function CreatePetOwnerProfile() {
         },
         phone,
       }
-      console.log(petOwner)
-      console.log('submitHandler')
-      // await createPatron(patron).unwrap()
-      // dispatch(setPatronInfo(patron))
-      // toast.success('Patron profile created')
-      // navigate('/dashboard')
+      await createPetOwner(petOwner).unwrap()
+      dispatch(setPetOwnerInfo(petOwner))
+      toast.success('Pet owner profile created')
+      navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }

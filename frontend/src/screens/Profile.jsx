@@ -9,14 +9,16 @@ import CreatePetOwnerProfile from '../components/CreatePetOwnerProfile'
 function Profile() {
   const { userInfo } = useSelector((state) => state.user)
   const { patronInfo } = useSelector((state) => state.patron)
+  const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (patronInfo) {
+    if (patronInfo || petOwnerInfo) {
       navigate('/dashboard')
+    } else {
     }
-  }, [navigate, patronInfo])
+  }, [navigate, patronInfo, petOwnerInfo])
 
   return (
     <Container>

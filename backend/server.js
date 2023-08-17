@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import userRoutes from './routes/userRoutes.js'
 import patronRoutes from './routes/patronRoutes.js'
-import Patron from './models/PatronModel.js'
+import petOwnerRoutes from './routes/petOwnerRoutes.js'
 
 dotenv.config()
 
@@ -22,6 +22,7 @@ app.use(cookieParser())
 
 app.use('/api/users', userRoutes)
 app.use('/api/patrons', patronRoutes)
+app.use('/api/petowners', petOwnerRoutes)
 
 app.use(notFound)
 app.use(errorHandler)

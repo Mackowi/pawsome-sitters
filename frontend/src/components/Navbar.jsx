@@ -7,6 +7,8 @@ import { FaSignInAlt, FaInfoCircle, FaIdCard } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLogoutMutation } from '../slices/usersApiSlice'
 import { logout } from '../slices/userSlice'
+import { clearPetOwnerInfo } from '../slices/petOwnerSlice'
+import { clearPatronInfo } from '../slices/patronSlice'
 import { toast } from 'react-toastify'
 
 function NavBar() {
@@ -62,6 +64,8 @@ function NavBar() {
     try {
       await logoutBackend().unwrap()
       dispatch(logout())
+      dispatch(clearPatronInfo())
+      dispatch(clearPetOwnerInfo())
       navigate('/')
     } catch (error) {
       toast.error(error?.data?.message || error.error)
