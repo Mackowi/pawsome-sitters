@@ -7,40 +7,18 @@ import { useCreatePatronMutation } from '../slices/patronsApiSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { setPatronInfo } from '../slices/patronSlice'
-import * as formik from 'formik'
-import * as yup from 'yup'
+import { useFormik } from 'formik'
+import { petOwnerSchema } from '../validationSchemas'
 
 function CreatePetOwnerProfile() {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [street, setStreet] = useState('')
-  const [houseNr, setHouseNr] = useState(0)
-  const [addition, setAddition] = useState('')
-  const [city, setCity] = useState('')
-  const [postcode, setPostcode] = useState('')
-  const [phone, setPhone] = useState(0)
-  const [gender, setGender] = useState(null)
-  const [photo, setPhoto] = useState('')
-  const [description, setDescription] = useState(null)
-  const [pets, setPets] = useState([])
-  const [service, setService] = useState([])
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [createPatron, { isLoading }] = useCreatePatronMutation()
 
-  const { Formik } = formik
-
-  const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-  })
-
-  const submitHandler = async (e) => {
-    e.preventDefault()
+  const submitHandler = async () => {
     try {
-      const patron = {
+      const petOwner = {
         firstName,
         lastName,
         address: {
@@ -51,44 +29,51 @@ function CreatePetOwnerProfile() {
           postcode,
         },
         phone,
-        gender,
-        photo,
-        description,
-        pets,
-        service,
       }
-      await createPatron(patron).unwrap()
-      dispatch(setPatronInfo(patron))
-      toast.success('Patron profile created')
-      navigate('/dashboard')
+      console.log(petOwner)
+      console.log('submitHandler')
+      // await createPatron(patron).unwrap()
+      // dispatch(setPatronInfo(patron))
+      // toast.success('Patron profile created')
+      // navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }
   }
 
-  const handleGenderChange = (event) => {
-    if (gender === event.target.value) {
-      setGender(null)
-    } else {
-      setGender(event.target.value)
-    }
-  }
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      street: '',
+      houseNr: '',
+      addition: '',
+      city: '',
+      postcode: '',
+      phone: '',
+    },
+    validationSchema: petOwnerSchema,
+    onSubmit: submitHandler,
+  })
 
-  const handlePetsChange = (event) => {
-    if (pets.includes(event.target.value)) {
-      setPets(pets.filter((pet) => pet !== event.target.value))
-    } else {
-      setPets([...pets, event.target.value])
-    }
-  }
-
-  const handleServiceChange = (event) => {
-    if (service.includes(event.target.value)) {
-      setService(service.filter((service) => service !== event.target.value))
-    } else {
-      setService([...service, event.target.value])
-    }
-  }
+  const {
+    firstName,
+    lastName,
+    street,
+    houseNr,
+    addition,
+    city,
+    postcode,
+    phone,
+  } = values
 
   return (
     <Container>
@@ -97,7 +82,7 @@ function CreatePetOwnerProfile() {
         <FaRegAddressCard size={45} className='me-3' />
         Please fill your details
       </h3>
-      <Form noValidate onSubmit={submitHandler}>
+      <Form noValidate onSubmit={handleSubmit} autoComplete='off'>
         <Row>
           <Col md={6}>
             <Form.Group className='mb-3' controlId='firstName'>
@@ -105,9 +90,14 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter first name'
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
+                value={values.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.firstName && !!errors.firstName}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.firstName}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -116,8 +106,14 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter last name'
-                onChange={(e) => setLastName(e.target.value)}
-              />
+                value={values.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.lastName && !!errors.lastName}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.lastName}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -130,18 +126,30 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter street'
-                onChange={(e) => setStreet(e.target.value)}
-              />
+                value={values.street}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.street && !!errors.street}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.street}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={3}>
-            <Form.Group className='mb-3' controlId='houseNumber'>
+            <Form.Group className='mb-3' controlId='houseNr'>
               <Form.Label>House number</Form.Label>
               <Form.Control
                 type='number'
                 placeholder='Enter house number'
-                onChange={(e) => setHouseNr(e.target.value)}
-              />
+                value={values.houseNr}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.houseNr && !!errors.houseNr}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.houseNr}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={3}>
@@ -150,8 +158,14 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter addition'
-                onChange={(e) => setAddition(e.target.value)}
-              />
+                value={values.addition}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.addition && !!errors.addition}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.addition}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -162,8 +176,14 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter city'
-                onChange={(e) => setCity(e.target.value)}
-              />
+                value={values.city}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.city && !!errors.city}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.city}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -172,8 +192,14 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='text'
                 placeholder='Enter postcode'
-                onChange={(e) => setPostcode(e.target.value)}
-              />
+                value={values.postcode}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.postcode && !!errors.postcode}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.postcode}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -184,123 +210,23 @@ function CreatePetOwnerProfile() {
               <Form.Control
                 type='number'
                 placeholder='Phone number'
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6} className='mb-3'>
-            <Form.Label className='text-center mb-3'>Gender</Form.Label>
-            <Form.Group className='' controlId='gender'>
-              <Form.Check
-                inline
-                label='Male'
-                name='male'
-                type='radio'
-                value='male'
-                checked={gender === 'male'}
-                onChange={handleGenderChange}
-              />
-              <Form.Check
-                inline
-                label='Female'
-                name='female'
-                type='radio'
-                value='female'
-                checked={gender === 'female'}
-                onChange={handleGenderChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Form.Group controlId='formFile' className='mb-3'>
-          <Form.Label>Photo</Form.Label>
-          <Form.Control
-            type='file'
-            onChange={(e) => setPhoto(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='description'>
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as='textarea'
-            rows={3}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </Form.Group>
-
-        <Row>
-          <Col md={6} className='mb-4'>
-            <Form.Label className='mb-3'>Accepted pets</Form.Label>
-            <Form.Group>
-              <Form.Check
-                inline
-                label='Dog'
-                name='dog'
-                type='checkbox'
-                value='dog'
-                checked={pets.includes('dog')}
-                onChange={handlePetsChange}
-              />
-              <Form.Check
-                inline
-                label='Cat'
-                name='cat'
-                type='checkbox'
-                value='cat'
-                checked={pets.includes('cat')}
-                onChange={handlePetsChange}
-              />
-              <Form.Check
-                inline
-                label='Rabbit'
-                name='rabbit'
-                type='checkbox'
-                value='rabbit'
-                checked={pets.includes('rabbit')}
-                onChange={handlePetsChange}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6} className='mb-5 '>
-            <Form.Label className='mb-3'>Provided service</Form.Label>
-            <Form.Group>
-              <Form.Check
-                inline
-                label='Walking'
-                name='walking'
-                type='checkbox'
-                value='walking'
-                checked={service.includes('walking')}
-                onChange={handleServiceChange}
-              />
-              <Form.Check
-                inline
-                label='Sitting'
-                name='sitting'
-                type='checkbox'
-                value='sitting'
-                checked={service.includes('sitting')}
-                onChange={handleServiceChange}
-              />
-              <Form.Check
-                inline
-                label='Daycare'
-                name='daycare'
-                type='checkbox'
-                value='daycare'
-                checked={service.includes('daycare')}
-                onChange={handleServiceChange}
-              />
+                value={values.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.phone && !!errors.phone}
+              ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.phone}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
         <Row>
           <Button
+            disabled={isSubmitting}
             variant='primary'
             type='submit'
-            className='btn-block w-50 mx-auto'
+            className='btn-block w-50 mx-auto mt-3'
           >
             Submit
           </Button>

@@ -17,10 +17,37 @@ export const registerSchema = yup.object().shape({
 export const loginSchema = yup.object().shape({
   email: yup.string().email('Please enter a valid email').required(),
   password: yup.string().required(),
-  // password: yup.string().min(6).matches(passwordRules, { message: "Please create a stronger password" }).required(),
 })
 
 export const patronSchema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email').required(),
-  password: yup.string().required(),
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  street: yup.string().required(),
+  houseNr: yup.number().required(),
+  addition: yup.string(),
+  city: yup.string().required(),
+  postcode: yup.string().required(),
+  phone: yup.string().required(),
+  genderPick: yup.string().required(),
+  photo: yup.string(),
+  description: yup.string().required(),
+  petsPicks: yup
+    .array()
+    .of(yup.string().oneOf(['dog', 'cat', 'rabbit']))
+    .required('Please pick accepted pets'),
+  servicePicks: yup
+    .array()
+    .of(yup.string().oneOf(['walking', 'sitting', 'daycare']))
+    .required('Please pick provided services'),
+})
+
+export const petOwnerSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  street: yup.string().required(),
+  houseNr: yup.number().required(),
+  addition: yup.string(),
+  city: yup.string().required(),
+  postcode: yup.string().required(),
+  phone: yup.string().required(),
 })

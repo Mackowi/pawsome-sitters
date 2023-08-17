@@ -1,9 +1,10 @@
-import { Container, Row, Col, Card, Button } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import RoleCoserCard from '../components/RoleChoserCard'
 import CreatePatronProfile from '../components/CreatePatronProfile'
+import CreatePetOwnerProfile from '../components/CreatePetOwnerProfile'
 
 function Profile() {
   const { userInfo } = useSelector((state) => state.user)
@@ -24,13 +25,13 @@ function Profile() {
       ) : userInfo.role === 'petOwner' ? (
         <Row className='my-5'>
           <Col>
-            <>'PetOwner profile'</>
+            <CreatePetOwnerProfile />
           </Col>
         </Row>
       ) : (
         <Row className='my-5'>
           <Col>
-            <CreatePatronProfile></CreatePatronProfile>
+            <CreatePatronProfile />
           </Col>
         </Row>
       )}
