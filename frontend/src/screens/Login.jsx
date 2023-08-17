@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Container, Row, Col, Form, Button } from 'react-bootstrap'
+import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import { useLoginMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/userSlice'
 import { toast } from 'react-toastify'
 import Img from '../assets/images/about3.jpg'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { useFormik } from 'formik'
+import { loginSchema } from '../validationSchemas'
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -30,8 +32,7 @@ function Login() {
     }
   }, [navigate, redirect, userInfo])
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
+  const submitHandler = async () => {
     try {
       const res = await login({ email, password }).unwrap()
       dispatch(setCredentials({ ...res }))
@@ -40,6 +41,25 @@ function Login() {
       toast.error(error?.data?.message || error?.error)
     }
   }
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: loginSchema,
+    onSubmit: submitHandler,
+  })
+
+  const { email, password } = values
 
   return (
     <Container>
@@ -52,28 +72,39 @@ function Login() {
           className='text-center d-flex flex-column justify-content-center'
         >
           <h3 className='text-primary fw-bold mb-4 mb-md-3 mb-lg-5'>Sign In</h3>
-          <Form onSubmit={submitHandler}>
+          <Form noValidate onSubmit={handleSubmit} autoComplete='off'>
             <Form.Group controlId='email' className='my-2 my-md-0 '>
               <Form.Label>Email Address</Form.Label>
               <Form.Control
                 type='email'
                 placeholder='Enter email'
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                }}
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.email && !!errors.email}
               ></Form.Control>
+              <Form.Control.Feedback type='invalid'>
+                {errors.email}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId='password' className='mt-2'>
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Enter password'
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
-              ></Form.Control>
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Enter password'
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={touched.password && !!errors.password}
+                ></Form.Control>
+                <Button onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+                <Form.Control.Feedback type='invalid'>
+                  {errors.password}
+                </Form.Control.Feedback>
+              </InputGroup>
             </Form.Group>
             <div className='mt-2'>
               <Link to='/forgotpassword' className='text-primary'>
@@ -83,6 +114,7 @@ function Login() {
 
             <div className='d-grid mt-4 mt-md-3'>
               <Button
+                disabled={isSubmitting}
                 type='submit'
                 variant='secondary'
                 className='w-50 mx-auto'
@@ -99,6 +131,7 @@ function Login() {
           <p>
             Are you not a user yet?
             <Link to='/register' style={{ color: '#2A4344' }}>
+              {' '}
               Register here
             </Link>
           </p>

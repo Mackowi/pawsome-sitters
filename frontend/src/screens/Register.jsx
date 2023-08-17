@@ -9,7 +9,7 @@ import { useRegisterMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/userSlice'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { registerSchema } from '../schemas/registerSchema'
+import { registerSchema } from '../validationSchemas'
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -116,24 +116,31 @@ function Register() {
                 <Button onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </Button>
+                <Form.Control.Feedback type='invalid'>
+                  {errors.password}
+                </Form.Control.Feedback>
               </InputGroup>
-              <Form.Control.Feedback type='invalid'>
-                {errors.password}
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId='confirmPassword' className='my-2 my-md-1 '>
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type={showPassword ? 'text' : 'password'}
-                placeholder='Confirm password'
-                value={values.confirmPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isInvalid={touched.confirmPassword && !!errors.confirmPassword}
-              ></Form.Control>
-              <Form.Control.Feedback type='invalid'>
-                {errors.confirmPassword}
-              </Form.Control.Feedback>
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Confirm password'
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={
+                    touched.confirmPassword && !!errors.confirmPassword
+                  }
+                ></Form.Control>
+                <Button onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+                <Form.Control.Feedback type='invalid'>
+                  {errors.confirmPassword}
+                </Form.Control.Feedback>
+              </InputGroup>
             </Form.Group>
             <div className='d-grid mt-4 mt-md-3'>
               <Button

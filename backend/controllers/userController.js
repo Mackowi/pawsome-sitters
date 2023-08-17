@@ -53,7 +53,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email }).select('+password')
   if (!user || !(await user.matchPassword(password))) {
     res.status(401)
-    throw new Error('Invalid credentials 123')
+    throw new Error('Invalid credentials')
   }
   generateToken(res, user._id)
   res.status(200).json({
