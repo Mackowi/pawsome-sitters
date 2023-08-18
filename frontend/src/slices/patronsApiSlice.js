@@ -11,8 +11,8 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     getPatron: builder.query({
-      query: (userId) => ({
-        url: `${PATRONS_URL}/${userId}`,
+      query: () => ({
+        url: `${PATRONS_URL}/user`,
         method: 'GET',
       }),
       keepUnusedDataFor: 5,

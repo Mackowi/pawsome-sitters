@@ -21,7 +21,6 @@ function CreatePatronProfile() {
   const [createPatron, { isLoading }] = useCreatePatronMutation()
 
   const handleGenderChange = (event) => {
-    console.log(values)
     if (gender === event.target.value) {
       setGender(null)
       values.genderPick = ''

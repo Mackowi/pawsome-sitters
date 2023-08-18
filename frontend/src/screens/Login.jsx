@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import Loader from '../components/Loader'
-import { useLoginMutation } from '../slices/usersApiSlice'
-import { setCredentials } from '../slices/userSlice'
-import { toast } from 'react-toastify'
+import { loginSchema } from '../validationSchemas'
+import { useFormik } from 'formik'
 import Img from '../assets/images/about3.jpg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import { useFormik } from 'formik'
-import { loginSchema } from '../validationSchemas'
+import { toast } from 'react-toastify'
+import Loader from '../components/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLoginMutation } from '../slices/usersApiSlice'
+import { setCredentials } from '../slices/userSlice'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -18,13 +18,12 @@ function Login() {
   const navigate = useNavigate()
 
   const [login, { isLoading }] = useLoginMutation()
-
   const { userInfo } = useSelector((state) => state.user)
 
   // const { search } = useLocation()
   // const sp = new URLSearchParams(search)
   // const redirect = sp.get('redirect') || '/'
-  const redirect = '/profile'
+  const redirect = '/dashboard'
 
   useEffect(() => {
     if (userInfo) {
@@ -34,8 +33,8 @@ function Login() {
 
   const submitHandler = async () => {
     try {
-      const res = await login({ email, password }).unwrap()
-      dispatch(setCredentials({ ...res }))
+      const user = await login({ email, password }).unwrap()
+      dispatch(setCredentials({ ...user }))
       navigate(redirect)
     } catch (error) {
       toast.error(error?.data?.message || error?.error)

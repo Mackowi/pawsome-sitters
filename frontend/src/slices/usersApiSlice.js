@@ -30,6 +30,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getUserProfile: builder.query({
+      query: (role) => ({
+        url: `/api/${role}s`,
+      }),
+    }),
   }),
 })
 
@@ -38,4 +43,5 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUpdateMutation,
+  useGetUserProfileQuery,
 } = usersApiSlice

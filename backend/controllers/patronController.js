@@ -42,15 +42,14 @@ const getPatrons = asyncHandler(async (req, res) => {
   res.status(200).json(patrons)
 })
 
-// desc: Get all patrons
-// route: GET /api/patrons/:id
+// desc: Get patron profile of the user
+// route: GET /api/patrons/user
 // access: Private
-const getPatronById = asyncHandler(async (req, res) => {
-  const patronId = req.params.id
-  const patron = await Patron.findById(patronId)
+const getPatronByUserId = asyncHandler(async (req, res) => {
+  const patron = await Patron.find({ user: req.user._id })
   if (!patron) {
     res.status(404)
-    throw new Error('Not found any patrons')
+    throw new Error('Not found patron profile for this user')
   }
 
   res.status(200).json(patron)
@@ -89,4 +88,10 @@ const updatePatron = asyncHandler(async (req, res) => {
   res.status(200).json(updatedPatron)
 })
 
-export { getPatronsPub, getPatrons, getPatronById, createPatron, updatePatron }
+export {
+  getPatronsPub,
+  getPatrons,
+  getPatronByUserId,
+  createPatron,
+  updatePatron,
+}

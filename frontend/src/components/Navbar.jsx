@@ -103,6 +103,9 @@ function NavBar() {
             </LinkContainer>
             {userInfo ? (
               <NavDropdown title={userInfo.name} id='name' className='fw-bold'>
+                <LinkContainer to='/dashboard'>
+                  <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                </LinkContainer>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>
