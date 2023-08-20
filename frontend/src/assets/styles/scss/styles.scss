@@ -131,6 +131,8 @@ header {
   background-color: #548687;
 }
 
+
+// arrows at input fields
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -142,3 +144,58 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.list-group {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.message-box{
+    max-height: 375px;
+  }
+
+.message-box-list{
+    max-height: 240px;
+  }
+  
+.search-map {
+  max-height: 675;
+}  
+
+.search-map-list {
+  height: 550px;
+}
+
+.search-map-container {
+  height: 550px;
+}
+
+
+@media (max-width:768px) {
+  .message-box {
+    max-height: 250px;
+  }
+
+  .message-box-list{
+    max-height: 150px;
+  }
+}
+
+@media (max-width:768px) {
+  .search-map {
+    max-height: 850px;
+  }
+  .search-map-container{
+    height: 350px;
+  }
+  
+  .search-map-list{
+      max-height: 225px;
+  }
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background: #CF6320;
+  cursor: pointer;
+}
+

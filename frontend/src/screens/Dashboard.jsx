@@ -3,6 +3,9 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Loader from '../components/Loader'
+import MessageBox from '../components/dashboard/MessageBox'
+import SearchMap from '../components/dashboard/SearchMap'
+import EditBox from '../components/dashboard/EditBox'
 import { useGetUserProfileQuery } from '../slices/usersApiSlice'
 import { setPatronInfo } from '../slices/patronSlice'
 import { setPetOwnerInfo } from '../slices/petOwnerSlice'
@@ -37,15 +40,31 @@ function Dashboard() {
       ) : isLoading ? (
         <Loader />
       ) : (
-        <Row className='text-center mt-5'>
-          <h1>Dashboard</h1>
-          <Col md={6}>
-            <h2>Edit profile</h2>
-          </Col>
-          <Col md={6}>
-            <h2>Pets</h2>
-          </Col>
-        </Row>
+        <>
+          <Row className='text-center mt-4 '>
+            <Col>
+              <MessageBox />
+            </Col>
+          </Row>
+          <Row className='text-center mt-2'>
+            <Col>
+              <SearchMap />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <h1>Write a review</h1>
+            </Col>
+            <Col>
+              <h1>History of services</h1>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <EditBox></EditBox>
+            </Col>
+          </Row>
+        </>
       )}
     </Container>
   )
