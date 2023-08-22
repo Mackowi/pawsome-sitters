@@ -1,4 +1,5 @@
 import { Row, Col, Card, Form, Button } from 'react-bootstrap'
+import { FaHistory } from 'react-icons/fa'
 import Rating from './Rating'
 
 function HistoryBox() {
@@ -52,7 +53,9 @@ function HistoryBox() {
 
   return (
     <Card className='my-2 p-3 bg-secondary-light history-box border-primary border-2'>
-      <h2 className='pb-1 text-primary fw-bold text-center'>Past Services</h2>
+      <h2 className='pb-1 text-primary fw-bold text-center'>
+        <FaHistory /> Past Services
+      </h2>
       <Row>
         <Col md={5} className='mb-2 mb-md-0'>
           <div className='list-group history-box-list'>

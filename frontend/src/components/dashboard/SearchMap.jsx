@@ -1,6 +1,7 @@
+import { Card, Row, Col, Form, Button } from 'react-bootstrap'
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css' // Import Leaflet CSS
-import { Card, Row, Col, Form, Button } from 'react-bootstrap'
+import { FaMapMarkedAlt } from 'react-icons/fa'
 
 function SearchMap() {
   const users = [
@@ -58,7 +59,7 @@ function SearchMap() {
         <Col>
           <Card className='py-3 bg-secondary-light border-primary border-2'>
             <h2 className='pb-1 text-primary fw-bold text-center'>
-              Find Patrons
+              <FaMapMarkedAlt /> Find Patrons
             </h2>
 
             <Row className='d-flex align-items-start justify-content-around px-3'>

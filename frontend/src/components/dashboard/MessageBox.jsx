@@ -1,4 +1,5 @@
-import { Card, Button, Row, Col, Container } from 'react-bootstrap'
+import { Card, Row, Col } from 'react-bootstrap'
+import { FaEnvelope } from 'react-icons/fa'
 
 function MessageBox() {
   const messages = [
@@ -31,7 +32,9 @@ function MessageBox() {
 
   return (
     <Card className='p-3 my-2 border-secondary bg-primary-light border-2 message-box text-center'>
-      <h2 className='pb-1 text-primary fw-bold'>Message Box</h2>
+      <h2 className='pb-1 text-primary fw-bold'>
+        <FaEnvelope /> Message Box
+      </h2>
       <Row className='text-start d-flex justify-content-center mb-1 '>
         <Col>
           <div className='list-group message-box-list'>
