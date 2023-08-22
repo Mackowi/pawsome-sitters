@@ -6,6 +6,7 @@ import Loader from '../components/Loader'
 import MessageBox from '../components/dashboard/MessageBox'
 import SearchMap from '../components/dashboard/SearchMap'
 import EditBox from '../components/dashboard/EditBox'
+import HistoryBox from '../components/dashboard/HistoryBox'
 import { useGetUserProfileQuery } from '../slices/usersApiSlice'
 import { setPatronInfo } from '../slices/patronSlice'
 import { setPetOwnerInfo } from '../slices/petOwnerSlice'
@@ -41,27 +42,24 @@ function Dashboard() {
         <Loader />
       ) : (
         <>
-          <Row className='text-center mt-4 '>
+          <Row className='mt-3'>
             <Col>
               <MessageBox />
             </Col>
           </Row>
-          <Row className='text-center mt-2'>
+          <Row>
             <Col>
               <SearchMap />
             </Col>
           </Row>
           <Row>
             <Col>
-              <h1>Write a review</h1>
-            </Col>
-            <Col>
-              <h1>History of services</h1>
+              <HistoryBox />
             </Col>
           </Row>
-          <Row>
+          <Row className='mb-3'>
             <Col>
-              <EditBox></EditBox>
+              <EditBox />
             </Col>
           </Row>
         </>

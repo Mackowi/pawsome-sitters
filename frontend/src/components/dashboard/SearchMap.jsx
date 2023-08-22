@@ -53,11 +53,13 @@ function SearchMap() {
 
   const position = [52.35444153530397, 5.00180295828673] // Initial latitude and longitude
   return (
-    <Card className='mt-3 mt-lg-4 bg-primary-light border-primary border-2 search-map'>
+    <Card className='my-2 bg-primary-light border-primary border-2 search-map'>
       <Row className='p-3'>
         <Col>
           <Card className='py-3 bg-secondary-light border-primary border-2'>
-            <h2 className='pb-1 text-primary fw-bold'>Find Patrons</h2>
+            <h2 className='pb-1 text-primary fw-bold text-center'>
+              Find Patrons
+            </h2>
 
             <Row className='d-flex align-items-start justify-content-around px-3'>
               <Col md={5} className='fw-bold mb-2'>
@@ -91,24 +93,27 @@ function SearchMap() {
 
       <Row className='px-3 mb-3'>
         <Col md={4} className='d-flex'>
-          <Card className='flex-fill border-primary border-2'>
-            <div class='list-group search-map-list '>
-              {users.map((user) => (
-                <>
-                  <a href='#' class='list-group-item list-group-item-action'>
-                    <div class='d-flex w-100 justify-content-between'>
-                      <h5 class='mb-1'>{user.fullName}</h5>
+          <Card className='flex-fill'>
+            <div className='list-group search-map-list '>
+              {users.map((user, index) => (
+                <div key={index}>
+                  <a
+                    href='#'
+                    className='list-group-item list-group-item-action'
+                  >
+                    <div className='d-flex w-100 justify-content-between'>
+                      <h5 className='mb-1'>{user.fullName}</h5>
                       <small>x days ago</small>
                     </div>
-                    <p class='mb-1'>{user.address}</p>
+                    <p className='mb-1'>{user.address}</p>
                   </a>
-                </>
+                </div>
               ))}
             </div>
           </Card>
         </Col>
         <Col md={8} className='mt-3 mt-md-0'>
-          <Card className='border-primary border-2'>
+          <Card>
             <MapContainer
               center={position}
               zoom={13}

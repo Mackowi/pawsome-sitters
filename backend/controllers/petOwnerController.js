@@ -1,6 +1,5 @@
 import PetOwner from '../models/PetOwnerModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
-console.log(PetOwner)
 
 // desc: Get all pet owners
 // route: GET /api/petowners/public

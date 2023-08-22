@@ -30,25 +30,25 @@ function MessageBox() {
   }
 
   return (
-    <Card className='p-3 border-secondary bg-primary-light border-2 message-box'>
+    <Card className='p-3 my-2 border-secondary bg-primary-light border-2 message-box text-center'>
       <h2 className='pb-1 text-primary fw-bold'>Message Box</h2>
-      <Row className='text-start d-flex justify-content-center mb-1'>
+      <Row className='text-start d-flex justify-content-center mb-1 '>
         <Col>
-          <div class='list-group message-box-list'>
-            {messages.map((message) => (
-              <>
+          <div className='list-group message-box-list'>
+            {messages.map((message, index) => (
+              <div key={index}>
                 <a
                   href='#'
-                  class='list-group-item list-group-item-action border-secondary '
+                  className='list-group-item list-group-item-action '
                   onClick={() => messageHandler(message)}
                 >
-                  <div class='d-flex w-100 justify-content-between'>
-                    <h5 class='mb-1'>{message.from}</h5>
+                  <div className='d-flex w-100 justify-content-between'>
+                    <h5 className='mb-1'>{message.from}</h5>
                     <small>x days ago</small>
                   </div>
-                  <p class='mb-1'>{message.text}</p>
+                  <p className='mb-1'>{message.text}</p>
                 </a>
-              </>
+              </div>
             ))}
           </div>
         </Col>
