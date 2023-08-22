@@ -1,7 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import Img1 from '../assets/images/about1.jpg'
-import Img2 from '../assets/images/about2.jpg'
-import Img3 from '../assets/images/about3.jpg'
+import Img1 from '../../assets/images/about1.jpg'
+import Img2 from '../../assets/images/about2.jpg'
+import Img3 from '../../assets/images/about3.jpg'
 
 function About() {
   return (

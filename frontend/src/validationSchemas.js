@@ -51,3 +51,12 @@ export const petOwnerSchema = yup.object().shape({
   postcode: yup.string().required(),
   phone: yup.string().required(),
 })
+
+export const userSchema = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().email('Please enter a valid email').required(),
+  password: yup.string().min(6),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+})

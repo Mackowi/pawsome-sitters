@@ -76,7 +76,7 @@ function HistoryBox() {
           <Row className='mb-2 mb-md-0'>
             <Form.Group controlId='description'>
               <Form.Label>Tell us more about your experience</Form.Label>
-              <Form.Control as='textarea' rows={4}></Form.Control>
+              <Form.Control as='textarea' rows={6}></Form.Control>
               <Form.Control.Feedback type='invalid'></Form.Control.Feedback>
             </Form.Group>
           </Row>

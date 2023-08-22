@@ -83,15 +83,18 @@ const logoutUser = asyncHandler(async (req, res) => {
 // route: PUT /api/users/update
 // desc: private
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id)
+  const user = await User.findById(req.user._id).select('+password')
   if (!user) {
     res.status(404)
     throw new Error('User not found')
   }
+  if (await user.matchPassword(req.body.password)) {
+    res.status(404)
+    throw new Error('Cannot change password, existing one is the same')
+  }
 
   user.name = req.body.name || user.name
   user.email = req.body.email || user.email
-  user.role = req.body.role || user.role
 
   if (req.body.password) {
     user.password = req.body.password

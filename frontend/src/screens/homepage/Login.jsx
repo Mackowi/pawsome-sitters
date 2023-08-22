@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap'
-import { loginSchema } from '../validationSchemas'
+import { loginSchema } from '../../validationSchemas'
 import { useFormik } from 'formik'
-import Img from '../assets/images/about3.jpg'
+import Img from '../../assets/images/about3.jpg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import Loader from '../components/Loader'
+import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLoginMutation } from '../slices/usersApiSlice'
-import { setCredentials } from '../slices/userSlice'
+import { useLoginMutation } from '../../slices/usersApiSlice'
+import { setCredentials } from '../../slices/userSlice'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)

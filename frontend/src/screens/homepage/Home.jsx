@@ -9,7 +9,7 @@ import {
   FaHome,
   FaMapMarkerAlt,
 } from 'react-icons/fa'
-import HomeScreenCarousel from '../components/HomeScreenCarousel'
+import HomeScreenCarousel from '../../components/HomeScreenCarousel'
 import { Link } from 'react-router-dom'
 
 function HomeScreen() {

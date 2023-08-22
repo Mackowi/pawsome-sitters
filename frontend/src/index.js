@@ -12,14 +12,16 @@ import './assets/styles/spacers.css'
 import './assets/styles/bootstrap.css'
 import './assets/styles/styles.css'
 import App from './App'
-import Home from './screens/Home'
-import About from './screens/About'
-import Login from './screens/Login'
-import Register from './screens/Register'
-import Help from './screens/Help'
-import Patrons from './screens/Patrons'
+import Home from './screens/homepage/Home'
+import About from './screens/homepage/About'
+import Login from './screens/homepage/Login'
+import Register from './screens/homepage/Register'
+import Help from './screens/homepage/Help'
 import Profile from './screens/Profile'
 import Dashboard from './screens/Dashboard'
+import AccountSettings from './screens/dashboard/AccountSettings'
+import ProfileSettings from './screens/dashboard/ProfileSettings'
+import Pets from './screens/dashboard/Pets'
 import PrivateRoute from './components/PrivateRoute'
 
 const router = createBrowserRouter(
@@ -33,6 +35,9 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard/account' element={<AccountSettings />} />
+        <Route path='/dashboard/profile' element={<ProfileSettings />} />
+        <Route path='/dashboard/pets' element={<Pets />} />
       </Route>
     </Route>
   )
