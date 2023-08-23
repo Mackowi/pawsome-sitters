@@ -1,24 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
-import Loader from './Loader'
+import Loader from '../Loader'
 import { toast } from 'react-toastify'
-import { useCreatePatronMutation } from '../slices/patronsApiSlice'
-import { useDispatch } from 'react-redux'
+import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setPatronInfo } from '../slices/patronSlice'
+import { setPatronInfo } from '../../slices/patronSlice'
 import { useFormik } from 'formik'
-import { patronSchema } from '../validationSchemas'
+import { patronSchema } from '../../validationSchemas'
 
-function CreatePatronProfile() {
-  const [gender, setGender] = useState(null)
-  const [pets, setPets] = useState([])
-  const [service, setService] = useState([])
+function EditPatronProfile() {
+  const { patronInfo } = useSelector((state) => state.patron)
+
+  const [gender, setGender] = useState(patronInfo.gender)
+  const [pets, setPets] = useState(patronInfo.acceptedPets)
+  const [service, setService] = useState(patronInfo.service)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const [createPatron, { isLoading }] = useCreatePatronMutation()
 
   const handleGenderChange = (event) => {
     if (gender === event.target.value) {
@@ -36,7 +36,7 @@ function CreatePatronProfile() {
       values.petsPicks.filter((pet) => pet !== event.target.value)
     } else {
       setPets([...pets, event.target.value])
-      values.petsPicks.push(event.target.value)
+      values.petsPicks = [...values.petsPicks, event.target.value]
     }
   }
 
@@ -46,7 +46,7 @@ function CreatePatronProfile() {
       values.servicePicks.filter((service) => service !== event.target.value)
     } else {
       setService([...service, event.target.value])
-      values.servicePicks.push(event.target.value)
+      values.servicePicks = [...values.servicePicks, event.target.value]
     }
   }
 
@@ -69,8 +69,8 @@ function CreatePatronProfile() {
         pets: petsPicks,
         service: servicePicks,
       }
-      await createPatron(patron).unwrap()
-      dispatch(setPatronInfo(patron))
+      // await createPatron(patron).unwrap()
+      // dispatch(setPatronInfo(patron))
       toast.success('Patron profile created')
       navigate('/dashboard')
     } catch (error) {
@@ -88,17 +88,17 @@ function CreatePatronProfile() {
     handleSubmit,
   } = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      street: '',
-      houseNr: '',
-      addition: '',
-      city: '',
-      postcode: '',
-      phone: '',
-      genderPick: '',
-      photo: '',
-      description: '',
+      firstName: `${patronInfo.firstName}`,
+      lastName: `${patronInfo.lastName}`,
+      street: `${patronInfo.address.street}`,
+      houseNr: `${patronInfo.address.houseNr}`,
+      addition: patronInfo.address.addition && `${patronInfo.address.addition}`,
+      city: `${patronInfo.address.city}`,
+      postcode: `${patronInfo.address.postcode}`,
+      phone: `${patronInfo.phone}`,
+      gender: `${patronInfo.gender}`,
+      photo: `${patronInfo.photo}`,
+      description: `${patronInfo.description}`,
       petsPicks: [],
       servicePicks: [],
     },
@@ -123,8 +123,8 @@ function CreatePatronProfile() {
   } = values
 
   return (
-    <Container>
-      {isLoading && <Loader />}
+    <Container className='my-5'>
+      {/* {isLoading && <Loader />} */}
       <h3 className='text-center mb-5 text-primary fw-bold'>
         <FaRegAddressCard size={45} className='me-3' />
         Please fill your details
@@ -408,4 +408,4 @@ function CreatePatronProfile() {
     </Container>
   )
 }
-export default CreatePatronProfile
+export default EditPatronProfile

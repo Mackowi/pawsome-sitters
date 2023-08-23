@@ -1,24 +1,58 @@
 import { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
-import Loader from './Loader'
+import Loader from '../Loader'
 import { toast } from 'react-toastify'
-import { useCreatePetOwnerMutation } from '../slices/petOwnersApiSlice'
+import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setPetOwnerInfo } from '../slices/petOwnerSlice'
+import { setPatronInfo } from '../../slices/patronSlice'
 import { useFormik } from 'formik'
-import { petOwnerSchema } from '../validationSchemas'
+import { patronSchema } from '../../validationSchemas'
 
-function CreatePetOwnerProfile() {
+function CreatePatronProfile() {
+  const [gender, setGender] = useState(null)
+  const [pets, setPets] = useState([])
+  const [service, setService] = useState([])
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [createPetOwner, { isLoading }] = useCreatePetOwnerMutation()
+  const [createPatron, { isLoading }] = useCreatePatronMutation()
+
+  const handleGenderChange = (event) => {
+    if (gender === event.target.value) {
+      setGender(null)
+      values.genderPick = ''
+    } else {
+      setGender(event.target.value)
+      values.genderPick = event.target.value
+    }
+  }
+
+  const handlePetsChange = (event) => {
+    if (pets.includes(event.target.value)) {
+      setPets(pets.filter((pet) => pet !== event.target.value))
+      values.petsPicks.filter((pet) => pet !== event.target.value)
+    } else {
+      setPets([...pets, event.target.value])
+      values.petsPicks.push(event.target.value)
+    }
+  }
+
+  const handleServiceChange = (event) => {
+    if (service.includes(event.target.value)) {
+      setService(service.filter((service) => service !== event.target.value))
+      values.servicePicks.filter((service) => service !== event.target.value)
+    } else {
+      setService([...service, event.target.value])
+      values.servicePicks.push(event.target.value)
+    }
+  }
 
   const submitHandler = async () => {
     try {
-      const petOwner = {
+      const patron = {
         firstName,
         lastName,
         address: {
@@ -29,10 +63,15 @@ function CreatePetOwnerProfile() {
           postcode,
         },
         phone,
+        gender: genderPick,
+        photo,
+        description,
+        pets: petsPicks,
+        service: servicePicks,
       }
-      await createPetOwner(petOwner).unwrap()
-      dispatch(setPetOwnerInfo(petOwner))
-      toast.success('Pet owner profile created')
+      await createPatron(patron).unwrap()
+      dispatch(setPatronInfo(patron))
+      toast.success('Patron profile created')
       navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
@@ -57,8 +96,13 @@ function CreatePetOwnerProfile() {
       city: '',
       postcode: '',
       phone: '',
+      genderPick: '',
+      photo: '',
+      description: '',
+      petsPicks: [],
+      servicePicks: [],
     },
-    validationSchema: petOwnerSchema,
+    validationSchema: patronSchema,
     onSubmit: submitHandler,
   })
 
@@ -71,10 +115,15 @@ function CreatePetOwnerProfile() {
     city,
     postcode,
     phone,
+    genderPick,
+    photo,
+    description,
+    petsPicks,
+    servicePicks,
   } = values
 
   return (
-    <Container>
+    <Container className='my-5'>
       {isLoading && <Loader />}
       <h3 className='text-center mb-5 text-primary fw-bold'>
         <FaRegAddressCard size={45} className='me-3' />
@@ -218,13 +267,139 @@ function CreatePetOwnerProfile() {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
+          <Col md={6} className='mb-3'>
+            <Form.Label className='text-center mb-3'>Gender</Form.Label>
+            <Form.Group>
+              <Form.Check
+                inline
+                id='genderMale'
+                label='Male'
+                name='male'
+                type='radio'
+                value='male'
+                checked={gender === 'male'}
+                onChange={handleGenderChange}
+                isInvalid={touched.gender && !!errors.gender}
+              />
+              <Form.Check
+                inline
+                id='genderFemale'
+                label='Female'
+                name='female'
+                type='radio'
+                value='female'
+                checked={gender === 'female'}
+                onChange={handleGenderChange}
+                isInvalid={touched.gender && !!errors.gender}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.gender}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Form.Group controlId='formFile' className='mb-3'>
+          <Form.Label>Photo</Form.Label>
+          <Form.Control
+            type='file'
+            value={values.file}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            isInvalid={touched.file && !!errors.file}
+          ></Form.Control>
+          <Form.Control.Feedback type='invalid'>
+            {errors.file}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='description'>
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as='textarea'
+            rows={3}
+            value={values.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            isInvalid={touched.description && !!errors.description}
+          ></Form.Control>
+          <Form.Control.Feedback type='invalid'>
+            {errors.description}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Row>
+          <Col md={6} className='mb-4'>
+            <Form.Label className='mb-3'>Accepted pets</Form.Label>
+            <Form.Group>
+              <Form.Check
+                inline
+                label='Dog'
+                name='dog'
+                type='checkbox'
+                value='dog'
+                checked={pets.includes('dog')}
+                onChange={handlePetsChange}
+              />
+              <Form.Check
+                inline
+                label='Cat'
+                name='cat'
+                type='checkbox'
+                value='cat'
+                checked={pets.includes('cat')}
+                onChange={handlePetsChange}
+              />
+              <Form.Check
+                inline
+                label='Rabbit'
+                name='rabbit'
+                type='checkbox'
+                value='rabbit'
+                checked={pets.includes('rabbit')}
+                onChange={handlePetsChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} className='mb-5 '>
+            <Form.Label className='mb-3'>Provided service</Form.Label>
+            <Form.Group>
+              <Form.Check
+                inline
+                label='Walking'
+                name='walking'
+                type='checkbox'
+                value='walking'
+                checked={service.includes('walking')}
+                onChange={handleServiceChange}
+              />
+              <Form.Check
+                inline
+                label='Sitting'
+                name='sitting'
+                type='checkbox'
+                value='sitting'
+                checked={service.includes('sitting')}
+                onChange={handleServiceChange}
+              />
+              <Form.Check
+                inline
+                label='Daycare'
+                name='daycare'
+                type='checkbox'
+                value='daycare'
+                checked={service.includes('daycare')}
+                onChange={handleServiceChange}
+              />
+            </Form.Group>
+          </Col>
         </Row>
         <Row>
           <Button
             disabled={isSubmitting}
             variant='primary'
             type='submit'
-            className='btn-block w-50 mx-auto mt-3'
+            className='btn-block w-50 mx-auto'
           >
             Submit
           </Button>
@@ -233,4 +408,4 @@ function CreatePetOwnerProfile() {
     </Container>
   )
 }
-export default CreatePetOwnerProfile
+export default CreatePatronProfile

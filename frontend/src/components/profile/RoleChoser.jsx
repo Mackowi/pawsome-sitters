@@ -1,12 +1,12 @@
 import { Card, Button } from 'react-bootstrap'
-import Loader from './Loader'
+import Loader from '../Loader'
 import { FaDog, FaHouseUser } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
-import { useUpdateMutation } from '../slices/usersApiSlice'
-import { setCredentials } from '../slices/userSlice'
+import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { setCredentials } from '../../slices/userSlice'
 import { toast } from 'react-toastify'
 
-function RoleCoserCard() {
+function RoleCoser() {
   const dispatch = useDispatch()
 
   const [update, { isLoading }] = useUpdateMutation()
@@ -51,4 +51,4 @@ function RoleCoserCard() {
     </>
   )
 }
-export default RoleCoserCard
+export default RoleCoser

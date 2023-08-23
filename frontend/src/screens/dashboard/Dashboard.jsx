@@ -2,20 +2,20 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import Loader from '../components/Loader'
-import MessageBox from '../components/dashboard/MessageBox'
-import RequestBox from '../components/dashboard/RequestBox'
-import SearchMap from '../components/dashboard/SearchMap'
-import EditBox from '../components/dashboard/EditBox'
-import HistoryBox from '../components/dashboard/HistoryBox'
-import { useGetUserProfileQuery } from '../slices/usersApiSlice'
-import { setPatronInfo } from '../slices/patronSlice'
-import { setPetOwnerInfo } from '../slices/petOwnerSlice'
+import Loader from '../../components/Loader'
+import MessageBox from '../../components/dashboard/MessageBox'
+import RequestBox from '../../components/dashboard/RequestBox'
+import SearchMap from '../../components/dashboard/SearchMap'
+import EditBox from '../../components/dashboard/EditBox'
+import HistoryBox from '../../components/dashboard/HistoryBox'
+import { useGetUserProfileQuery } from '../../slices/usersApiSlice'
+import { setPatronInfo } from '../../slices/patronSlice'
+import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 
 function Dashboard() {
   const { userInfo } = useSelector((state) => state.user)
-  const { patronInfo } = useSelector((state) => state.patron)
-  const { petOwnerInfo } = useSelector((state) => state.petOwner)
+  // const { patronInfo } = useSelector((state) => state.patron)
+  // const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
