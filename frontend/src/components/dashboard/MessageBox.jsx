@@ -33,7 +33,7 @@ function MessageBox() {
   return (
     <Card className='p-3 my-2 border-secondary bg-primary-light border-2 message-box text-center'>
       <h2 className='pb-1 text-primary fw-bold'>
-        <FaEnvelope /> Message Box
+        <FaEnvelope className='mb-1' /> Message Box
       </h2>
       <Row className='text-start d-flex justify-content-center mb-1 '>
         <Col>

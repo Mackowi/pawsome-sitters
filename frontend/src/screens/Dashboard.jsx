@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Loader from '../components/Loader'
 import MessageBox from '../components/dashboard/MessageBox'
+import RequestBox from '../components/dashboard/RequestBox'
 import SearchMap from '../components/dashboard/SearchMap'
 import EditBox from '../components/dashboard/EditBox'
 import HistoryBox from '../components/dashboard/HistoryBox'
@@ -47,16 +48,28 @@ function Dashboard() {
               <MessageBox />
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <SearchMap />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <HistoryBox />
-            </Col>
-          </Row>
+          {userInfo.role === 'patron' ? (
+            <>
+              <Row>
+                <Col>
+                  <RequestBox></RequestBox>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <>
+              <Row>
+                <Col>
+                  <SearchMap />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <HistoryBox />
+                </Col>
+              </Row>
+            </>
+          )}
           <Row className='mb-3'>
             <Col>
               <EditBox />

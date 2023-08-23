@@ -1,8 +1,7 @@
-import { Row, Col, Card, Form, Button } from 'react-bootstrap'
-import { FaHistory } from 'react-icons/fa'
-import Rating from './Rating'
+import { Card, Row, Col, Button } from 'react-bootstrap'
+import { FaPersonCircleQuestion } from 'react-icons/fa6'
 
-function HistoryBox() {
+function RequestBox() {
   const services = [
     {
       fullName: 'Joe Smith',
@@ -50,45 +49,35 @@ function HistoryBox() {
       date: '13.01.2023',
     },
   ]
-
   return (
-    <Card className='my-2 p-3 bg-secondary-light history-box border-primary border-2'>
-      <h2 className='pb-1 text-primary fw-bold text-center'>
-        <FaHistory className='mb-1' /> Past Services
+    <Card className='p-3 my-2 border-primary bg-secondary-light border-2 request-box text-center'>
+      <h2 className='pb-1 text-primary fw-bold'>
+        <FaPersonCircleQuestion className='mb-2' /> Service Requests
       </h2>
-      <Row>
-        <Col md={5} className='mb-2 mb-md-0'>
-          <div className='list-group history-box-list'>
+      <Row className='text-start d-flex justify-content-center mb-1 '>
+        <Col>
+          <div className='list-group request-box-list'>
             {services.map((service, index) => (
               <div key={index}>
-                <div className='list-group-item list-group-item-action '>
+                <a href='#' className='list-group-item list-group-item-action '>
                   <div className='d-flex w-100 justify-content-between'>
                     <h5 className='mb-1'>{service.fullName}</h5>
                     <small>{service.date}</small>
                   </div>
-                  <p className='mb-1'>{service.serivce}</p>
-                </div>
+                  <div className='d-flex w-100 justify-content-between'>
+                    <p className='mb-1'>{service.serivce}</p>
+                    <div className='d-flex gap-2'>
+                      <Button>Accept</Button>
+                      <Button variant='secondary'>Decline</Button>
+                    </div>
+                  </div>
+                </a>
               </div>
             ))}
           </div>
-        </Col>
-        <Col md={7} className='d-flex flex-column justify-content-between'>
-          <Row className='mb-2 mb-md-0'>
-            <Form.Group controlId='description'>
-              <Form.Label>Tell us more about your experience</Form.Label>
-              <Form.Control as='textarea' rows={6}></Form.Control>
-              <Form.Control.Feedback type='invalid'></Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className='mx-auto mb-2 mb-md-0'>
-            <Rating />
-          </Row>
-          <Row className='w-50 mx-auto '>
-            <Button>Submit Review</Button>
-          </Row>
         </Col>
       </Row>
     </Card>
   )
 }
-export default HistoryBox
+export default RequestBox

@@ -59,7 +59,7 @@ function SearchMap() {
         <Col>
           <Card className='py-3 bg-secondary-light border-primary border-2'>
             <h2 className='pb-1 text-primary fw-bold text-center'>
-              <FaMapMarkedAlt /> Find Patrons
+              <FaMapMarkedAlt className='mb-2' /> Find Patrons
             </h2>
 
             <Row className='d-flex align-items-start justify-content-around px-3'>
