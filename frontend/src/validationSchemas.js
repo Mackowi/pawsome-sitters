@@ -28,14 +28,14 @@ export const patronSchema = yup.object().shape({
   city: yup.string().required(),
   postcode: yup.string().required(),
   phone: yup.string().required(),
-  genderPick: yup.string().required(),
+  gender: yup.string().required(),
   photo: yup.string(),
   description: yup.string().required(),
-  petsPicks: yup
+  pets: yup
     .array()
     .of(yup.string().oneOf(['dog', 'cat', 'rabbit']))
     .required('Please pick accepted pets'),
-  servicePicks: yup
+  service: yup
     .array()
     .of(yup.string().oneOf(['walking', 'sitting', 'daycare']))
     .required('Please pick provided services'),

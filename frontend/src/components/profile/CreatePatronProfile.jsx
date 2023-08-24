@@ -1,54 +1,22 @@
-import { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
-import Loader from '../Loader'
-import { toast } from 'react-toastify'
-import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setPatronInfo } from '../../slices/patronSlice'
 import { useFormik } from 'formik'
 import { patronSchema } from '../../validationSchemas'
+import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
+import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { setCredentials } from '../../slices/userSlice'
+import { setPatronInfo } from '../../slices/patronSlice'
+import { toast } from 'react-toastify'
+import Loader from '../Loader'
 
 function CreatePatronProfile() {
-  const [gender, setGender] = useState(null)
-  const [pets, setPets] = useState([])
-  const [service, setService] = useState([])
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [createPatron, { isLoading }] = useCreatePatronMutation()
-
-  const handleGenderChange = (event) => {
-    if (gender === event.target.value) {
-      setGender(null)
-      values.genderPick = ''
-    } else {
-      setGender(event.target.value)
-      values.genderPick = event.target.value
-    }
-  }
-
-  const handlePetsChange = (event) => {
-    if (pets.includes(event.target.value)) {
-      setPets(pets.filter((pet) => pet !== event.target.value))
-      values.petsPicks.filter((pet) => pet !== event.target.value)
-    } else {
-      setPets([...pets, event.target.value])
-      values.petsPicks.push(event.target.value)
-    }
-  }
-
-  const handleServiceChange = (event) => {
-    if (service.includes(event.target.value)) {
-      setService(service.filter((service) => service !== event.target.value))
-      values.servicePicks.filter((service) => service !== event.target.value)
-    } else {
-      setService([...service, event.target.value])
-      values.servicePicks.push(event.target.value)
-    }
-  }
+  const [update] = useUpdateMutation()
 
   const submitHandler = async () => {
     try {
@@ -63,12 +31,14 @@ function CreatePatronProfile() {
           postcode,
         },
         phone,
-        gender: genderPick,
+        gender,
         photo,
         description,
-        pets: petsPicks,
-        service: servicePicks,
+        acceptedPets: pets,
+        service,
       }
+      const res = await update({ role: 'patron' }).unwrap()
+      dispatch(setCredentials({ ...res }))
       await createPatron(patron).unwrap()
       dispatch(setPatronInfo(patron))
       toast.success('Patron profile created')
@@ -96,11 +66,11 @@ function CreatePatronProfile() {
       city: '',
       postcode: '',
       phone: '',
-      genderPick: '',
+      gender: '',
       photo: '',
       description: '',
-      petsPicks: [],
-      servicePicks: [],
+      pets: [],
+      service: [],
     },
     validationSchema: patronSchema,
     onSubmit: submitHandler,
@@ -115,11 +85,11 @@ function CreatePatronProfile() {
     city,
     postcode,
     phone,
-    genderPick,
+    gender,
     photo,
     description,
-    petsPicks,
-    servicePicks,
+    pets,
+    service,
   } = values
 
   return (
@@ -274,22 +244,26 @@ function CreatePatronProfile() {
                 inline
                 id='genderMale'
                 label='Male'
-                name='male'
+                name='gender'
                 type='radio'
                 value='male'
-                checked={gender === 'male'}
-                onChange={handleGenderChange}
+                checked={values.gender === 'male' ? true : false}
+                onChange={(e) => {
+                  handleChange(e)
+                }}
                 isInvalid={touched.gender && !!errors.gender}
               />
               <Form.Check
                 inline
                 id='genderFemale'
                 label='Female'
-                name='female'
+                name='gender'
                 type='radio'
                 value='female'
-                checked={gender === 'female'}
-                onChange={handleGenderChange}
+                checked={values.gender === 'female' ? true : false}
+                onChange={(e) => {
+                  handleChange(e)
+                }}
                 isInvalid={touched.gender && !!errors.gender}
               />
               <Form.Control.Feedback type='invalid'>
@@ -335,29 +309,29 @@ function CreatePatronProfile() {
               <Form.Check
                 inline
                 label='Dog'
-                name='dog'
+                name='pets'
                 type='checkbox'
                 value='dog'
-                checked={pets.includes('dog')}
-                onChange={handlePetsChange}
+                checked={values.pets.includes('dog') ? true : false}
+                onChange={handleChange}
               />
               <Form.Check
                 inline
                 label='Cat'
-                name='cat'
+                name='pets'
                 type='checkbox'
                 value='cat'
-                checked={pets.includes('cat')}
-                onChange={handlePetsChange}
+                checked={values.pets.includes('cat') ? true : false}
+                onChange={handleChange}
               />
               <Form.Check
                 inline
                 label='Rabbit'
-                name='rabbit'
+                name='pets'
                 type='checkbox'
                 value='rabbit'
-                checked={pets.includes('rabbit')}
-                onChange={handlePetsChange}
+                checked={values.pets.includes('rabbit') ? true : false}
+                onChange={handleChange}
               />
             </Form.Group>
           </Col>
@@ -367,29 +341,29 @@ function CreatePatronProfile() {
               <Form.Check
                 inline
                 label='Walking'
-                name='walking'
+                name='service'
                 type='checkbox'
                 value='walking'
-                checked={service.includes('walking')}
-                onChange={handleServiceChange}
+                checked={values.service.includes('walking') ? true : false}
+                onChange={handleChange}
               />
               <Form.Check
                 inline
                 label='Sitting'
-                name='sitting'
+                name='service'
                 type='checkbox'
                 value='sitting'
-                checked={service.includes('sitting')}
-                onChange={handleServiceChange}
+                checked={values.service.includes('sitting') ? true : false}
+                onChange={handleChange}
               />
               <Form.Check
                 inline
                 label='Daycare'
-                name='daycare'
+                name='service'
                 type='checkbox'
                 value='daycare'
-                checked={service.includes('daycare')}
-                onChange={handleServiceChange}
+                checked={values.service.includes('daycare') ? true : false}
+                onChange={handleChange}
               />
             </Form.Group>
           </Col>

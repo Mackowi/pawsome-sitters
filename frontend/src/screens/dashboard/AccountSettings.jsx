@@ -17,7 +17,7 @@ function AccountSettings() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [update, { isLoading }] = useUpdateMutation()
+  const [updatePatron, { isLoading }] = useUpdateMutation()
 
   const submitHandler = async () => {
     try {
@@ -26,7 +26,7 @@ function AccountSettings() {
         email,
         password,
       }
-      const updatedUserData = await update(userData).unwrap()
+      const updatedUserData = await updatePatron(userData).unwrap()
       dispatch(setCredentials(updatedUserData))
       toast.success('Account settings updated')
       navigate('/dashboard')

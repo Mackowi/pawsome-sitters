@@ -1,5 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import RoleChoser from '../components/profile/RoleChoser'
@@ -7,24 +7,22 @@ import CreatePatronProfile from '../components/profile/CreatePatronProfile'
 import CreatePetOwnerProfile from '../components/profile/CreatePetOwnerProfile'
 
 function Profile() {
+  const [role, setRole] = useState(null)
   const { userInfo } = useSelector((state) => state.user)
-  const { patronInfo } = useSelector((state) => state.patron)
-  const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (patronInfo || petOwnerInfo) {
+    if (userInfo.role) {
       navigate('/dashboard')
-    } else {
     }
   }, [navigate])
 
   return (
     <Container>
-      {!userInfo.role ? (
-        <RoleChoser></RoleChoser>
-      ) : userInfo.role === 'petOwner' ? (
+      {!role ? (
+        <RoleChoser setRole={setRole}></RoleChoser>
+      ) : role === 'petOwner' ? (
         <Row>
           <Col>
             <CreatePetOwnerProfile />

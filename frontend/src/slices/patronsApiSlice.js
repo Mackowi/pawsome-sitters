@@ -5,7 +5,7 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPatrons: builder.query({
       query: () => ({
-        url: PATRONS_URL,
+        url: `${PATRONS_URL}`,
         method: 'GET',
       }),
       keepUnusedDataFor: 5,
@@ -25,8 +25,8 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updatePatron: builder.mutation({
-      query: (patronId, data) => ({
-        url: `${PATRONS_URL}/${patronId}`,
+      query: (data) => ({
+        url: `${PATRONS_URL}`,
         method: 'PUT',
         body: data,
       }),

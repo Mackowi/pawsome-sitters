@@ -106,9 +106,18 @@ function NavBar() {
                 <LinkContainer to='/dashboard'>
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
-                <LinkContainer to='/profile'>
-                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                <LinkContainer to='/dashboard/account'>
+                  <NavDropdown.Item>Account Settings</NavDropdown.Item>
                 </LinkContainer>
+                {userInfo.role ? (
+                  <LinkContainer to='/dashboard/profile'>
+                    <NavDropdown.Item>Profile Settings</NavDropdown.Item>
+                  </LinkContainer>
+                ) : (
+                  <LinkContainer to='/dashboard/profile'>
+                    <NavDropdown.Item>Profile Creation</NavDropdown.Item>
+                  </LinkContainer>
+                )}
                 <NavDropdown.Item onClick={logoutHandler}>
                   Logout
                 </NavDropdown.Item>

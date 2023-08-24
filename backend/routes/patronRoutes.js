@@ -11,8 +11,11 @@ import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
 
 router.get('/public', getPatronsPub)
-router.route('/').get(protect, getPatrons).post(protect, createPatron)
-router.route('/:id').put(protect, updatePatron)
+router
+  .route('/')
+  .get(protect, getPatrons)
+  .post(protect, createPatron)
+  .put(protect, updatePatron)
 router.get('/user', protect, getPatronByUserId)
 
 export default router

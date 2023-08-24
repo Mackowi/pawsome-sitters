@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
 import Loader from '../Loader'
 import { toast } from 'react-toastify'
-import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
+import { useUpdatePatronMutation } from '../../slices/patronsApiSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { setPatronInfo } from '../../slices/patronSlice'
@@ -16,9 +16,6 @@ function EditPatronProfile() {
   const [gender, setGender] = useState(patronInfo.gender)
   const [pets, setPets] = useState(patronInfo.acceptedPets)
   const [service, setService] = useState(patronInfo.service)
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const handleGenderChange = (event) => {
     if (gender === event.target.value) {
@@ -50,7 +47,13 @@ function EditPatronProfile() {
     }
   }
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const [updatePatron, { isLoading }] = useUpdatePatronMutation()
+
   const submitHandler = async () => {
+    console.log('test')
     try {
       const patron = {
         firstName,
@@ -69,9 +72,10 @@ function EditPatronProfile() {
         pets: petsPicks,
         service: servicePicks,
       }
-      // await createPatron(patron).unwrap()
-      // dispatch(setPatronInfo(patron))
-      toast.success('Patron profile created')
+      const updatedPatronData = await updatePatron(patron).unwrap()
+      dispatch(setPatronInfo(updatedPatronData))
+      console.log(updatedPatronData)
+      toast.success('Patron profile updated')
       navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
@@ -99,8 +103,8 @@ function EditPatronProfile() {
       gender: `${patronInfo.gender}`,
       photo: `${patronInfo.photo}`,
       description: `${patronInfo.description}`,
-      petsPicks: [],
-      servicePicks: [],
+      petsPicks: patronInfo.acceptedPets,
+      servicePicks: patronInfo.service,
     },
     validationSchema: patronSchema,
     onSubmit: submitHandler,
@@ -124,7 +128,7 @@ function EditPatronProfile() {
 
   return (
     <Container className='my-5'>
-      {/* {isLoading && <Loader />} */}
+      {isLoading && <Loader />}
       <h3 className='text-center mb-5 text-primary fw-bold'>
         <FaRegAddressCard size={45} className='me-3' />
         Please fill your details

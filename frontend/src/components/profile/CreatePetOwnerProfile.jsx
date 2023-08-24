@@ -3,18 +3,23 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
 import Loader from '../Loader'
 import { toast } from 'react-toastify'
-import { useCreatePetOwnerMutation } from '../../slices/petOwnersApiSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 import { useFormik } from 'formik'
 import { petOwnerSchema } from '../../validationSchemas'
+import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { setCredentials } from '../../slices/userSlice'
+import { useCreatePetOwnerMutation } from '../../slices/petOwnersApiSlice'
+import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 
 function CreatePetOwnerProfile() {
+  const { userInfo } = useSelector((state) => state.user)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [createPetOwner, { isLoading }] = useCreatePetOwnerMutation()
+  const [update] = useUpdateMutation()
 
   const submitHandler = async () => {
     try {
@@ -32,6 +37,11 @@ function CreatePetOwnerProfile() {
       }
       await createPetOwner(petOwner).unwrap()
       dispatch(setPetOwnerInfo(petOwner))
+      const res = await update({
+        name: firstName,
+        role: 'petOwner',
+      }).unwrap()
+      dispatch(setCredentials({ ...res }))
       toast.success('Pet owner profile created')
       navigate('/dashboard')
     } catch (error) {
@@ -49,7 +59,7 @@ function CreatePetOwnerProfile() {
     handleSubmit,
   } = useFormik({
     initialValues: {
-      firstName: '',
+      firstName: `${userInfo.name}`,
       lastName: '',
       street: '',
       houseNr: '',

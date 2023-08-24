@@ -49,7 +49,7 @@ const getPatronByUserId = asyncHandler(async (req, res) => {
   const patron = await Patron.find({ user: req.user._id })
   if (!patron) {
     res.status(404)
-    throw new Error('Not found patron profile for this user')
+    throw new Error('There is not patron profile for this user')
   }
 
   res.status(200).json(patron)
@@ -71,20 +71,19 @@ const createPatron = asyncHandler(async (req, res) => {
 })
 
 // desc: Update patron
-// route: POST /api/patrons/:id
+// route: PUT /api/patrons
 // access: Private
 const updatePatron = asyncHandler(async (req, res) => {
-  const patronId = req.params.id
-  const patron = await Patron.findById(patronId)
+  const patron = await Patron.findOne({ user: req.user._id })
   if (!patron) {
     res.status(400)
-    throw new Error(`No patron with the id: ${patronId}`)
+    throw new Error(`There is not patron profile`)
   }
-
-  const updatedPatron = await Patron.findByIdAndUpdate(patronId, req.body, {
+  const updatedPatron = await Patron.findByIdAndUpdate(patron._id, req.body, {
     new: true,
     runValidators: true,
   })
+
   res.status(200).json(updatedPatron)
 })
 
