@@ -16,7 +16,7 @@ function Profile() {
     if (userInfo.role) {
       navigate('/dashboard')
     }
-  }, [navigate])
+  }, [userInfo, navigate])
 
   return (
     <Container>

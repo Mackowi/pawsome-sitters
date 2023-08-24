@@ -37,7 +37,7 @@ function NavBar() {
     return () => {
       window.removeEventListener('scroll', handleNavOpacity)
     }
-  }, [])
+  }, [userInfo])
 
   const handleMouseEnter = () => {
     setIsMouseOver(true)
@@ -58,7 +58,7 @@ function NavBar() {
   } else if (navOpacity && isMouseOver) {
     navbarClasses.filter((className) => className !== 'nav-opacity')
   }
-  const [logoutBackend, { isLoading }] = useLogoutMutation()
+  const [logoutBackend] = useLogoutMutation()
 
   const logoutHandler = async () => {
     try {
