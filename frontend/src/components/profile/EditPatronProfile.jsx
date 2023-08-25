@@ -99,8 +99,6 @@ function EditPatronProfile() {
     service,
   } = values
 
-  console.log(values)
-
   return (
     <Container className='my-5'>
       {isLoading ? (

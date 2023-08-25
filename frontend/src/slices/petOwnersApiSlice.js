@@ -30,6 +30,7 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ['PetOwner'],
     }),
   }),
 })

@@ -30,6 +30,7 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ['Patron'],
     }),
   }),
 })

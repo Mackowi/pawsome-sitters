@@ -10,15 +10,20 @@ import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLoginMutation } from '../../slices/usersApiSlice'
 import { setCredentials } from '../../slices/userSlice'
+import { useLazyGetUserProfileQuery } from '../../slices/usersApiSlice'
+import { setPatronInfo } from '../../slices/patronSlice'
+import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
+
+  const { userInfo } = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [login, { isLoading }] = useLoginMutation()
-  const { userInfo } = useSelector((state) => state.user)
+  const [getUserProfile, results] = useLazyGetUserProfileQuery()
 
   // const { search } = useLocation()
   // const sp = new URLSearchParams(search)
@@ -26,16 +31,22 @@ function Login() {
   const redirect = '/dashboard'
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && results && results.data) {
+      if (userInfo.role === 'patron') {
+        console.log(results.data.profile[0])
+        dispatch(setPatronInfo(results.data.profile[0]))
+      } else {
+        dispatch(setPetOwnerInfo(results.data.profile[0]))
+      }
       navigate(redirect)
     }
-  }, [navigate, redirect, userInfo])
+  }, [navigate, dispatch, results, redirect, userInfo])
 
   const submitHandler = async () => {
     try {
       const user = await login({ email, password }).unwrap()
       dispatch(setCredentials({ ...user }))
-      navigate(redirect)
+      getUserProfile(1)
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }

@@ -54,7 +54,7 @@ function AccountSettings() {
     onSubmit: submitHandler,
   })
 
-  const { name, email, password, confirmPassword } = values
+  const { name, email, password } = values
 
   return (
     <Container className='my-4 '>
@@ -85,7 +85,7 @@ function AccountSettings() {
         <Row>
           <Col>
             <Form.Group className='mb-3' controlId='email'>
-              <Form.Label>Last email</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter email'

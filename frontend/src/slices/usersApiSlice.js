@@ -34,6 +34,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `${USERS_URL}/getProfile`,
       }),
+      keepUnusedDataFor: 5,
     }),
   }),
 })
@@ -43,5 +44,5 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUpdateMutation,
-  useGetUserProfileQuery,
+  useLazyGetUserProfileQuery,
 } = usersApiSlice

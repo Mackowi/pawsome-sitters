@@ -132,7 +132,6 @@ const getProfile = asyncHandler(async (req, res) => {
   } else {
     if (user.role === 'patron') {
       profile = await Patron.find({ user: req.user._id })
-      console.log(profile)
     } else {
       profile = await PetOwner.find({ user: req.user._id })
     }
