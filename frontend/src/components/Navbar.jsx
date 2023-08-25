@@ -106,15 +106,15 @@ function NavBar() {
                 <LinkContainer to='/dashboard'>
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
-                <LinkContainer to='/dashboard/account'>
+                <LinkContainer to='/dashboard/editaccount'>
                   <NavDropdown.Item>Account Settings</NavDropdown.Item>
                 </LinkContainer>
                 {userInfo.role ? (
-                  <LinkContainer to='/dashboard/profile'>
+                  <LinkContainer to='/dashboard/editprofile'>
                     <NavDropdown.Item>Profile Settings</NavDropdown.Item>
                   </LinkContainer>
                 ) : (
-                  <LinkContainer to='/dashboard/profile'>
+                  <LinkContainer to='/dashboard'>
                     <NavDropdown.Item>Profile Creation</NavDropdown.Item>
                   </LinkContainer>
                 )}

@@ -19,17 +19,17 @@ function EditBox() {
               </Link>
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
-              <FaFileAlt size={30} className='text-primary fw-bold' />
-              <h4 className='text-primary fw-bold mb-3'>Account Settings</h4>
-              <Link to='/dashboard/account'>
-                <Button variant='secondary'>Edit Account</Button>
+              <FaUserEdit size={30} className='text-primary fw-bold' />
+              <h4 className='text-primary fw-bold mb-3'>Profile Settings</h4>
+              <Link to='/dashboard/editprofile'>
+                <Button variant='secondary'>Edit Profile</Button>
               </Link>
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
-              <FaUserEdit size={30} className='text-primary fw-bold' />
-              <h4 className='text-primary fw-bold mb-3'>Profile Settings</h4>
-              <Link to='/dashboard/profile'>
-                <Button variant='secondary'>Edit Profile</Button>
+              <FaFileAlt size={30} className='text-primary fw-bold' />
+              <h4 className='text-primary fw-bold mb-3'>Account Settings</h4>
+              <Link to='/dashboard/editaccount'>
+                <Button variant='secondary'>Edit Account</Button>
               </Link>
             </Col>
           </>

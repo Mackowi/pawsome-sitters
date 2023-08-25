@@ -35,8 +35,8 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/dashboard/account' element={<AccountSettings />} />
-        <Route path='/dashboard/profile' element={<ProfileSettings />} />
+        <Route path='/dashboard/editaccount' element={<AccountSettings />} />
+        <Route path='/dashboard/editprofile' element={<ProfileSettings />} />
         <Route path='/dashboard/pets' element={<Pets />} />
       </Route>
     </Route>

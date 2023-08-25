@@ -37,13 +37,13 @@ const getPetOwners = asyncHandler(async (req, res) => {
 // route: GET /api/petowners/user
 // access: Private
 const getPetOwnerByUserId = asyncHandler(async (req, res) => {
-  const patron = await PetOwner.findById({ user: req.user._id })
-  if (!patron) {
+  const petOwner = await PetOwner.findById({ user: req.user._id })
+  if (!petOwner) {
     res.status(404)
-    throw new Error('Not found any pet profile for this user')
+    throw new Error('Not found any pet owner profile for this user')
   }
 
-  res.status(200).json(patron)
+  res.status(200).json(petOwner)
 })
 
 // desc: Create new patron
@@ -51,29 +51,28 @@ const getPetOwnerByUserId = asyncHandler(async (req, res) => {
 // access: Private
 const createPetOwner = asyncHandler(async (req, res) => {
   req.body.user = req.user
-  const patronExist = await PetOwner.findOne({ user: req.user._id })
-  if (patronExist) {
+  const petOwnerExist = await PetOwner.findOne({ user: req.user._id })
+  if (petOwnerExist) {
     res.status(400)
-    throw new Error('There is already patron created for this user')
+    throw new Error('There is already petowner created for this user')
   }
 
-  const patron = await PetOwner.create(req.body)
-  res.status(201).json(patron)
+  const petOwner = await PetOwner.create(req.body)
+  res.status(201).json(petOwner)
 })
 
-// desc: Update patron
-// route: POST /api/petowners/:id
+// desc: Update petowner
+// route: POST /api/petowners
 // access: Private
 const updatePetOwner = asyncHandler(async (req, res) => {
-  const petOwnerId = req.params.id
-  const patron = await PetOwner.findById(petOwnerId)
-  if (!patron) {
+  const petOwner = await PetOwner.findOne({ user: req.user._id })
+  if (!petOwner) {
     res.status(400)
-    throw new Error(`No patron with the id: ${petOwnerId}`)
+    throw new Error(`No patron for that user`)
   }
 
   const updatedPetOwner = await PetOwner.findByIdAndUpdate(
-    petOwnerId,
+    petOwner._id,
     req.body,
     {
       new: true,

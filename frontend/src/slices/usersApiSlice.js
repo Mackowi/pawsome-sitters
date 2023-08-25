@@ -31,8 +31,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUserProfile: builder.query({
-      query: (role) => ({
-        url: `/api/${role}s`,
+      query: () => ({
+        url: `${USERS_URL}/getProfile`,
       }),
     }),
   }),

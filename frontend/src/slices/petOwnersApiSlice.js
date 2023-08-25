@@ -25,8 +25,8 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updatePetOwner: builder.mutation({
-      query: (petOwnerId, data) => ({
-        url: `${PETOWNERS_URL}/${petOwnerId}`,
+      query: (data) => ({
+        url: `${PETOWNERS_URL}`,
         method: 'PUT',
         body: data,
       }),

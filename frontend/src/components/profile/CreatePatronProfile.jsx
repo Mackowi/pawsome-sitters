@@ -1,6 +1,6 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { patronSchema } from '../../validationSchemas'
@@ -12,6 +12,8 @@ import { toast } from 'react-toastify'
 import Loader from '../Loader'
 
 function CreatePatronProfile() {
+  const { userInfo } = useSelector((state) => state.user)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -37,10 +39,10 @@ function CreatePatronProfile() {
         acceptedPets: pets,
         service,
       }
-      const res = await update({ role: 'patron' }).unwrap()
-      dispatch(setCredentials({ ...res }))
       await createPatron(patron).unwrap()
       dispatch(setPatronInfo(patron))
+      const res = await update({ name: firstName, role: 'patron' }).unwrap()
+      dispatch(setCredentials({ ...res }))
       toast.success('Patron profile created')
       navigate('/dashboard')
     } catch (error) {
@@ -58,7 +60,7 @@ function CreatePatronProfile() {
     handleSubmit,
   } = useFormik({
     initialValues: {
-      firstName: '',
+      firstName: `${userInfo.name}`,
       lastName: '',
       street: '',
       houseNr: '',
@@ -248,9 +250,7 @@ function CreatePatronProfile() {
                 type='radio'
                 value='male'
                 checked={values.gender === 'male' ? true : false}
-                onChange={(e) => {
-                  handleChange(e)
-                }}
+                onChange={handleChange}
                 isInvalid={touched.gender && !!errors.gender}
               />
               <Form.Check
@@ -261,9 +261,7 @@ function CreatePatronProfile() {
                 type='radio'
                 value='female'
                 checked={values.gender === 'female' ? true : false}
-                onChange={(e) => {
-                  handleChange(e)
-                }}
+                onChange={handleChange}
                 isInvalid={touched.gender && !!errors.gender}
               />
               <Form.Control.Feedback type='invalid'>

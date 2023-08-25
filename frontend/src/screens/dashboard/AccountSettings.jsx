@@ -45,8 +45,8 @@ function AccountSettings() {
     handleSubmit,
   } = useFormik({
     initialValues: {
-      name: `${userInfo.name}`,
-      email: `${userInfo.email}`,
+      name: userInfo.name,
+      email: userInfo.email,
       password: '',
       confirmPassword: '',
     },

@@ -11,7 +11,7 @@ import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
 
 router.route('/').get(protect, getPetOwners).post(protect, createPetOwner)
-router.route('/:id').put(protect, updatePetOwner)
+router.route('/').put(protect, updatePetOwner)
 router.get('/public', getPetOwnersPub)
 router.get('/user', protect, getPetOwnerByUserId)
 

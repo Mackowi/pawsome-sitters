@@ -1,4 +1,6 @@
 import User from '../models/UserModel.js'
+import PetOwner from '../models/PetOwnerModel.js'
+import Patron from '../models/PatronModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
 import generateToken from '../utils/generateToken.js'
 
@@ -115,10 +117,38 @@ const updateUser = asyncHandler(async (req, res) => {
 })
 
 // desc: get request user
+// route: POST /api/users/getProfile
+// access: public
+const getProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  let profile
+  if (!user.role) {
+    res.status(404)
+    throw new Error('User role not assigned')
+  } else {
+    if (user.role === 'patron') {
+      profile = await Patron.find({ user: req.user._id })
+      console.log(profile)
+    } else {
+      profile = await PetOwner.find({ user: req.user._id })
+    }
+  }
+  if (!profile) {
+    res.status(404)
+    throw new Error('User profile not found')
+  }
+  res.status(200).json({ profile })
+})
+
+// desc: get request user
 // route: POST /api/users/getme
 // access: public
 const getMe = (req, res) => {
   res.send(req.user)
 }
 
-export { registerUser, loginUser, logoutUser, updateUser, getMe }
+export { registerUser, loginUser, logoutUser, updateUser, getProfile, getMe }

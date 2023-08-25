@@ -21,40 +21,38 @@ function Dashboard() {
 
   return (
     <Container>
-      <>
-        <Row className='mt-3'>
-          <Col>
-            <MessageBox />
-          </Col>
-        </Row>
-        {userInfo.role === 'patron' ? (
-          <>
-            <Row>
-              <Col>
-                <RequestBox></RequestBox>
-              </Col>
-            </Row>
-          </>
-        ) : (
-          <>
-            <Row>
-              <Col>
-                <SearchMap />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <HistoryBox />
-              </Col>
-            </Row>
-          </>
-        )}
-        <Row className='mb-3'>
-          <Col>
-            <EditBox />
-          </Col>
-        </Row>
-      </>
+      <Row className='mt-3'>
+        <Col>
+          <MessageBox />
+        </Col>
+      </Row>
+      {userInfo.role === 'patron' ? (
+        <>
+          <Row>
+            <Col>
+              <RequestBox></RequestBox>
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <>
+          <Row>
+            <Col>
+              <SearchMap />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <HistoryBox />
+            </Col>
+          </Row>
+        </>
+      )}
+      <Row className='mb-3'>
+        <Col>
+          <EditBox />
+        </Col>
+      </Row>
     </Container>
   )
 }
