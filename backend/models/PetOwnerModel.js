@@ -17,6 +17,11 @@ const PetSchema = new mongoose.Schema(
       required: true,
       maxLength: [25, 'Name can not be more than 25 characters'],
     },
+    gender: {
+      type: String,
+      required: [true, 'Please pick a gender'],
+      enum: ['male', 'female'],
+    },
     age: {
       type: Number,
       required: [true, 'Please add an age'],
@@ -24,7 +29,7 @@ const PetSchema = new mongoose.Schema(
     info: {
       type: String,
       required: [true, 'Please add info '],
-      maxLength: [100, 'Info can not be longer than 100 characters'],
+      maxLength: [200, 'Info can not be longer than 200 characters'],
     },
   },
   { timestamps: true }

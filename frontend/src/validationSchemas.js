@@ -60,3 +60,14 @@ export const userSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password'), null], 'Passwords must match'),
 })
+
+export const petSchema = yup.object().shape({
+  type: yup
+    .array()
+    .of(yup.string().oneOf(['dog', 'cat', 'rabbit']))
+    .required('Please pick you pet type'),
+  name: yup.string().required(),
+  gender: yup.string().required(),
+  age: yup.number().required(),
+  info: yup.string().required().max(200),
+})
