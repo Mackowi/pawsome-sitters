@@ -1,4 +1,12 @@
-import { Container, Row, Col, Form, Button } from 'react-bootstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Tab,
+  Button,
+  ListGroup,
+  Modal,
+} from 'react-bootstrap'
 import {
   FaCarrot,
   FaCat,
@@ -9,8 +17,11 @@ import {
   FaSquarePlus,
   FaSquareMinus,
 } from 'react-icons/fa6'
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import { petSchema } from '../../validationSchemas'
+import AddPetForm from './AddPetForm'
+import EditPetForm from './EditPetForm'
 
 const pets = [
   {
@@ -37,197 +48,108 @@ const pets = [
 ]
 
 function Pets() {
-  const submitHandler = (e) => {
-    e.preventDefault()
-    console.log('Submit handler')
-  }
+  const [show, setShow] = useState(false)
 
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      type: '',
-      name: '',
-      gender: '',
-      age: '',
-      info: '',
-    },
-    validationSchema: petSchema,
-    onSubmit: submitHandler,
-  })
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
   return (
-    <Container>
-      <h2 className='text-center mt-4 mt-md-5 text-secondary fw-bold'>
-        <FaPaw className='mb-1' /> Your Pets
-      </h2>
-      <Row className='my-3 border border-2 border-secondary bg-primary-light'>
-        <Col md={6} className='p-3 '>
-          <div className='pets-box'>
-            <div className='list-group pets-box-list'>
+    <Container className='py-5'>
+      <Tab.Container id='list-group-pets' defaultActiveKey='#link1'>
+        <Row className='border border-2 border-secondary bg-secondary-light pb-3'>
+          <h2 className='text-center mt-3 text-primary fw-bold'>
+            <FaPaw className='mb-1' /> Your Pets
+          </h2>
+          <Col sm={4}>
+            <ListGroup className='mx-2 pets-box-list'>
               {pets.map((pet, index) => (
-                <div key={index}>
-                  <div className='list-group-item list-group-item-action '>
-                    <div className='d-flex w-100 justify-content-between'>
-                      <div className='d-flex flex-column align-items-center'>
-                        <span>
-                          {pet.type === 'dog' ? (
-                            <FaDog />
-                          ) : pet.type === 'cat' ? (
-                            <FaCat />
-                          ) : (
-                            <FaCarrot />
-                          )}
-                        </span>
-                        <p className='mb-0 fw-bold text-secondary lead'>
-                          {pet.name.toUpperCase()}
-                        </p>
-                      </div>
-                      <p>{pet.gender === 'male' ? <FaMars /> : <FaVenus />}</p>
-                    </div>
-                    <p className='mb-1'>{pet.info}</p>
+                <ListGroup.Item action href={`#link${index}`}>
+                  <div className='d-flex gap-2'>
+                    <span>
+                      {pet.type === 'dog' ? (
+                        <FaDog />
+                      ) : pet.type === 'cat' ? (
+                        <FaCat />
+                      ) : (
+                        <FaCarrot />
+                      )}
+                    </span>
+                    <p className='mb-0 fw-bold lead'>
+                      {pet.name.toUpperCase()}
+                    </p>
                   </div>
-                </div>
+                </ListGroup.Item>
               ))}
-            </div>
-            <div className='d-flex justify-content-center gap-5 mt-3'>
-              <Button>
-                Add Pet <FaSquarePlus />
-              </Button>
-              <Button>
-                Remove Pet <FaSquareMinus />
+            </ListGroup>
+            <div className='text-center mt-3'>
+              <Button className='btn-primary btn-lg' onClick={handleShow}>
+                <FaSquarePlus /> Add Pet
               </Button>
             </div>
-          </div>
-        </Col>
-        <Col md={6} className='p-3 '>
-          <Form noValidate onSubmit={handleSubmit} autoComplete='off'>
-            <Form.Group controlId='name' className='my-2 my-md-1 '>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter name'
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isInvalid={touched.name && !!errors.name}
-              ></Form.Control>
-              <Form.Control.Feedback type='invalid'>
-                {errors.name}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group controlId='type' className='my-2 my-md-1 '>
-              <Form.Label className='mb-3'>Type</Form.Label>
-              <Form.Group>
-                <Form.Check
-                  inline
-                  label='Dog'
-                  name='type'
-                  type='radio'
-                  value='dog'
-                  // checked={values.type.includes('dog') ? true : false}
-                  onChange={handleChange}
-                />
-                <Form.Check
-                  inline
-                  label='Cat'
-                  name='type'
-                  type='radio'
-                  value='cat'
-                  // checked={values.type.includes('cat') ? true : false}
-                  onChange={handleChange}
-                />
-                <Form.Check
-                  inline
-                  label='Rabbit'
-                  name='type'
-                  type='radio'
-                  value='rabbit'
-                  // checked={values.type.includes('rabbit') ? true : false}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Form.Group>
-            <Form.Group controlId='gender' className='my-2 my-md-1 '>
-              <Form.Label className='text-center mb-3'>Gender</Form.Label>
-              <Form.Group>
-                <Form.Check
-                  inline
-                  id='genderMale'
-                  label='Male'
-                  name='gender'
-                  type='radio'
-                  value='male'
-                  checked={values.gender === 'male' ? true : false}
-                  onChange={handleChange}
-                  isInvalid={touched.gender && !!errors.gender}
-                />
-                <Form.Check
-                  inline
-                  id='genderFemale'
-                  label='Female'
-                  name='gender'
-                  type='radio'
-                  value='female'
-                  checked={values.gender === 'female' ? true : false}
-                  onChange={handleChange}
-                  isInvalid={touched.gender && !!errors.gender}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.gender}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Group>
+          </Col>
+          <Col sm={8}>
+            <Tab.Content>
+              {pets.map((pet, index) => (
+                <Tab.Pane eventKey={'#link' + index}>
+                  <EditPetForm pet={pet} />
+                </Tab.Pane>
+              ))}
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
 
-            <Form.Group controlId='age' className='my-2 my-md-1 '>
-              <Form.Label>Age</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter age'
-                value={values.age}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isInvalid={touched.age && !!errors.age}
-              ></Form.Control>
-              <Form.Control.Feedback type='invalid'>
-                {errors.age}
-              </Form.Control.Feedback>
-            </Form.Group>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddPetForm />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant='primary' onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-            <Form.Group className='mb-3' controlId='info'>
-              <Form.Label>Additional Information</Form.Label>
-              <Form.Control
-                as='textarea'
-                rows={3}
-                value={values.info}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isInvalid={touched.info && !!errors.info}
-              ></Form.Control>
-              <Form.Control.Feedback type='invalid'>
-                {errors.info}
-              </Form.Control.Feedback>
-            </Form.Group>
+      {/* <Col className='p-3 '>
+          <Tab.Container>
+            <ListGroup>
+              {pets.map((pet, index) => (
+                <ListGroup.Item action href={`#link${index}`}>
+                  <div className='d-flex w-100 justify-content-between'>
+                    <div className='d-flex flex-column align-items-center'>
+                      <span>
+                        {pet.type === 'dog' ? (
+                          <FaDog />
+                        ) : pet.type === 'cat' ? (
+                          <FaCat />
+                        ) : (
+                          <FaCarrot />
+                        )}
+                      </span>
+                      <p className='mb-0 fw-bold text-secondary lead'>
+                        {pet.name.toUpperCase()}
+                      </p>
+                    </div>
+                    <p>{pet.gender === 'male' ? <FaMars /> : <FaVenus />}</p>
+                  </div>
+                  <p className='mb-1'>{pet.info}</p>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+            <Tab.Content>
+              <Tab.Pane eventKey='#link0'>Tab pane content 1</Tab.Pane>
+              <Tab.Pane eventKey='#link1'>Tab pane content 2</Tab.Pane>
+              <Tab.Pane eventKey='#link2'>Tab pane content 3</Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
 
-            <div className='d-grid mt-4 mt-md-3'>
-              <Button
-                disabled={isSubmitting}
-                type='submit'
-                variant='secondary'
-                className='w-50 mx-auto'
-              >
-                Register
-              </Button>
-            </div>
-          </Form>
-        </Col>
-      </Row>
+        </Col> */}
     </Container>
   )
 }
