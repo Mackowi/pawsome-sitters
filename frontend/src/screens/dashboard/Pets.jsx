@@ -8,6 +8,8 @@ import {
   FaSquareMinus,
 } from 'react-icons/fa6'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+
 import { useFormik } from 'formik'
 import { petSchema } from '../../validationSchemas'
 import EditPetForm from './EditPetForm'
@@ -39,6 +41,8 @@ const pets = [
 ]
 
 function Pets() {
+  const { petOwnerInfo } = useSelector((state) => state.petOwner)
+
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showAddPetModal, setShowAddPetModal] = useState(false)
 
@@ -50,65 +54,74 @@ function Pets() {
 
   return (
     <Container className='py-5'>
-      <Tab.Container id='list-group-pets' defaultActiveKey='#link1'>
+      <Tab.Container id='list-group-pets' defaultActiveKey='#0'>
         <Row className='border border-2 border-secondary bg-secondary-light p-3 '>
           <h2 className='text-center text-primary fw-bold mt-3 mt-md-0'>
             <FaPaw className='mb-1' /> Your Pets
           </h2>
-
-          <Col
-            sm={4}
-            className='d-flex flex-column gap-3 justify-content-between mt-3 mt-md-0'
-          >
-            <ListGroup className='pets-box-list'>
-              {pets.map((pet, index) => (
-                <ListGroup.Item action href={`#link${index}`}>
-                  <div className='d-flex gap-2'>
-                    <span>
-                      {pet.type === 'dog' ? (
-                        <FaDog />
-                      ) : pet.type === 'cat' ? (
-                        <FaCat />
-                      ) : (
-                        <FaCarrot />
-                      )}
-                    </span>
-                    <p className='mb-0 fw-bold lead'>
-                      {pet.name.toUpperCase()}
-                    </p>
-                  </div>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-            <div className='d-flex justify-content-around'>
-              <Button
-                variant='btn btn-outline-primary'
-                onClick={openConfirmModal}
+          {petOwnerInfo.pets.length ? (
+            <>
+              <Col
+                sm={4}
+                className='d-flex flex-column gap-3 justify-content-between mt-3 mt-md-0'
               >
-                <FaSquareMinus className='mb-1' /> Remove Pet
-              </Button>
-              <Button className='btn-primary' onClick={openAddPetModal}>
+                <ListGroup className='pets-box-list'>
+                  {petOwnerInfo.pets.map((pet, index) => (
+                    <ListGroup.Item action href={`#${index}`} key={index}>
+                      <div className='d-flex gap-2'>
+                        <span>
+                          {pet.type === 'dog' ? (
+                            <FaDog />
+                          ) : pet.type === 'cat' ? (
+                            <FaCat />
+                          ) : (
+                            <FaCarrot />
+                          )}
+                        </span>
+                        <p className='mb-0 fw-bold lead'>
+                          {pet.name.toUpperCase()}
+                        </p>
+                      </div>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <div className='d-flex justify-content-around'>
+                  <Button
+                    variant='btn btn-outline-primary'
+                    onClick={openConfirmModal}
+                  >
+                    <FaSquareMinus className='mb-1' /> Remove Pet
+                  </Button>
+                  <Button className='btn-primary' onClick={openAddPetModal}>
+                    <FaSquarePlus className='mb-1' /> Add Pet
+                  </Button>
+                </div>
+              </Col>
+
+              <Col sm={8} className='pe-3 mt-4 mt-md-0'>
+                <Tab.Content>
+                  {petOwnerInfo.pets.map((pet, index) => (
+                    <Tab.Pane eventKey={'#' + index}>
+                      <EditPetForm pet={pet} />
+                    </Tab.Pane>
+                  ))}
+                </Tab.Content>
+              </Col>
+            </>
+          ) : (
+            <div className='text-center mt-3'>
+              <Button className='btn-primary w-50 ' onClick={openAddPetModal}>
                 <FaSquarePlus className='mb-1' /> Add Pet
               </Button>
             </div>
-          </Col>
-
-          <Col sm={8} className='pe-3 mt-4 mt-md-0'>
-            <Tab.Content>
-              {pets.map((pet, index) => (
-                <Tab.Pane eventKey={'#link' + index}>
-                  <EditPetForm pet={pet} />
-                </Tab.Pane>
-              ))}
-            </Tab.Content>
-          </Col>
+          )}
         </Row>
       </Tab.Container>
 
       <ConfirmModal
         showConfirmModal={showConfirmModal}
         closeConfirmModal={closeConfirmModal}
-        info={pets[0]}
+        info={false}
       />
 
       <AddPetModal

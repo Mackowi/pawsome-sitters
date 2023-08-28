@@ -54,7 +54,7 @@ const createPetOwner = asyncHandler(async (req, res) => {
   const petOwnerExist = await PetOwner.findOne({ user: req.user._id })
   if (petOwnerExist) {
     res.status(400)
-    throw new Error('There is already petowner created for this user')
+    throw new Error('There is already pet owner created for this user')
   }
 
   const petOwner = await PetOwner.create(req.body)
@@ -62,13 +62,13 @@ const createPetOwner = asyncHandler(async (req, res) => {
 })
 
 // desc: Update petowner
-// route: POST /api/petowners
+// route: PUT /api/petowners
 // access: Private
 const updatePetOwner = asyncHandler(async (req, res) => {
   const petOwner = await PetOwner.findOne({ user: req.user._id })
   if (!petOwner) {
     res.status(400)
-    throw new Error(`No patron for that user`)
+    throw new Error(`No pet owner for that user`)
   }
 
   const updatedPetOwner = await PetOwner.findByIdAndUpdate(
@@ -82,10 +82,56 @@ const updatePetOwner = asyncHandler(async (req, res) => {
   res.status(200).json(updatedPetOwner)
 })
 
+// desc: Add new pet
+// route: POST /api/petowners/pets
+// access: Private
+const addPet = asyncHandler(async (req, res) => {
+  const newPet = req.body
+  const petOwner = await PetOwner.findOne({ user: req.user._id })
+  if (!petOwner) {
+    res.status(400)
+    throw new Error(`No pet owner for that user`)
+  }
+  newPet.petOwner = petOwner._id
+  petOwner.pets.push(newPet)
+  await petOwner.save()
+  res.status(200).json({ message: 'Pet added' })
+})
+
+// desc: Update pet data
+// route: PUT /api/petowners/pets/:id
+// access: Private
+const updatePet = asyncHandler(async (req, res) => {
+  const newPetData = req.body
+
+  const petOwner = await PetOwner.findOne({ user: req.user._id })
+  if (!petOwner) {
+    res.status(400)
+    throw new Error(`No pet owner for that user`)
+  }
+
+  const updatedPets = petOwner.pets.map((pet) => {
+    if (pet._id.toString() === req.params.id.toString()) {
+      return {
+        ...pet.toObject(),
+        ...newPetData,
+      }
+    }
+    return pet
+  })
+
+  petOwner.pets = updatedPets
+  await petOwner.save()
+
+  res.status(200).json(petOwner)
+})
+
 export {
   getPetOwnersPub,
   getPetOwners,
   getPetOwnerByUserId,
   createPetOwner,
   updatePetOwner,
+  addPet,
+  updatePet,
 }
