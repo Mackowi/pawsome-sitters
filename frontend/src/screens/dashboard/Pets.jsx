@@ -1,18 +1,8 @@
-import {
-  Container,
-  Row,
-  Col,
-  Tab,
-  Button,
-  ListGroup,
-  Modal,
-} from 'react-bootstrap'
+import { Container, Row, Col, Tab, Button, ListGroup } from 'react-bootstrap'
 import {
   FaCarrot,
   FaCat,
   FaDog,
-  FaMars,
-  FaVenus,
   FaPaw,
   FaSquarePlus,
   FaSquareMinus,
@@ -20,8 +10,9 @@ import {
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import { petSchema } from '../../validationSchemas'
-import AddPetForm from './AddPetForm'
 import EditPetForm from './EditPetForm'
+import AddPetModal from './AddPetModal'
+import ConfirmModal from '../../components/ConfirmModal'
 
 const pets = [
   {
@@ -48,20 +39,28 @@ const pets = [
 ]
 
 function Pets() {
-  const [show, setShow] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showAddPetModal, setShowAddPetModal] = useState(false)
 
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
+  const openConfirmModal = () => setShowConfirmModal(true)
+  const closeConfirmModal = () => setShowConfirmModal(false)
+
+  const openAddPetModal = () => setShowAddPetModal(true)
+  const closeAddPetModal = () => setShowAddPetModal(false)
 
   return (
     <Container className='py-5'>
       <Tab.Container id='list-group-pets' defaultActiveKey='#link1'>
-        <Row className='border border-2 border-secondary bg-secondary-light pb-3'>
-          <h2 className='text-center mt-3 text-primary fw-bold'>
+        <Row className='border border-2 border-secondary bg-secondary-light p-3 '>
+          <h2 className='text-center text-primary fw-bold mt-3 mt-md-0'>
             <FaPaw className='mb-1' /> Your Pets
           </h2>
-          <Col sm={4}>
-            <ListGroup className='mx-2 pets-box-list'>
+
+          <Col
+            sm={4}
+            className='d-flex flex-column gap-3 justify-content-between mt-3 mt-md-0'
+          >
+            <ListGroup className='pets-box-list'>
               {pets.map((pet, index) => (
                 <ListGroup.Item action href={`#link${index}`}>
                   <div className='d-flex gap-2'>
@@ -81,13 +80,20 @@ function Pets() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
-            <div className='text-center mt-3'>
-              <Button className='btn-primary btn-lg' onClick={handleShow}>
-                <FaSquarePlus /> Add Pet
+            <div className='d-flex justify-content-around'>
+              <Button
+                variant='btn btn-outline-primary'
+                onClick={openConfirmModal}
+              >
+                <FaSquareMinus className='mb-1' /> Remove Pet
+              </Button>
+              <Button className='btn-primary' onClick={openAddPetModal}>
+                <FaSquarePlus className='mb-1' /> Add Pet
               </Button>
             </div>
           </Col>
-          <Col sm={8}>
+
+          <Col sm={8} className='pe-3 mt-4 mt-md-0'>
             <Tab.Content>
               {pets.map((pet, index) => (
                 <Tab.Pane eventKey={'#link' + index}>
@@ -99,57 +105,16 @@ function Pets() {
         </Row>
       </Tab.Container>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <AddPetForm />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant='secondary' onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant='primary' onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ConfirmModal
+        showConfirmModal={showConfirmModal}
+        closeConfirmModal={closeConfirmModal}
+        info={pets[0]}
+      />
 
-      {/* <Col className='p-3 '>
-          <Tab.Container>
-            <ListGroup>
-              {pets.map((pet, index) => (
-                <ListGroup.Item action href={`#link${index}`}>
-                  <div className='d-flex w-100 justify-content-between'>
-                    <div className='d-flex flex-column align-items-center'>
-                      <span>
-                        {pet.type === 'dog' ? (
-                          <FaDog />
-                        ) : pet.type === 'cat' ? (
-                          <FaCat />
-                        ) : (
-                          <FaCarrot />
-                        )}
-                      </span>
-                      <p className='mb-0 fw-bold text-secondary lead'>
-                        {pet.name.toUpperCase()}
-                      </p>
-                    </div>
-                    <p>{pet.gender === 'male' ? <FaMars /> : <FaVenus />}</p>
-                  </div>
-                  <p className='mb-1'>{pet.info}</p>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-            <Tab.Content>
-              <Tab.Pane eventKey='#link0'>Tab pane content 1</Tab.Pane>
-              <Tab.Pane eventKey='#link1'>Tab pane content 2</Tab.Pane>
-              <Tab.Pane eventKey='#link2'>Tab pane content 3</Tab.Pane>
-            </Tab.Content>
-          </Tab.Container>
-
-        </Col> */}
+      <AddPetModal
+        showAddPetModal={showAddPetModal}
+        closeAddPetModal={closeAddPetModal}
+      />
     </Container>
   )
 }

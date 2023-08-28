@@ -106,9 +106,11 @@ function NavBar() {
                 <LinkContainer to='/dashboard'>
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
-                <LinkContainer to='/dashboard/editaccount'>
-                  <NavDropdown.Item>Account Settings</NavDropdown.Item>
-                </LinkContainer>
+                {userInfo.role === 'petOwner' && (
+                  <LinkContainer to='/dashboard/pets'>
+                    <NavDropdown.Item>Your Pets</NavDropdown.Item>
+                  </LinkContainer>
+                )}
                 {userInfo.role ? (
                   <LinkContainer to='/dashboard/editprofile'>
                     <NavDropdown.Item>Profile Settings</NavDropdown.Item>
@@ -118,6 +120,9 @@ function NavBar() {
                     <NavDropdown.Item>Profile Creation</NavDropdown.Item>
                   </LinkContainer>
                 )}
+                <LinkContainer to='/dashboard/editaccount'>
+                  <NavDropdown.Item>Account Settings</NavDropdown.Item>
+                </LinkContainer>
                 <NavDropdown.Item onClick={logoutHandler}>
                   Logout
                 </NavDropdown.Item>
