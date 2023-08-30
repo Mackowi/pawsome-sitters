@@ -4,7 +4,7 @@ import { petSchema } from '../../validationSchemas'
 import { useFormik } from 'formik'
 import { useAddPetMutation } from '../../slices/petOwnersApiSlice'
 import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import Loader from '../../components/Loader'
 
@@ -13,7 +13,7 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
 
   const [addPet, { isLoading }] = useAddPetMutation()
 
-  const submitHandler = async (formik) => {
+  const submitHandler = async () => {
     try {
       const newPet = values
       const res = await addPet(newPet).unwrap()

@@ -15,7 +15,7 @@ const generateToken = (res, userId) => {
     // prevents attacks
     sameSite: 'strict',
     // same as expiresIn in token creation
-    maxAge: 1000 * 60 * 30,
+    maxAge: 1000 * 60 * 180,
   })
 }
 

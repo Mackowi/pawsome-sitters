@@ -123,8 +123,7 @@ const deletePet = asyncHandler(async (req, res) => {
 // route: PUT /api/petowners/pets/:id
 // access: Private
 const updatePet = asyncHandler(async (req, res) => {
-  const newPetData = req.body
-
+  const { id, type, name, gender, age, info } = req.body
   const petOwner = await PetOwner.findOne({ user: req.user._id })
   if (!petOwner) {
     res.status(404)
@@ -132,10 +131,14 @@ const updatePet = asyncHandler(async (req, res) => {
   }
 
   const updatedPets = petOwner.pets.map((pet) => {
-    if (pet._id.toString() === req.params.id.toString()) {
+    if (pet._id.toString() === id) {
       return {
-        ...pet.toObject(),
-        ...newPetData,
+        ...pet,
+        type,
+        name,
+        gender,
+        age,
+        info,
       }
     }
     return pet

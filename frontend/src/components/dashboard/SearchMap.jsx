@@ -1,5 +1,5 @@
 import { Card, Row, Col, Form, Button } from 'react-bootstrap'
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css' // Import Leaflet CSS
 import { FaMapMarkedAlt } from 'react-icons/fa'
 

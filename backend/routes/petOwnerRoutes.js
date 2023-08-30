@@ -20,7 +20,7 @@ router
   .post(createPetOwner)
   .put(updatePetOwner)
 router.get('/user', protect, getPetOwnerByUserId)
-router.post('/pets', protect, addPet)
-router.route('/pets/:id').all(protect).put(updatePet).delete(deletePet)
+router.route('/pets').all(protect).post(addPet).put(updatePet)
+router.route('/pets/:id').all(protect).delete(deletePet)
 
 export default router
