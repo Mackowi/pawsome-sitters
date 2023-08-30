@@ -32,6 +32,19 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['PetOwner'],
     }),
+    addPet: builder.mutation({
+      query: (data) => ({
+        url: `${PETOWNERS_URL}/pets`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    removePet: builder.mutation({
+      query: (petId) => ({
+        url: `${PETOWNERS_URL}/pets/${petId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -40,4 +53,6 @@ export const {
   useGetPetOwnerQuery,
   useCreatePetOwnerMutation,
   useUpdatePetOwnerMutation,
+  useAddPetMutation,
+  useRemovePetMutation,
 } = petOwnersApiSlice

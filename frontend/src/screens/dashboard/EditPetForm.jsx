@@ -25,11 +25,11 @@ function EditPetForm({ pet }) {
     handleSubmit,
   } = useFormik({
     initialValues: {
-      type: '',
+      type: pet.type,
       name: pet.name,
-      gender: '',
-      age: '',
-      info: '',
+      gender: pet.gender,
+      age: pet.age,
+      info: pet.info,
     },
     validationSchema: petSchema,
     onSubmit: submitHandler,
@@ -169,13 +169,13 @@ function EditPetForm({ pet }) {
             <Form.Control
               as='textarea'
               rows={3}
-              value={values.description}
+              value={values.info}
               onChange={handleChange}
               onBlur={handleBlur}
-              isInvalid={touched.description && !!errors.description}
+              isInvalid={touched.info && !!errors.info}
             ></Form.Control>
             <Form.Control.Feedback type='invalid'>
-              {errors.description}
+              {errors.info}
             </Form.Control.Feedback>
           </Form.Group>
         </Row>

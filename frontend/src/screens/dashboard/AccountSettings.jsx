@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import { setCredentials } from '../../slices/userSlice'
 
 import { useFormik } from 'formik'
@@ -17,7 +17,7 @@ function AccountSettings() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [updatePatron, { isLoading }] = useUpdateMutation()
+  const [updatePatron, { isLoading }] = useUpdateUserMutation()
 
   const submitHandler = async () => {
     try {

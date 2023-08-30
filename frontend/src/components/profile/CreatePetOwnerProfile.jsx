@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { petOwnerSchema } from '../../validationSchemas'
-import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import { setCredentials } from '../../slices/userSlice'
 import { useCreatePetOwnerMutation } from '../../slices/petOwnersApiSlice'
 import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
@@ -18,7 +18,7 @@ function CreatePetOwnerProfile() {
   const dispatch = useDispatch()
 
   const [createPetOwner, { isLoading }] = useCreatePetOwnerMutation()
-  const [update] = useUpdateMutation()
+  const [updateUser] = useUpdateUserMutation()
 
   const submitHandler = async () => {
     try {
@@ -36,7 +36,7 @@ function CreatePetOwnerProfile() {
       }
       await createPetOwner(petOwner).unwrap()
       dispatch(setPetOwnerInfo(petOwner))
-      const res = await update({
+      const res = await updateUser({
         name: firstName,
         role: 'petOwner',
       }).unwrap()

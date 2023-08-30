@@ -7,16 +7,20 @@ import {
   getPetOwnerByUserId,
   addPet,
   updatePet,
+  deletePet,
 } from '../controllers/petOwnerController.js'
 import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.route('/').get(protect, getPetOwners).post(protect, createPetOwner)
-router.route('/').put(protect, updatePetOwner)
-router.get('/public', getPetOwnersPub)
+router
+  .route('/')
+  .all(protect)
+  .get(getPetOwners)
+  .post(createPetOwner)
+  .put(updatePetOwner)
 router.get('/user', protect, getPetOwnerByUserId)
 router.post('/pets', protect, addPet)
-router.put('/pets/:id', protect, updatePet)
+router.route('/pets/:id').all(protect).put(updatePet).delete(deletePet)
 
 export default router

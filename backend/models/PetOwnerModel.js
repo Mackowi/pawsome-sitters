@@ -28,7 +28,6 @@ const PetSchema = new mongoose.Schema(
     },
     info: {
       type: String,
-      required: [true, 'Please add info '],
       maxLength: [200, 'Info can not be longer than 200 characters'],
     },
   },

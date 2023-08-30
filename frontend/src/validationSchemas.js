@@ -63,11 +63,11 @@ export const userSchema = yup.object().shape({
 
 export const petSchema = yup.object().shape({
   type: yup
-    .array()
-    .of(yup.string().oneOf(['dog', 'cat', 'rabbit']))
+    .string()
+    .oneOf(['dog', 'cat', 'rabbit'])
     .required('Please pick you pet type'),
   name: yup.string().required(),
   gender: yup.string().required(),
   age: yup.number().required(),
-  info: yup.string().required().max(200),
+  info: yup.string().max(200),
 })

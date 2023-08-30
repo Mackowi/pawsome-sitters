@@ -67,7 +67,7 @@ const createPetOwner = asyncHandler(async (req, res) => {
 const updatePetOwner = asyncHandler(async (req, res) => {
   const petOwner = await PetOwner.findOne({ user: req.user._id })
   if (!petOwner) {
-    res.status(400)
+    res.status(404)
     throw new Error(`No pet owner for that user`)
   }
 
@@ -89,13 +89,34 @@ const addPet = asyncHandler(async (req, res) => {
   const newPet = req.body
   const petOwner = await PetOwner.findOne({ user: req.user._id })
   if (!petOwner) {
-    res.status(400)
+    res.status(404)
     throw new Error(`No pet owner for that user`)
   }
   newPet.petOwner = petOwner._id
   petOwner.pets.push(newPet)
   await petOwner.save()
-  res.status(200).json({ message: 'Pet added' })
+  res.status(201).json(petOwner)
+})
+
+// desc: Update pet data
+// route: PUT /api/petowners/pets/:id
+// access: Private
+const deletePet = asyncHandler(async (req, res) => {
+  const petId = req.params.id
+  const petOwner = await PetOwner.findOne({ user: req.user._id })
+  if (!petOwner) {
+    res.status(404)
+    throw new Error(`No pet owner for that user`)
+  }
+  const pets = petOwner.pets.filter((pet) => {
+    return pet._id.toString() !== petId
+  })
+
+  petOwner.pets = pets
+
+  await petOwner.save()
+
+  res.status(200).json(petOwner)
 })
 
 // desc: Update pet data
@@ -106,7 +127,7 @@ const updatePet = asyncHandler(async (req, res) => {
 
   const petOwner = await PetOwner.findOne({ user: req.user._id })
   if (!petOwner) {
-    res.status(400)
+    res.status(404)
     throw new Error(`No pet owner for that user`)
   }
 
@@ -119,7 +140,6 @@ const updatePet = asyncHandler(async (req, res) => {
     }
     return pet
   })
-
   petOwner.pets = updatedPets
   await petOwner.save()
 
@@ -134,4 +154,5 @@ export {
   updatePetOwner,
   addPet,
   updatePet,
+  deletePet,
 }

@@ -6,7 +6,7 @@ import { useUpdatePatronMutation } from '../../slices/patronsApiSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
-import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import { setPatronInfo } from '../../slices/patronSlice'
 import { setCredentials } from '../../slices/userSlice'
 import { patronSchema } from '../../validationSchemas'
@@ -19,7 +19,7 @@ function EditPatronProfile() {
   const dispatch = useDispatch()
 
   const [updatePatron, { isLoading, error }] = useUpdatePatronMutation()
-  const [update] = useUpdateMutation()
+  const [updateUser] = useUpdateUserMutation()
 
   const submitHandler = async () => {
     try {
@@ -43,7 +43,7 @@ function EditPatronProfile() {
       const updatedPatronData = await updatePatron(patron).unwrap()
       dispatch(setPatronInfo(updatedPatronData))
       if (firstName) {
-        const res = await update({
+        const res = await updateUser({
           name: firstName,
         }).unwrap()
         dispatch(setCredentials({ ...res }))

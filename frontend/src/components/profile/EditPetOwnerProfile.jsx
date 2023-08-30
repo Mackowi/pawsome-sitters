@@ -9,7 +9,7 @@ import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 import { useFormik } from 'formik'
 import { petOwnerSchema } from '../../validationSchemas'
 import { setCredentials } from '../../slices/userSlice'
-import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import Message from '../Message'
 
 function EditPetOwnerProfile() {
@@ -19,7 +19,7 @@ function EditPetOwnerProfile() {
   const dispatch = useDispatch()
 
   const [updatePetOwner, { isLoading, error }] = useUpdatePetOwnerMutation()
-  const [update] = useUpdateMutation()
+  const [updateUser] = useUpdateUserMutation()
 
   const submitHandler = async () => {
     try {
@@ -39,7 +39,7 @@ function EditPetOwnerProfile() {
       const updatedPetOwner = await updatePetOwner(petOwner).unwrap()
       dispatch(setPetOwnerInfo(updatedPetOwner))
       if (firstName) {
-        const res = await update({
+        const res = await updateUser({
           name: firstName,
         }).unwrap()
         dispatch(setCredentials({ ...res }))

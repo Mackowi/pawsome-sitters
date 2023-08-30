@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { patronSchema } from '../../validationSchemas'
 import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
-import { useUpdateMutation } from '../../slices/usersApiSlice'
+import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import { setCredentials } from '../../slices/userSlice'
 import { setPatronInfo } from '../../slices/patronSlice'
 import { toast } from 'react-toastify'
@@ -18,7 +18,7 @@ function CreatePatronProfile() {
   const dispatch = useDispatch()
 
   const [createPatron, { isLoading }] = useCreatePatronMutation()
-  const [update] = useUpdateMutation()
+  const [updateUser] = useUpdateUserMutation()
 
   const submitHandler = async () => {
     try {
@@ -41,7 +41,7 @@ function CreatePatronProfile() {
       }
       await createPatron(patron).unwrap()
       dispatch(setPatronInfo(patron))
-      const res = await update({ name: firstName, role: 'patron' }).unwrap()
+      const res = await updateUser({ name: firstName, role: 'patron' }).unwrap()
       dispatch(setCredentials({ ...res }))
       toast.success('Patron profile created')
       navigate('/dashboard')
