@@ -28,25 +28,27 @@ function Login() {
   // const { search } = useLocation()
   // const sp = new URLSearchParams(search)
   // const redirect = sp.get('redirect') || '/'
-  const redirect = '/dashboard'
 
   useEffect(() => {
     if (userInfo && results && results.data) {
       if (userInfo.role === 'patron') {
-        console.log(results.data.profile[0])
         dispatch(setPatronInfo(results.data.profile[0]))
       } else {
         dispatch(setPetOwnerInfo(results.data.profile[0]))
       }
-      navigate(redirect)
+      navigate('/dashboard')
     }
-  }, [navigate, dispatch, results, redirect, userInfo])
+  }, [navigate, dispatch, results, userInfo])
 
   const submitHandler = async () => {
     try {
       const user = await login({ email, password }).unwrap()
       dispatch(setCredentials({ ...user }))
-      getUserProfile(1)
+      if (user.role) {
+        getUserProfile(1)
+      } else {
+        navigate('/profile')
+      }
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }

@@ -34,8 +34,8 @@ function CreatePetOwnerProfile() {
         },
         phone,
       }
-      await createPetOwner(petOwner).unwrap()
-      dispatch(setPetOwnerInfo(petOwner))
+      const petOwnerData = await createPetOwner(petOwner).unwrap()
+      dispatch(setPetOwnerInfo(petOwnerData))
       const res = await updateUser({
         name: firstName,
         role: 'petOwner',

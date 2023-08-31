@@ -1,58 +1,27 @@
 import { Card, Row, Col, Form, Button } from 'react-bootstrap'
-import { MapContainer, TileLayer } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css' // Import Leaflet CSS
+import { MapContainer, TileLayer, Marker, Popup, Icon } from 'react-leaflet'
+import * as L from 'leaflet'
+// import 'leaflet/dist/leaflet.css' // CHANGED TO LINK IN HEAD OF HTML FILE TO FIX MARKER ISSUE
 import { FaMapMarkedAlt } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import Map from './Map'
 
 function SearchMap() {
-  const users = [
-    {
-      fullName: 'Joe Smith',
-      address: '123 Main St, City',
-      rating: 4.5,
-    },
-    {
-      fullName: 'Alice Johnson',
-      address: '456 Elm St, Town',
-      rating: 5.0,
-    },
-    {
-      fullName: 'Bob Anderson',
-      address: '789 Oak Ave, Village',
-      rating: 4.2,
-    },
-    {
-      fullName: 'Emily Davis',
-      address: '987 Pine Rd, Hamlet',
-      rating: 4.8,
-    },
-    {
-      fullName: 'Alex Wilson',
-      address: '654 Maple Blvd, Suburb',
-      rating: 4.6,
-    },
-    {
-      fullName: 'Alice Johnson',
-      address: '456 Elm St, Town',
-      rating: 5.0,
-    },
-    {
-      fullName: 'Bob Anderson',
-      address: '789 Oak Ave, Village',
-      rating: 4.2,
-    },
-    {
-      fullName: 'Emily Davis',
-      address: '987 Pine Rd, Hamlet',
-      rating: 4.8,
-    },
-    {
-      fullName: 'Alex Wilson',
-      address: '654 Maple Blvd, Suburb',
-      rating: 4.6,
-    },
-  ]
+  const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
-  const position = [52.35444153530397, 5.00180295828673] // Initial latitude and longitude
+  const LeafIcon = L.Icon.extend({
+    options: {},
+  })
+
+  const blueIcon = new LeafIcon({
+      iconUrl:
+        'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|abcdef&chf=a,s,ee00FFFF',
+    }),
+    greenIcon = new LeafIcon({
+      iconUrl:
+        'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|2ecc71&chf=a,s,ee00FFFF',
+    })
+
   return (
     <Card className='my-2 bg-primary-light border-primary border-2 search-map'>
       <Row className='p-3'>
@@ -96,7 +65,7 @@ function SearchMap() {
         <Col md={4} className='d-flex'>
           <Card className='flex-fill'>
             <div className='list-group search-map-list '>
-              {users.map((user, index) => (
+              {/* {users.map((user, index) => (
                 <div key={index}>
                   <a
                     href='#'
@@ -109,22 +78,47 @@ function SearchMap() {
                     <p className='mb-1'>{user.address}</p>
                   </a>
                 </div>
-              ))}
+              ))} */}
             </div>
           </Card>
         </Col>
         <Col md={8} className='mt-3 mt-md-0'>
           <Card>
             <MapContainer
-              center={position}
+              center={[
+                petOwnerInfo.address.coordinates[1],
+                petOwnerInfo.address.coordinates[0],
+              ]}
+              scrollWheelZoom={true}
               zoom={13}
               style={{ width: '100%' }}
               className='search-map-container '
             >
               <TileLayer
-                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               />
+              <Marker
+                position={[
+                  petOwnerInfo.address.coordinates[1],
+                  petOwnerInfo.address.coordinates[0],
+                ]}
+                title='Your Address'
+              >
+                <Popup>Your Adress</Popup>
+              </Marker>
+              <Marker
+                position={[
+                  petOwnerInfo.address.coordinates[1],
+                  petOwnerInfo.address.coordinates[0],
+                ]}
+                icon={blueIcon}
+              >
+                <Popup>
+                  <h1>Salt lake City</h1>
+                </Popup>
+              </Marker>
+              <Map />
             </MapContainer>
           </Card>
         </Col>

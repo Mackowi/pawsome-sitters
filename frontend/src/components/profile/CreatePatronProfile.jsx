@@ -39,8 +39,8 @@ function CreatePatronProfile() {
         acceptedPets: pets,
         service,
       }
-      await createPatron(patron).unwrap()
-      dispatch(setPatronInfo(patron))
+      const patronData = await createPatron(patron).unwrap()
+      dispatch(setPatronInfo(patronData))
       const res = await updateUser({ name: firstName, role: 'patron' }).unwrap()
       dispatch(setCredentials({ ...res }))
       toast.success('Patron profile created')

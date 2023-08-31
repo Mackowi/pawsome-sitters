@@ -3,6 +3,7 @@ import {
   getPatronsPub,
   getPatrons,
   getPatronByUserId,
+  getPatronsInArea,
   createPatron,
   updatePatron,
 } from '../controllers/patronController.js'
@@ -17,5 +18,6 @@ router
   .post(protect, createPatron)
   .put(protect, updatePatron)
 router.get('/user', protect, getPatronByUserId)
+router.get('/area', protect, getPatronsInArea)
 
 export default router

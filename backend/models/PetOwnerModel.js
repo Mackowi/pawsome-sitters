@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import geocoder from '../utils/geocoder.js'
 
 const PetSchema = new mongoose.Schema(
   {
@@ -50,16 +51,16 @@ const PetOwnerSchema = new mongoose.Schema(
       required: [true, 'Please add a last name'],
     },
     address: {
-      street: {
-        type: String,
-        required: [true, 'Please fill a street name'],
-      },
       houseNr: {
         type: String,
         required: [true, 'Please fill a house Nr'],
       },
       addition: {
         type: String,
+      },
+      street: {
+        type: String,
+        required: [true, 'Please fill a street name'],
       },
       city: {
         type: String,
@@ -68,6 +69,14 @@ const PetOwnerSchema = new mongoose.Schema(
       postcode: {
         type: String,
         required: [true, 'Please fill a postcode'],
+      },
+      type: {
+        type: String,
+        enum: ['Point'],
+      },
+      coordinates: {
+        type: [Number],
+        index: '2dsphere',
       },
     },
     phone: {
@@ -79,6 +88,33 @@ const PetOwnerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+
+PetOwnerSchema.pre('save', async function (next) {
+  const addressString = `${this.address.street} ${this.address.houseNr}${this.address.addition} ${this.address.city} ${this.address.postcode}`
+  const loc = await geocoder.geocode(addressString)
+  this.address = {
+    ...this.address,
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+  }
+  next()
+})
+
+PetOwnerSchema.pre('findOneAndUpdate', async function (next) {
+  const addressString = `${this._update.address.street} ${this._update.address.houseNr}${this._update.address.addition} ${this._update.address.city} ${this._update.address.postcode}`
+
+  try {
+    const location = await geocoder.geocode(addressString)
+    this._update.address = {
+      ...this._update.address,
+      type: 'Point',
+      coordinates: [location[0].longitude, location[0].latitude],
+    }
+  } catch (error) {
+    return next(error)
+  }
+  next()
+})
 
 const PetOwner = mongoose.model('PetOwner', PetOwnerSchema)
 

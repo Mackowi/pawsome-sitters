@@ -46,18 +46,20 @@ const getPetOwnerByUserId = asyncHandler(async (req, res) => {
   res.status(200).json(petOwner)
 })
 
-// desc: Create new patron
+// desc: Create new petowner
 // route: POST /api/petowners
 // access: Private
 const createPetOwner = asyncHandler(async (req, res) => {
-  req.body.user = req.user
+  req.body.user = req.user._id
+  const petOwnerData = req.body
   const petOwnerExist = await PetOwner.findOne({ user: req.user._id })
   if (petOwnerExist) {
     res.status(400)
     throw new Error('There is already pet owner created for this user')
   }
 
-  const petOwner = await PetOwner.create(req.body)
+  const petOwner = await PetOwner.create(petOwnerData)
+
   res.status(201).json(petOwner)
 })
 
