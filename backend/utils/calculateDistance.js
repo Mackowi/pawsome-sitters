@@ -18,15 +18,7 @@ export default function calculateDistance(lat1, lon1, lat2, lon2) {
 
   const preciseDistance = earthRadiusKm * c // Distance in kilometers
 
-  const distance = preciseDistance.toFixed(2)
+  const distance = preciseDistance.toFixed(2) - 1
 
   return distance
 }
-
-// const lat1 = 52.52 // Latitude of point 1
-// const lon1 = 13.405 // Longitude of point 1
-// const lat2 = 48.8566 // Latitude of point 2
-// const lon2 = 2.3522 // Longitude of point 2
-
-// const distance = calculateHaversineDistance(lat1, lon1, lat2, lon2)
-// console.log(`Distance between the two points: ${distance.toFixed(2)} km`)

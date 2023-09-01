@@ -18,6 +18,6 @@ router
   .post(protect, createPatron)
   .put(protect, updatePatron)
 router.get('/user', protect, getPatronByUserId)
-router.get('/area', protect, getPatronsInArea)
+router.post('/area', protect, getPatronsInArea)
 
 export default router

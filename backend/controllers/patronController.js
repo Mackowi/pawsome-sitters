@@ -44,24 +44,25 @@ const getPatrons = asyncHandler(async (req, res) => {
 })
 
 // desc: Get patron profile of the user
-// route: GET /api/patrons/area
+// route: POST /api/patrons/area
 // access: Private
 const getPatronsInArea = asyncHandler(async (req, res) => {
-  const { centerCoords, edgeCoords } = req.body
+  const { centerCoords, boundsCoords } = req.body
 
-  const lng = centerCoords[0]
-  const lat = centerCoords[1]
+  if (!centerCoords.length || !boundsCoords.length) {
+    res.status(400)
+    throw new Error('Missing coordinates')
+  }
 
-  // const distance = calculateDistance(lat, lng, edgeCoords[0], edgeCoords[1])
+  const lat = centerCoords[0]
+  const lng = centerCoords[1]
 
-  const distance = 50
+  const distance = calculateDistance(lat, lng, boundsCoords[0], boundsCoords[1])
 
   // calculate the radius using radians
   // divide distance by radius of earth
   // Earth Radius = 6378km
   const radius = distance / 6378
-
-  // console.log(distance)
 
   const patrons = await Patron.find({
     address: {

@@ -32,6 +32,14 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Patron'],
     }),
+    getPatronsInArea: builder.mutation({
+      query: (data) => ({
+        url: `${PATRONS_URL}/area`,
+        method: 'POST',
+        body: data,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 })
 
@@ -40,4 +48,5 @@ export const {
   useGetPatronQuery,
   useCreatePatronMutation,
   useUpdatePatronMutation,
+  useGetPatronsInAreaMutation,
 } = patronsApiSlice
