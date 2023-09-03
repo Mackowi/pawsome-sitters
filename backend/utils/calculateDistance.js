@@ -18,7 +18,7 @@ export default function calculateDistance(lat1, lon1, lat2, lon2) {
 
   const preciseDistance = earthRadiusKm * c // Distance in kilometers
 
-  const distance = preciseDistance.toFixed(2) - 1
+  const distance = preciseDistance.toFixed(2)
 
   return distance
 }

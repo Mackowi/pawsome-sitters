@@ -36,7 +36,7 @@ function Coords({ setCenterCoords, setBoundsCoords }) {
       const { lat, lng } = initialBounds._northEast
       setBoundsCoords([lat, lng])
     }
-  }, [map])
+  }, [map, setBoundsCoords])
 }
 
 export default Coords

@@ -5,7 +5,7 @@ import { FaMapMarkedAlt, FaRegAddressCard } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import Coords from './Coords'
 import { useEffect, useState, useRef } from 'react'
-import { homeIcon, primaryIcon, secondaryIcon } from '../mapIcons/icons'
+import { homeIcon, primaryIcon, secondaryIcon } from './MapMarkers'
 import { useGetPatronsInAreaMutation } from '../../slices/patronsApiSlice'
 import { Link } from 'react-router-dom'
 
@@ -38,7 +38,7 @@ function SearchMap() {
     }
 
     fetchData()
-  }, [centerCoords, boundsCoords, setPatrons])
+  }, [centerCoords, boundsCoords, setPatrons, getPatronsInArea])
 
   useEffect(() => {
     if (mapRef.current) {
@@ -72,45 +72,44 @@ function SearchMap() {
       <Row className='px-3 mb-3'>
         <Col md={4} className='d-flex'>
           <Card className='flex-fill'>
-            <div className='list-group search-map-list '>
+            <div className='list-group search-map-list'>
               {patrons &&
                 patrons.map((patron, index) => (
-                  <div key={index}>
-                    <div
-                      href='#'
-                      onMouseEnter={() => setHoveredPatron(patron._id)}
-                      onMouseLeave={() => setHoveredPatron(null)}
-                      onClick={() => {
-                        setSelectedPatron(patron._id)
-                      }}
-                      className={`list-group-item list-group-item-action ${
-                        selectedPatron === patron._id ||
-                        (hoveredPatron === patron._id &&
-                          selectedPatron === null)
-                          ? 'bg-secondary-light'
-                          : ''
-                      }`}
-                    >
-                      <div className='d-flex w-100 justify-content-between align-items-center'>
-                        <div>
-                          <h5 className='mb-1 fw-bold'>
-                            {patron.firstName} {patron.lastName}
-                          </h5>
-                          <Stack direction='horizontal' gap={1}>
-                            {patron.service.map((serv) => (
-                              <Badge bg='secondary'>{serv}</Badge>
-                            ))}
-                          </Stack>
-                          <span>Rating: {patron.avgRating}</span>
-                        </div>
-                        <Link
-                          to={`/${patron.id}`}
-                          className='btn btn-primary btn-sm'
-                          style={{ height: '30px' }}
-                        >
-                          Profile <FaRegAddressCard className='mb-1' />
-                        </Link>
+                  <div
+                    key={patron._id}
+                    onMouseEnter={() => setHoveredPatron(patron._id)}
+                    onMouseLeave={() => setHoveredPatron(null)}
+                    onClick={() => {
+                      setSelectedPatron(patron._id)
+                    }}
+                    className={`list-group-item list-group-item-action ${
+                      selectedPatron === patron._id ||
+                      (hoveredPatron === patron._id && selectedPatron === null)
+                        ? 'bg-secondary-light border border-primary border-3'
+                        : ''
+                    }`}
+                  >
+                    <div className='d-flex w-100 justify-content-between align-items-center'>
+                      <div>
+                        <h5 className='mb-1 fw-bold'>
+                          {patron.firstName} {patron.lastName}
+                        </h5>
+                        <Stack direction='horizontal' gap={1}>
+                          {patron.service.map((serv) => (
+                            <Badge bg='secondary' key={serv}>
+                              {serv}
+                            </Badge>
+                          ))}
+                        </Stack>
+                        <span>Rating: {patron.avgRating}</span>
                       </div>
+                      <Link
+                        to={`/patrons/${patron._id}`}
+                        className='btn btn-primary btn-sm'
+                        style={{ height: '30px' }}
+                      >
+                        Profile <FaRegAddressCard className='mb-1' />
+                      </Link>
                     </div>
                   </div>
                 ))}

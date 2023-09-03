@@ -2,6 +2,7 @@ import express from 'express'
 import {
   getPatronsPub,
   getPatrons,
+  getPatronById,
   getPatronByUserId,
   getPatronsInArea,
   createPatron,
@@ -18,6 +19,7 @@ router
   .post(protect, createPatron)
   .put(protect, updatePatron)
 router.get('/user', protect, getPatronByUserId)
+router.get('/:id', protect, getPatronById)
 router.post('/area', protect, getPatronsInArea)
 
 export default router

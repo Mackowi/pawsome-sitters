@@ -22,6 +22,7 @@ import Dashboard from './screens/dashboard/Dashboard'
 import AccountSettings from './screens/dashboard/AccountSettings'
 import ProfileSettings from './screens/dashboard/ProfileSettings'
 import Pets from './screens/dashboard/Pets'
+import Patron from './screens/Patron'
 import PrivateRoute from './components/PrivateRoute'
 
 const router = createBrowserRouter(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
         <Route path='/dashboard/editaccount' element={<AccountSettings />} />
         <Route path='/dashboard/editprofile' element={<ProfileSettings />} />
         <Route path='/dashboard/pets' element={<Pets />} />
+        <Route path='/patrons/:id' element={<Patron />} />
       </Route>
     </Route>
   )

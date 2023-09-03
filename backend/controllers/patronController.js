@@ -61,8 +61,8 @@ const getPatronsInArea = asyncHandler(async (req, res) => {
 
   // calculate the radius using radians
   // divide distance by radius of earth
-  // Earth Radius = 6378km
-  const radius = distance / 6378
+  // Earth Radius = 6371km
+  const radius = distance / 6371
 
   const patrons = await Patron.find({
     address: {
@@ -82,7 +82,20 @@ const getPatronByUserId = asyncHandler(async (req, res) => {
   const patron = await Patron.find({ user: req.user._id })
   if (!patron) {
     res.status(404)
-    throw new Error('There is not patron profile for this user')
+    throw new Error('There is no patron profile for this user')
+  }
+
+  res.status(200).json(patron)
+})
+
+// desc: Get patron profile of the user
+// route: GET /api/patrons/:id
+// access: Private
+const getPatronById = asyncHandler(async (req, res) => {
+  const patron = await Patron.findById(req.params.id)
+  if (!patron) {
+    res.status(404)
+    throw new Error(`There is no patron with this id:${patronId}`)
   }
 
   res.status(200).json(patron)
@@ -125,6 +138,7 @@ const updatePatron = asyncHandler(async (req, res) => {
 export {
   getPatronsPub,
   getPatrons,
+  getPatronById,
   getPatronByUserId,
   getPatronsInArea,
   createPatron,
