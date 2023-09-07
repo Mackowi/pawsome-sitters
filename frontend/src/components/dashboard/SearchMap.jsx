@@ -1,7 +1,7 @@
 import { Card, Row, Col, Badge, Stack } from 'react-bootstrap'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 // import 'leaflet/dist/leaflet.css' // CHANGED TO LINK IN HEAD OF HTML FILE TO FIX MARKER ISSUE
-import { FaMapMarkedAlt, FaRegAddressCard } from 'react-icons/fa'
+import { FaMapMarkedAlt, FaArrowRight } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import Coords from './Coords'
 import { useEffect, useState, useRef } from 'react'
@@ -57,6 +57,16 @@ function SearchMap() {
     }
   }, [setSelectedPatron, setHoveredPatron])
 
+  const patronRefs = useRef({})
+
+  const scrollToPatron = (patronId) => {
+    const patronListContainer = document.getElementById('patronListContainer')
+    if (patronListContainer && patronRefs.current[patronId]) {
+      patronListContainer.scrollTop =
+        patronRefs.current[patronId].offsetTop - patronListContainer.offsetTop
+    }
+  }
+
   return (
     <Card className='my-2 bg-primary-light border-primary border-2 search-map'>
       <Row className='p-3'>
@@ -70,14 +80,20 @@ function SearchMap() {
       </Row>
 
       <Row className='px-3 mb-3'>
-        <Col md={4} className='d-flex'>
+        <Col xl={4} className='d-flex'>
           <Card className='flex-fill'>
-            <div className='list-group search-map-list'>
+            <div
+              id='patronListContainer'
+              className='list-group search-map-list'
+            >
               {patrons &&
                 patrons.map((patron, index) => (
                   <div
                     key={patron._id}
-                    onMouseEnter={() => setHoveredPatron(patron._id)}
+                    ref={(el) => (patronRefs.current[patron._id] = el)}
+                    onMouseEnter={() => {
+                      setHoveredPatron(patron._id)
+                    }}
                     onMouseLeave={() => setHoveredPatron(null)}
                     onClick={() => {
                       setSelectedPatron(patron._id)
@@ -90,25 +106,46 @@ function SearchMap() {
                     }`}
                   >
                     <div className='d-flex w-100 justify-content-between align-items-center'>
-                      <div>
-                        <h5 className='mb-1 fw-bold'>
-                          {patron.firstName} {patron.lastName}
-                        </h5>
-                        <Stack direction='horizontal' gap={1}>
-                          {patron.service.map((serv) => (
-                            <Badge bg='secondary' key={serv}>
-                              {serv}
-                            </Badge>
-                          ))}
-                        </Stack>
-                        <span>Rating: {patron.avgRating}</span>
+                      <div className='d-flex gap-3'>
+                        <div className='my-auto'>
+                          <img
+                            src={patron.image}
+                            alt='img'
+                            className='rounded-circle'
+                            style={{ height: '50px', width: '50px' }}
+                          />
+                        </div>
+                        <div>
+                          <h5 className='mb-1 fw-bold'>
+                            {patron.firstName} {patron.lastName}
+                          </h5>
+                          <Stack
+                            direction='horizontal'
+                            gap={1}
+                            className='mb-1'
+                          >
+                            {patron.service.map((serv) => (
+                              <Badge bg='secondary' key={serv}>
+                                {serv}
+                              </Badge>
+                            ))}
+                          </Stack>
+                          <Stack direction='horizontal' gap={1}>
+                            {patron.acceptedPets.map((pet) => (
+                              <Badge bg='primary' key={pet}>
+                                {pet}
+                              </Badge>
+                            ))}
+                          </Stack>
+                          <span>Rating: {patron.avgRating}</span>
+                        </div>
                       </div>
                       <Link
                         to={`/patrons/${patron._id}`}
                         className='btn btn-primary btn-sm'
                         style={{ height: '30px' }}
                       >
-                        Profile <FaRegAddressCard className='mb-1' />
+                        <FaArrowRight className='mb-1' />
                       </Link>
                     </div>
                   </div>
@@ -116,7 +153,7 @@ function SearchMap() {
             </div>
           </Card>
         </Col>
-        <Col md={8} className='mt-3 mt-md-0'>
+        <Col xl={8} className='mt-3 mt-xl-0'>
           <Card>
             <MapContainer
               center={[
@@ -158,6 +195,7 @@ function SearchMap() {
                     eventHandlers={{
                       mouseover: () => {
                         setHoveredPatron(patron._id)
+                        scrollToPatron(patron._id)
                       },
                       mouseout: () => {
                         setHoveredPatron(null)
@@ -167,12 +205,15 @@ function SearchMap() {
                           setSelectedPatron(null)
                         } else {
                           setSelectedPatron(patron._id)
+                          scrollToPatron(patron._id)
                         }
                       },
                     }}
                   >
                     <Popup>
-                      <h1>{patron.lastName}</h1>
+                      <Link to={`/patrons/${patron._id}`}>
+                        <p>{patron.firstName}'s profile</p>
+                      </Link>
                     </Popup>
                   </Marker>
                 ))}

@@ -184,17 +184,19 @@ input[type=number] {
   .message-box-list, .history-box-list {
     max-height: 150px;
   }
-  .search-map-list {
-    max-height: 225px;
-  }
-  .search-map-container {
-    height: 350px;
-  }
   .pets-box {
     max-height: 375px;
   }
   .pets-box-list {
     max-height: 330px;
+  }
+}
+@media (max-width: 1200px) {
+  .search-map-list {
+    max-height: 225px;
+  }
+  .search-map-container {
+    height: 350px;
   }
 }
 input[type=range]::-webkit-slider-thumb {
@@ -263,5 +265,21 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .sticky-offset {
-  top: 85px;
+  top: 35%;
+}
+
+input[type=checkbox] {
+  box-shadow: none !important;
+}
+input[type=checkbox]:checked {
+  background-color: #CF6320;
+  border: #CF6320;
+}
+
+input[type=radio] {
+  box-shadow: none !important;
+}
+input[type=radio]:checked {
+  background-color: #CF6320;
+  border: #CF6320;
 }

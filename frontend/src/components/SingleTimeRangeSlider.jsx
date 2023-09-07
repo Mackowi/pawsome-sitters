@@ -1,8 +1,11 @@
 import Slider from 'rc-slider'
-import 'rc-slider/assets/index.css'
+import '../assets/styles/slider.css'
 
-const TimeRangeSlider = ({ handleStartTimeChange, handleEndTimeChange }) => {
-  const style = { width: 250 }
+const SingleTimeRangeSlider = ({
+  handleStartTimeChange,
+  handleEndTimeChange,
+}) => {
+  const style = { maxWidth: `600px`, marginLeft: 'auto', marginRight: 'auto' }
   const marksBig = {
     0: '0:00',
     8: '2:00',
@@ -50,25 +53,19 @@ const TimeRangeSlider = ({ handleStartTimeChange, handleEndTimeChange }) => {
   }
 
   return (
-    <div>
-      <div style={style}>
-        <p>Range with marks</p>
-        <Slider
-          range
-          min={0}
-          max={96}
-          step={1}
-          marks={marksSmall}
-          onChange={calculateTimePeriod}
-          defaultValue={[48, 56]}
-        />
-      </div>
-      <div>
-        <p>{}</p>
-        <p></p>
-      </div>
+    <div style={style}>
+      <p>Single</p>
+      <Slider
+        range
+        min={0}
+        max={96}
+        step={1}
+        marks={marksSmall}
+        onChange={calculateTimePeriod}
+        defaultValue={[48, 56]}
+      />
     </div>
   )
 }
 
-export default TimeRangeSlider
+export default SingleTimeRangeSlider

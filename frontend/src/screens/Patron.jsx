@@ -6,18 +6,20 @@ import {
   Button,
   Badge,
   Stack,
+  Form,
 } from 'react-bootstrap'
 import { FaCarrot, FaCat, FaDog, FaMars, FaVenus } from 'react-icons/fa6'
 import { useParams } from 'react-router-dom'
-import { useGetPatronByIdQuery } from '../slices/patronsApiSlice'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useGetPatronByIdQuery } from '../slices/patronsApiSlice'
+import Calendar from 'react-calendar'
+import '../assets/styles/calendar.css'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import ContactModal from '../components/ContactModal'
-import { useState } from 'react'
-import Calendar from 'react-calendar'
-import 'react-calendar/dist/Calendar.css'
-import TimeRangeSlider from '../components/TimeRangeSlider'
+import DoubleTimeRangeSlider from '../components/DoubleTimeRangeSlider'
+import SingleTimeRangeSlider from '../components/SingleTimeRangeSlider'
 
 function Patron() {
   const { id: patronId } = useParams()
@@ -30,28 +32,21 @@ function Patron() {
     error,
   } = useGetPatronByIdQuery(patronId)
 
-  // MODALS STUFF
+  const [startTime, setStartTime] = useState('12:00')
+  const [endTime, setEndTime] = useState('14:00')
+  const [date, setDate] = useState(new Date())
+  const [pickedServices, setPickedServices] = useState([])
+
   const [showContactModal, setShowContactModal] = useState(false)
   const openContactModal = () => setShowContactModal(true)
   const closeContactModal = () => setShowContactModal(false)
 
-  const [value, onChange] = useState(new Date())
-
-  const [startTime, setStartTime] = useState('12:00')
-  const [endTime, setEndTime] = useState('14:00')
-
-  // Handle start and end time changes
   const handleStartTimeChange = (time) => {
     setStartTime(time)
   }
-
   const handleEndTimeChange = (time) => {
     setEndTime(time)
   }
-
-  // You can format the selected times as needed for your application
-  const formattedStartTime = `${startTime}`
-  const formattedEndTime = `${endTime}`
 
   const formatDate = (date) => {
     return date
@@ -63,27 +58,29 @@ function Patron() {
       .replace(/\//g, '.')
   }
 
-  const formatDates = (dates) => {
-    if (!dates) {
-      return ''
-    }
+  let serviceLength = 0
 
+  const formatDates = (dates) => {
     if (Array.isArray(dates) && dates.length === 2) {
+      serviceLength = 2
       const [startDate, endDate] = dates
       const formattedStartDate = formatDate(startDate)
       const formattedEndDate = formatDate(endDate)
       if (formattedStartDate === formattedEndDate) {
+        serviceLength = 1
+
         return `${formattedStartDate}`
       }
       return `${formattedStartDate} - ${formattedEndDate}`
     } else if (dates instanceof Date) {
+      serviceLength = 1
       return formatDate(dates)
     } else {
       return 'Invalid date format'
     }
   }
 
-  const date = formatDates(value)
+  const formattedDate = formatDates(date)
 
   return (
     <Container>
@@ -94,13 +91,13 @@ function Patron() {
       ) : (
         <>
           <Row className='my-4'>
-            <Col md={8}>
+            <Col lg={8}>
               <Card className='p-3 pt-4 p-md-4'>
                 <Col>
                   <div className='d-flex justify-content-center mb-4'>
                     <img
                       src={patron.image}
-                      style={{ height: '400px' }}
+                      style={{ maxHeight: '500px' }}
                       className='img-fluid'
                     />
                   </div>
@@ -122,7 +119,7 @@ function Patron() {
                     <div className='mt-4'>
                       <h4 className='mb-4'>Accepted pets:</h4>
                       {patron.acceptedPets.map((pet) => (
-                        <div className='d-flex gap-2 ms-2'>
+                        <div className='d-flex gap-2 ms-2' key={pet}>
                           <p>{pet}</p>
                           {pet === 'dog' ? (
                             <FaDog />
@@ -139,7 +136,7 @@ function Patron() {
                     <div className='mt-2'>
                       <h4 className='mb-4'>Provided services:</h4>
                       {patron.service.map((service) => (
-                        <div className='d-flex gap-2 ms-2'>
+                        <div className='d-flex gap-2 ms-2' key={service}>
                           <p>{service}</p>
                         </div>
                       ))}
@@ -149,22 +146,46 @@ function Patron() {
                     <h4 className='mt-2'>About {patron.firstName}</h4>
                     <p>{patron.description}</p>
                   </Row>
-                  <Row>
-                    <h3>Select Start and End Times</h3>
-                    <Calendar
-                      selectRange={true}
-                      className='my-4'
-                      onChange={onChange}
-                      value={value}
-                    />
+                  <Row className='mt-4'>
+                    <h3>Select the type of service</h3>
                     <div className='my-4'>
-                      <TimeRangeSlider
-                        handleStartTimeChange={handleStartTimeChange}
-                        handleEndTimeChange={handleEndTimeChange}
+                      <ul className='list-unstyled d-flex gap-8 justify-content-between justify-content-xl-center'>
+                        {patron.service.map((service) => (
+                          <Form.Check
+                            key={service}
+                            inline
+                            label={service}
+                            name={service}
+                            type='radio'
+                            value={service}
+                            checked={service === pickedServices}
+                            onChange={() => setPickedServices(service)}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                    <h3>Select time range of the service</h3>
+                    <div>
+                      <Calendar
+                        selectRange={true}
+                        className='my-4 mx-auto'
+                        onChange={setDate}
+                        value={date}
                       />
                     </div>
-                    <div className='div'>
-                      <p>{date}</p>
+                    <div className='my-4'>
+                      {serviceLength === 1 ? (
+                        <SingleTimeRangeSlider />
+                      ) : (
+                        <DoubleTimeRangeSlider
+                          handleStartTimeChange={handleStartTimeChange}
+                          handleEndTimeChange={handleEndTimeChange}
+                        />
+                      )}
+                    </div>
+                    <div className='div mt-5 text-center'>
+                      <p>{serviceLength}</p>
+                      <p>{formattedDate}</p>
                       <p>
                         {startTime} - {endTime}
                       </p>
@@ -173,7 +194,7 @@ function Patron() {
                 </Col>
               </Card>
             </Col>
-            <Col className='d-none d-md-block' md={4}>
+            <Col className='d-none d-lg-block' lg={4}>
               <Card className='p-3 d-flex gap-4 sticky-top sticky-offset'>
                 <Row className='pb-3 border-bottom'>
                   <Col xl={5} className='text-center mb-3'>
