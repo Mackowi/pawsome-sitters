@@ -265,7 +265,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .sticky-offset {
-  top: 35%;
+  top: 90px;
 }
 
 input[type=checkbox] {

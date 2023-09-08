@@ -1,5 +1,6 @@
 import Slider from 'rc-slider'
 import '../assets/styles/slider.css'
+import { useState } from 'react'
 
 const DoubleTimeRangeSlider = ({
   handleStartTimeChange,
@@ -33,11 +34,18 @@ const DoubleTimeRangeSlider = ({
     96: '24:00',
   }
 
-  const calculateTimePeriod = (value) => {
-    const startHour = calculateHourFromKey(value[0])
-    const endHour = calculateHourFromKey(value[1])
-    handleStartTimeChange(startHour)
-    handleEndTimeChange(endHour)
+  const [time, setTime] = useState([`12:00`, '14:00'])
+
+  const calculateTimePeriod = (type, value) => {
+    if (type === 'start') {
+      const startHour = calculateHourFromKey(value)
+      handleStartTimeChange(startHour)
+      setTime([startHour, time[1]])
+    } else {
+      const endHour = calculateHourFromKey(value)
+      handleEndTimeChange(endHour)
+      setTime([time[0], endHour])
+    }
   }
 
   const calculateHourFromKey = (key) => {
@@ -48,23 +56,38 @@ const DoubleTimeRangeSlider = ({
 
     const formattedHour = hour.toString().padStart(2, '0')
     const formattedMinute = minute.toString().padStart(2, '0')
-
     return `${formattedHour}:${formattedMinute}`
   }
 
   return (
-    <div style={style}>
-      <p>Double</p>
-      <p>Select time of service</p>
-      <Slider
-        range
-        min={0}
-        max={96}
-        step={1}
-        marks={marksSmall}
-        onChange={calculateTimePeriod}
-        defaultValue={[48, 56]}
-      />
+    <div style={style} className='d-flex flex-column'>
+      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2'>{`${time[0]} - ${time[1]}`}</p>
+      <div className='mb-5'>
+        <p>Select starting time of service</p>
+        <Slider
+          range
+          min={0}
+          max={96}
+          step={1}
+          marks={marksSmall}
+          onChange={(newValue) => calculateTimePeriod('start', newValue)}
+          defaultValue={[48]}
+          included={false}
+        />
+      </div>
+      <div className='mb-3'>
+        <p>Select starting time of service</p>
+        <Slider
+          range
+          min={0}
+          max={96}
+          step={1}
+          marks={marksSmall}
+          onChange={(newValue) => calculateTimePeriod('end', newValue)}
+          defaultValue={[56]}
+          included={false}
+        />
+      </div>
     </div>
   )
 }

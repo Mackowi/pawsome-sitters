@@ -1,5 +1,6 @@
 import Slider from 'rc-slider'
 import '../assets/styles/slider.css'
+import { useState } from 'react'
 
 const SingleTimeRangeSlider = ({
   handleStartTimeChange,
@@ -33,11 +34,14 @@ const SingleTimeRangeSlider = ({
     96: '24:00',
   }
 
+  const [time, setTime] = useState([`12:00`, '14:00'])
+
   const calculateTimePeriod = (value) => {
     const startHour = calculateHourFromKey(value[0])
     const endHour = calculateHourFromKey(value[1])
     handleStartTimeChange(startHour)
     handleEndTimeChange(endHour)
+    setTime([startHour, endHour])
   }
 
   const calculateHourFromKey = (key) => {
@@ -53,14 +57,14 @@ const SingleTimeRangeSlider = ({
   }
 
   return (
-    <div style={style}>
-      <p>Single</p>
+    <div style={style} className='d-flex flex-column'>
+      <p className='text-center fw-bold border-bottom mx-auto mb-5 border-primary'>{`${time[0]} - ${time[1]}`}</p>
       <Slider
         range
         min={0}
         max={96}
         step={1}
-        marks={marksSmall}
+        marks={marksBig}
         onChange={calculateTimePeriod}
         defaultValue={[48, 56]}
       />
