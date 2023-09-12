@@ -61,28 +61,28 @@ const DoubleTimeRangeSlider = ({
 
   return (
     <div style={style} className='d-flex flex-column'>
-      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2'>{`${time[0]} - ${time[1]}`}</p>
-      <div className='mb-5'>
+      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mb-4'>{`${time[0]} - ${time[1]}`}</p>
+      <div className='mb-5 mt-2'>
         <p>Select starting time of service</p>
         <Slider
           range
           min={0}
           max={96}
           step={1}
-          marks={marksSmall}
+          marks={marksBig}
           onChange={(newValue) => calculateTimePeriod('start', newValue)}
           defaultValue={[48]}
           included={false}
         />
       </div>
       <div className='mb-3'>
-        <p>Select starting time of service</p>
+        <p>Select ending time of service</p>
         <Slider
           range
           min={0}
           max={96}
           step={1}
-          marks={marksSmall}
+          marks={marksBig}
           onChange={(newValue) => calculateTimePeriod('end', newValue)}
           defaultValue={[56]}
           included={false}

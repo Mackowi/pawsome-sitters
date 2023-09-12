@@ -283,3 +283,34 @@ input[type=radio]:checked {
   background-color: #CF6320;
   border: #CF6320;
 }
+
+.wave-container {
+  position: relative;
+}
+
+.wave-text {
+  position: absolute;
+  top: 5px;
+  left: 33%;
+  color: white;
+  padding: 10px;
+}
+
+@media (min-width: 768px) {
+  .wave-text {
+    top: 15px;
+    left: 36%;
+  }
+}
+@media (min-width: 992px) {
+  .wave-text {
+    top: 10px;
+    left: 34%;
+  }
+}
+@media (min-width: 1200px) {
+  .wave-text {
+    top: 15px;
+    left: 38%;
+  }
+}

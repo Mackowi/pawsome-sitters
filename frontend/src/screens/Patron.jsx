@@ -8,7 +8,15 @@ import {
   Stack,
   Form,
 } from 'react-bootstrap'
-import { FaCarrot, FaCat, FaDog, FaMars, FaVenus } from 'react-icons/fa6'
+import {
+  FaCarrot,
+  FaCat,
+  FaDog,
+  FaPersonWalking,
+  FaHouse,
+  FaSchool,
+} from 'react-icons/fa6'
+import { ReactComponent as Wave } from '../assets/wave.svg'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -20,6 +28,7 @@ import Message from '../components/Message'
 import ContactModal from '../components/ContactModal'
 import DoubleTimeRangeSlider from '../components/DoubleTimeRangeSlider'
 import SingleTimeRangeSlider from '../components/SingleTimeRangeSlider'
+import Rating from '../components/Rating'
 
 function Patron() {
   const { id: patronId } = useParams()
@@ -86,9 +95,6 @@ function Patron() {
 
   const formattedDate = formatDates(date)
 
-  // console.log(pickedPets)
-  // console.log(pickedServices)
-
   return (
     <Container>
       {isLoading ? (
@@ -104,57 +110,74 @@ function Patron() {
                   <div className='d-flex justify-content-center mb-4'>
                     <img
                       src={patron.image}
-                      style={{ maxHeight: '500px' }}
+                      style={{ maxWidth: 'auto' }}
                       className='img-fluid'
                     />
                   </div>
-                  <div className='d-flex justify-content-between align-items-center'>
-                    <h2>
-                      <strong>{patron.firstName}</strong>{' '}
-                      <strong>{patron.lastName}</strong>
-                    </h2>
-                    <h4>
-                      {patron.gender === 'male' ? (
-                        <FaMars className='mb-1' />
-                      ) : (
-                        <FaVenus className='mb-1' />
-                      )}{' '}
-                      {patron.gender}
-                    </h4>
-                  </div>
-                  <Row>
-                    <div className='mt-4'>
-                      <h4 className='mb-4'>Accepted pets:</h4>
-                      {patron.acceptedPets.map((pet) => (
-                        <div className='d-flex gap-2 ms-2' key={pet}>
-                          <p>{pet}</p>
-                          {pet === 'dog' ? (
-                            <FaDog />
-                          ) : pet === 'cat' ? (
-                            <FaCat />
-                          ) : (
-                            <FaCarrot />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </Row>
-                  <Row>
-                    <div className='mt-2'>
-                      <h4 className='mb-4'>Provided services:</h4>
-                      {patron.service.map((service) => (
-                        <div className='d-flex gap-2 ms-2' key={service}>
-                          <p>{service}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </Row>
-                  <Row>
-                    <h4 className='mt-2'>About {patron.firstName}</h4>
-                    <p>{patron.description}</p>
+                  <h2 className='text-center'>
+                    <strong>{patron.firstName}</strong>{' '}
+                    <strong>{patron.lastName}</strong>{' '}
+                  </h2>
+
+                  <Row className='mt-4'>
+                    <Col>
+                      <div className='d-flex flex-column align-items-center gap-4'>
+                        <h4 className='mb-4'>Accepted pets:</h4>
+                        {patron.acceptedPets.map((pet) => (
+                          <div
+                            className='d-flex gap-2 ms-2 align-items-center'
+                            key={pet}
+                          >
+                            {pet === 'dog' ? (
+                              <FaDog />
+                            ) : pet === 'cat' ? (
+                              <FaCat />
+                            ) : (
+                              <FaCarrot />
+                            )}
+                            <p className='mb-0'>{pet}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className='d-flex flex-column align-items-center gap-4'>
+                        <h4 className='mb-4'>Provided services:</h4>
+                        {patron.service.map((service) => (
+                          <div
+                            className='d-flex gap-2 ms-2 align-items-center'
+                            key={service}
+                          >
+                            {service === 'walking' ? (
+                              <FaPersonWalking />
+                            ) : service === 'sitting' ? (
+                              <FaHouse />
+                            ) : (
+                              <FaSchool />
+                            )}
+                            <p className='mb-0'>{service}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </Col>
                   </Row>
                   <Row className='mt-4'>
-                    <h3>Select your pets </h3>
+                    <Col className='d-flex justify-content-center'>
+                      <h4 className='mt-2 '>Rating: </h4>
+                      <Rating view={true} avgRating={patron.avgRating} />
+                    </Col>
+                  </Row>
+                  <Row className='text-center'>
+                    <h4 className='mt-4 '>About {patron.firstName}</h4>
+                    <p>{patron.description}</p>
+                  </Row>
+
+                  <Row className='mt-4 text-center'>
+                    <div className='wave-container'>
+                      <Wave />
+                      <p className='wave-text fw-bold fs-4 '>Service details</p>
+                    </div>
+                    <h4>Select your pets </h4>
                     <div className='my-4'>
                       <ul className='list-unstyled d-flex gap-5 justify-content-center'>
                         {petOwnerInfo.pets.map((pet) => (
@@ -171,7 +194,7 @@ function Patron() {
                         ))}
                       </ul>
                     </div>
-                    <h3>Select the type of service</h3>
+                    <h4>Select the type of service</h4>
                     <div className='my-4'>
                       <ul className='list-unstyled d-flex justify-content-center'>
                         {patron.service.map((service) => (
@@ -188,9 +211,9 @@ function Patron() {
                         ))}
                       </ul>
                     </div>
-                    <h3>Select time range of the service</h3>
+                    <h4>Select time range of the service</h4>
                     <div className='text-center mt-3 d-flex flex-column'>
-                      {pickedServices !== 'sitting' && (
+                      {/* {pickedServices !== 'sitting' && (
                         <Form.Check
                           className='mx-auto'
                           inline
@@ -199,14 +222,14 @@ function Patron() {
                           name={'recurring'}
                           type='checkbox'
                           checked={recurringService}
-                          onChange={() =>
-                            setRecurringService(!recurringService)
-                          }
+                          // onChange={() =>
+                          //   setRecurringService(!recurringService)
+                          // }
                         />
-                      )}
+                      )} */}
                       <Calendar
                         selectRange={true}
-                        className='my-4 mx-auto'
+                        className='my-3 mx-auto'
                         onChange={(newDates) => {
                           const range = formatDates(newDates)
                           if (range.match(/(.*) - (.*)/gi)) {
@@ -218,11 +241,20 @@ function Patron() {
                         }}
                         value={date}
                       />
-                      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mt-3'>{`${formatDates(
+                      {pickedServices === 'sitting' ? (
+                        <></>
+                      ) : recurringService ? (
+                        <p className='mb-0 fw-bold text-primary'>
+                          Reccuring service
+                        </p>
+                      ) : (
+                        <></>
+                      )}
+                      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 my-3'>{`${formatDates(
                         date
                       )}`}</p>
                     </div>
-                    <div className='mb-4'>
+                    <div className='mb-5'>
                       {pickedServices !== 'sitting' ? (
                         <SingleTimeRangeSlider
                           handleStartTimeChange={handleStartTimeChange}
