@@ -7,6 +7,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import userRoutes from './routes/userRoutes.js'
 import patronRoutes from './routes/patronRoutes.js'
 import petOwnerRoutes from './routes/petOwnerRoutes.js'
+import serviceRequestRoutes from './routes/serviceRequestRoutes.js'
 
 dotenv.config()
 
@@ -23,6 +24,7 @@ app.use(cookieParser())
 app.use('/api/users', userRoutes)
 app.use('/api/patrons', patronRoutes)
 app.use('/api/petowners', petOwnerRoutes)
+app.use('/api/service', serviceRequestRoutes)
 
 app.use(notFound)
 app.use(errorHandler)

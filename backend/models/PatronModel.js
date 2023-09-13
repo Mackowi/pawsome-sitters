@@ -88,6 +88,13 @@ const PatronSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    serviceRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ServiceRequest',
+        required: true,
+      },
+    ],
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,

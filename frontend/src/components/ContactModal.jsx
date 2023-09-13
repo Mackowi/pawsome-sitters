@@ -1,6 +1,14 @@
 import { Modal, Button } from 'react-bootstrap'
 
-function ContactModal({ showContactModal, closeContactModal, info }) {
+function ContactModal({
+  showContactModal,
+  closeContactModal,
+  formatDatesDb,
+  info,
+  startTime,
+  endTime,
+  date,
+}) {
   return (
     <Modal show={showContactModal} onHide={closeContactModal} centered>
       <Modal.Header closeButton>
@@ -16,9 +24,7 @@ function ContactModal({ showContactModal, closeContactModal, info }) {
         </Button>
         <Button
           variant='primary'
-          onClick={() => {
-            closeContactModal()
-          }}
+          onClick={() => formatDatesDb(startTime, endTime, date)}
         >
           Confirm
         </Button>

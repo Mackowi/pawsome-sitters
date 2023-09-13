@@ -29,6 +29,8 @@ import ContactModal from '../components/ContactModal'
 import DoubleTimeRangeSlider from '../components/DoubleTimeRangeSlider'
 import SingleTimeRangeSlider from '../components/SingleTimeRangeSlider'
 import Rating from '../components/Rating'
+import { DateTime } from 'luxon'
+import { formatDates, formatDatesDb } from '../utils/dates'
 
 function Patron() {
   const { id: patronId } = useParams()
@@ -51,32 +53,6 @@ function Patron() {
       setPickedPets(pickedPets.filter((name) => name !== petName))
     } else {
       setPickedPets([...pickedPets, petName])
-    }
-  }
-
-  const formatDate = (date) => {
-    return date
-      .toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
-      .replace(/\//g, '.')
-  }
-
-  const formatDates = (dates) => {
-    if (Array.isArray(dates) && dates.length === 2) {
-      const [startDate, endDate] = dates
-      const formattedStartDate = formatDate(startDate)
-      const formattedEndDate = formatDate(endDate)
-      if (formattedStartDate === formattedEndDate) {
-        return `${formattedStartDate}`
-      }
-      return `${formattedStartDate} - ${formattedEndDate}`
-    } else if (dates instanceof Date) {
-      return formatDate(dates)
-    } else {
-      return 'Invalid date format'
     }
   }
 
@@ -400,7 +376,11 @@ function Patron() {
           <ContactModal
             showContactModal={showContactModal}
             closeContactModal={closeContactModal}
+            formatDatesDb={formatDatesDb}
             info={patron.firstName}
+            startTime={startTime}
+            endTime={endTime}
+            date={date}
           />
         </>
       )}

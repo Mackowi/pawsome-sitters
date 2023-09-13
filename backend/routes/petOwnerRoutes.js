@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  getPetOwnersPub,
   getPetOwners,
   createPetOwner,
   updatePetOwner,
@@ -21,6 +20,6 @@ router
   .put(updatePetOwner)
 router.get('/user', protect, getPetOwnerByUserId)
 router.route('/pets').all(protect).post(addPet).put(updatePet)
-router.route('/pets/:id').all(protect).delete(deletePet)
+router.delete('/pets/:id', protect, deletePet)
 
 export default router
