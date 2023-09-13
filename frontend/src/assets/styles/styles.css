@@ -52,6 +52,10 @@ nav a {
   background-color: #CF6320;
 }
 
+.dropdown-item:hover {
+  background-color: #E2A179;
+}
+
 header {
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.75)), url("./../images/header.jpg") left center no-repeat;
   background-size: 100% auto, cover;
@@ -266,6 +270,7 @@ input[type=range]::-webkit-slider-thumb {
 
 .sticky-offset {
   top: 90px;
+  z-index: 1;
 }
 
 input[type=checkbox] {

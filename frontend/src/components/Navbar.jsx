@@ -87,7 +87,7 @@ function NavBar() {
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
-        <Navbar.Collapse id='basic-navbar-nav'>
+        <Navbar.Collapse id='basic-navbar-nav' className='position-static'>
           <Nav className='ms-auto fs-5 d-flex flex-row justify-content-between'>
             <LinkContainer to='/about'>
               <Nav.Link className='fw-bold'>

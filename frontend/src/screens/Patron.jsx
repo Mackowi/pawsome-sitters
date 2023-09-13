@@ -34,12 +34,7 @@ function Patron() {
   const { id: patronId } = useParams()
   const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
-  const {
-    data: patron,
-    refetch,
-    isLoading,
-    error,
-  } = useGetPatronByIdQuery(patronId)
+  const { data: patron, isLoading, error } = useGetPatronByIdQuery(patronId)
 
   const [startTime, setStartTime] = useState('12:00')
   const [endTime, setEndTime] = useState('14:00')
@@ -47,17 +42,9 @@ function Patron() {
   const [pickedServices, setPickedServices] = useState([])
   const [pickedPets, setPickedPets] = useState([])
   const [recurringService, setRecurringService] = useState(false)
-
   const [showContactModal, setShowContactModal] = useState(false)
   const openContactModal = () => setShowContactModal(true)
   const closeContactModal = () => setShowContactModal(false)
-
-  const handleStartTimeChange = (time) => {
-    setStartTime(time)
-  }
-  const handleEndTimeChange = (time) => {
-    setEndTime(time)
-  }
 
   const handlePetChange = (petName) => {
     if (pickedPets.includes(petName)) {
@@ -122,7 +109,7 @@ function Patron() {
                   <Row className='mt-4'>
                     <Col>
                       <div className='d-flex flex-column align-items-center gap-4'>
-                        <h4 className='mb-4'>Accepted pets:</h4>
+                        <h4 className='mb-2'>Accepted pets:</h4>
                         {patron.acceptedPets.map((pet) => (
                           <div
                             className='d-flex gap-2 ms-2 align-items-center'
@@ -142,7 +129,7 @@ function Patron() {
                     </Col>
                     <Col>
                       <div className='d-flex flex-column align-items-center gap-4'>
-                        <h4 className='mb-4'>Provided services:</h4>
+                        <h4 className='mb-2'>Provided services:</h4>
                         {patron.service.map((service) => (
                           <div
                             className='d-flex gap-2 ms-2 align-items-center'
@@ -161,9 +148,9 @@ function Patron() {
                       </div>
                     </Col>
                   </Row>
-                  <Row className='mt-4'>
+                  <Row className='mt-5'>
                     <Col className='d-flex justify-content-center'>
-                      <h4 className='mt-2 '>Rating: </h4>
+                      <h4 className='mt-1 me-2'>Rating: </h4>
                       <Rating view={true} avgRating={patron.avgRating} />
                     </Col>
                   </Row>
@@ -172,8 +159,8 @@ function Patron() {
                     <p>{patron.description}</p>
                   </Row>
 
-                  <Row className='mt-4 text-center'>
-                    <div className='wave-container'>
+                  <Row className='mt-4 text-center border border-primary border-2 rounded-2'>
+                    <div className='wave-container px-0'>
                       <Wave />
                       <p className='wave-text fw-bold fs-4 '>Service details</p>
                     </div>
@@ -213,20 +200,6 @@ function Patron() {
                     </div>
                     <h4>Select time range of the service</h4>
                     <div className='text-center mt-3 d-flex flex-column'>
-                      {/* {pickedServices !== 'sitting' && (
-                        <Form.Check
-                          className='mx-auto'
-                          inline
-                          key={'recurring'}
-                          label={'Recurring Service Days'}
-                          name={'recurring'}
-                          type='checkbox'
-                          checked={recurringService}
-                          // onChange={() =>
-                          //   setRecurringService(!recurringService)
-                          // }
-                        />
-                      )} */}
                       <Calendar
                         selectRange={true}
                         className='my-3 mx-auto'
@@ -244,9 +217,7 @@ function Patron() {
                       {pickedServices === 'sitting' ? (
                         <></>
                       ) : recurringService ? (
-                        <p className='mb-0 fw-bold text-primary'>
-                          Reccuring service
-                        </p>
+                        <p className='mb-0 fw-bold '>Reccuring Service</p>
                       ) : (
                         <></>
                       )}
@@ -257,17 +228,18 @@ function Patron() {
                     <div className='mb-5'>
                       {pickedServices !== 'sitting' ? (
                         <SingleTimeRangeSlider
-                          handleStartTimeChange={handleStartTimeChange}
-                          handleEndTimeChange={handleEndTimeChange}
+                          setStartTime={setStartTime}
+                          setEndTime={setEndTime}
                         />
                       ) : (
                         <DoubleTimeRangeSlider
-                          handleStartTimeChange={handleStartTimeChange}
-                          handleEndTimeChange={handleEndTimeChange}
+                          setStartTime={setStartTime}
+                          setEndTime={setEndTime}
                         />
                       )}
                     </div>
                   </Row>
+                  {/* PANEL AT THE BOTTOM FOR SMALL SCREENS */}
                   <Card className='p-3 mt-5 d-flex gap-4 d-lg-none'>
                     <Row className='pb-3 border-bottom d-flex align-items-center'>
                       <Col xl={5} className='text-center mb-3'>
@@ -341,6 +313,7 @@ function Patron() {
                 </Col>
               </Card>
             </Col>
+            {/* PANEL ON THE RIGHT SIDE FOR BIG SCREENS */}
             <Col className='d-none d-lg-block' lg={4}>
               <Card className='p-3 d-flex gap-4 sticky-top sticky-offset'>
                 <Row className='pb-3 border-bottom d-flex align-items-center'>
@@ -399,12 +372,17 @@ function Patron() {
                         <p className='mb-0'>{formattedDate}</p>
                       )}
                       <p className='mb-0'>
-                        {recurringService && 'Recurring Service'}
+                        {pickedServices === 'sitting' ? (
+                          <></>
+                        ) : recurringService ? (
+                          <p className='mb-0 '>Reccuring Service</p>
+                        ) : (
+                          <></>
+                        )}
                       </p>
                     </div>
                   </Col>
                 </Row>
-                <Row></Row>
                 <Row>
                   <Button
                     style={{ width: '300px' }}

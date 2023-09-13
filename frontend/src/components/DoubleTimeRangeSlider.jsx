@@ -2,10 +2,7 @@ import Slider from 'rc-slider'
 import '../assets/styles/slider.css'
 import { useState } from 'react'
 
-const DoubleTimeRangeSlider = ({
-  handleStartTimeChange,
-  handleEndTimeChange,
-}) => {
+const DoubleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
   const style = { maxWidth: `600px`, marginLeft: 'auto', marginRight: 'auto' }
   const marksBig = {
     0: '0:00',
@@ -22,28 +19,17 @@ const DoubleTimeRangeSlider = ({
     88: '22:00',
     96: '24:00',
   }
-  const marksSmall = {
-    0: '0:00',
-    12: ' ',
-    24: '6:00',
-    36: ' ',
-    48: '12:00',
-    60: ' ',
-    72: '18:00',
-    84: ' ',
-    96: '24:00',
-  }
 
   const [time, setTime] = useState([`12:00`, '14:00'])
 
   const calculateTimePeriod = (type, value) => {
     if (type === 'start') {
       const startHour = calculateHourFromKey(value)
-      handleStartTimeChange(startHour)
+      setStartTime(startHour)
       setTime([startHour, time[1]])
     } else {
       const endHour = calculateHourFromKey(value)
-      handleEndTimeChange(endHour)
+      setEndTime(endHour)
       setTime([time[0], endHour])
     }
   }

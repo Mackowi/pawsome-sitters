@@ -19,47 +19,47 @@ function Rating({ view, avgRating }) {
         <div className='rating'>
           <span>
             {avgRating >= 1 ? (
-              <FaStar size={40} fill='#CF6320' />
+              <FaStar size={35} fill='#CF6320' />
             ) : avgRating >= 0.5 ? (
-              <FaStarHalfAlt size={40} fill='#CF6320' />
+              <FaStarHalfAlt size={35} fill='#CF6320' />
             ) : (
-              <FaRegStar size={40} fill='#CF6320' />
+              <FaRegStar size={35} fill='#CF6320' />
             )}
           </span>
           <span>
             {avgRating >= 2 ? (
-              <FaStar size={40} fill='#CF6320' />
+              <FaStar size={35} fill='#CF6320' />
             ) : avgRating >= 1.5 ? (
-              <FaStarHalfAlt size={40} fill='#CF6320' />
+              <FaStarHalfAlt size={35} fill='#CF6320' />
             ) : (
-              <FaRegStar size={40} fill='#CF6320' />
+              <FaRegStar size={35} fill='#CF6320' />
             )}
           </span>
           <span>
             {avgRating >= 3 ? (
-              <FaStar size={40} fill='#CF6320' />
+              <FaStar size={35} fill='#CF6320' />
             ) : avgRating >= 2.5 ? (
-              <FaStarHalfAlt size={40} fill='#CF6320' />
+              <FaStarHalfAlt size={35} fill='#CF6320' />
             ) : (
-              <FaRegStar size={40} fill='#CF6320' />
+              <FaRegStar size={35} fill='#CF6320' />
             )}
           </span>
           <span>
             {avgRating >= 4 ? (
-              <FaStar size={40} fill='#CF6320' />
+              <FaStar size={35} fill='#CF6320' />
             ) : avgRating >= 3.5 ? (
-              <FaStarHalfAlt size={40} fill='#CF6320' />
+              <FaStarHalfAlt size={35} fill='#CF6320' />
             ) : (
-              <FaRegStar size={40} fill='#CF6320' />
+              <FaRegStar size={35} fill='#CF6320' />
             )}
           </span>
           <span>
             {avgRating >= 5 ? (
-              <FaStar size={40} fill='#CF6320' />
+              <FaStar size={35} fill='#CF6320' />
             ) : avgRating >= 4.5 ? (
-              <FaStarHalfAlt size={40} fill='#CF6320' />
+              <FaStarHalfAlt size={35} fill='#CF6320' />
             ) : (
-              <FaRegStar size={40} fill='#CF6320' />
+              <FaRegStar size={35} fill='#CF6320' />
             )}
           </span>
         </div>
@@ -74,20 +74,20 @@ function Rating({ view, avgRating }) {
             >
               {hoverRating > rating ? (
                 hoverRating >= starNr ? (
-                  <FaStar size={40} fill='#CF6320' />
+                  <FaStar size={35} fill='#CF6320' />
                 ) : (
-                  <FaRegStar size={40} fill='#CF6320' />
+                  <FaRegStar size={35} fill='#CF6320' />
                 )
               ) : hoverRating > 0 ? (
                 hoverRating >= starNr ? (
-                  <FaStar size={40} fill='#CF6320' />
+                  <FaStar size={35} fill='#CF6320' />
                 ) : (
-                  <FaRegStar size={40} fill='#CF6320' />
+                  <FaRegStar size={35} fill='#CF6320' />
                 )
               ) : rating >= starNr ? (
-                <FaStar size={40} fill='#CF6320' />
+                <FaStar size={35} fill='#CF6320' />
               ) : (
-                <FaRegStar size={40} fill='#CF6320' />
+                <FaRegStar size={35} fill='#CF6320' />
               )}
             </span>
           ))}

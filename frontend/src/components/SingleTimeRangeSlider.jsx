@@ -2,10 +2,7 @@ import Slider from 'rc-slider'
 import '../assets/styles/slider.css'
 import { useState } from 'react'
 
-const SingleTimeRangeSlider = ({
-  handleStartTimeChange,
-  handleEndTimeChange,
-}) => {
+const SingleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
   const style = { maxWidth: `600px`, marginLeft: 'auto', marginRight: 'auto' }
   const marksBig = {
     0: '0:00',
@@ -28,8 +25,8 @@ const SingleTimeRangeSlider = ({
   const calculateTimePeriod = (value) => {
     const startHour = calculateHourFromKey(value[0])
     const endHour = calculateHourFromKey(value[1])
-    handleStartTimeChange(startHour)
-    handleEndTimeChange(endHour)
+    setStartTime(startHour)
+    setEndTime(endHour)
     setTime([startHour, endHour])
   }
 
