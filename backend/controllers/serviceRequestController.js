@@ -1,12 +1,26 @@
 import ServiceRequest from '../models/ServiceRequestModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
-import { test } from '../utils/dates.js'
 
-// desc: Get all serv req
-// route: GET /api/service
-// access: Private/Admin
-const getServiceRequests = asyncHandler(async (req, res) => {
-  const servReq = await ServiceRequest.find({})
+// // desc: Get all serv req
+// // route: GET /api/service
+// // access: Private/Admin
+// const getServiceRequests = asyncHandler(async (req, res) => {
+//   const servReq = await ServiceRequest.find({})
+//   if (!servReq) {
+//     res.status(404)
+//     throw new Error('Not found any service requests')
+//   }
+
+//   res.status(200).json(servReq)
+// })
+
+// desc: Get serv req for patron
+// route: POST /api/service/patron
+// access: Private
+const getPatronServiceRequests = asyncHandler(async (req, res) => {
+  const { patronId } = req.body
+  console.log(req.body)
+  const servReq = await ServiceRequest.find({ patron: patronId })
   if (!servReq) {
     res.status(404)
     throw new Error('Not found any service requests')
@@ -34,4 +48,4 @@ const createServiceRequest = asyncHandler(async (req, res) => {
   res.status(201).json(serviceRequest)
 })
 
-export { getServiceRequests, createServiceRequest }
+export { createServiceRequest, getPatronServiceRequests }

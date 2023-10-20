@@ -26,8 +26,8 @@ function MessageBox() {
   ]
 
   const messageHandler = (message) => {
-    console.log('message handler')
-    console.log(`${message.text}`)
+    // console.log('message handler')
+    // console.log(`${message.text}`)
   }
 
   return (

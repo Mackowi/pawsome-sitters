@@ -1,6 +1,6 @@
 import { Modal, Button } from 'react-bootstrap'
 
-function ConfirmModal({
+function DeletePetModal({
   showConfirmModal,
   closeConfirmModal,
   info,
@@ -31,4 +31,4 @@ function ConfirmModal({
     </Modal>
   )
 }
-export default ConfirmModal
+export default DeletePetModal

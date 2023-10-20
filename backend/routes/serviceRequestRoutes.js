@@ -1,17 +1,13 @@
 import express from 'express'
 import { protect } from '../middleware/authMiddleware.js'
 import {
-  getServiceRequests,
   createServiceRequest,
+  getPatronServiceRequests,
 } from '../controllers/serviceRequestController.js'
 
 const router = express.Router()
 
-router
-  .route('/')
-  .all(protect)
-  .get(getServiceRequests)
-  .post(createServiceRequest)
-// router.route('/:id').all(protect).get().put().delete()
+router.route('/').all(protect).post(createServiceRequest)
+router.post('/patron', protect, getPatronServiceRequests)
 
 export default router

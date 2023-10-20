@@ -5,7 +5,7 @@ const formatDate = (date) => {
   return luxonDate.toFormat('dd.MM.yyyy')
 }
 
-const formatDates = (dates) => {
+const formatDatesToDisplay = (dates) => {
   if (Array.isArray(dates) && dates.length === 2) {
     const [startDate, endDate] = dates
     const formattedStartDate = formatDate(startDate)
@@ -21,22 +21,76 @@ const formatDates = (dates) => {
   }
 }
 
-const formatDatesDb = (startTime, endTime, date) => {
-  if (Array.isArray(date) && date.length === 2) {
-    const [startDate, endDate] = date
-    const formattedStartDate = formatDate(startDate)
-    const formattedEndDate = formatDate(endDate)
-    const formattedStartDateHour = combineDateTime(
-      startTime,
-      formattedStartDate
-    )
-    const formattedEndDateHour = combineDateTime(endTime, formattedEndDate)
-    return { formattedStartDateHour, formattedEndDateHour }
-  } else if (date instanceof Date) {
-    return formatDate(date)
-  } else {
-    return 'Invalid date format'
+const processDates = (startTime, endTime, dates, reccuring) => {
+  const combinedDatesTimes = []
+  if (Array.isArray(dates) && dates.length === 2) {
+    const [startDate, endDate] = dates
+    const startDateString = formatDate(startDate)
+    const endDateString = formatDate(endDate)
+    if (startDateString === endDateString) {
+      const combinedStartDateTime = combineDateTime(startTime, startDateString)
+      const combinedEndDateTime = combineDateTime(endTime, endDateString)
+      combinedDatesTimes.push({
+        startDate: combinedStartDateTime,
+        endDate: combinedEndDateTime,
+      })
+      return combinedDatesTimes
+    }
+    if (reccuring) {
+      const dates = getDatesBetween(startDateString, endDateString)
+      dates.forEach((date) => {
+        const combinedStartDateTime = combineDateTime(startTime, date)
+        const combinedEndDateTime = combineDateTime(endTime, date)
+        combinedDatesTimes.push({
+          startDate: combinedStartDateTime,
+          endDate: combinedEndDateTime,
+        })
+      })
+    } else {
+      const combinedStartDateTime = combineDateTime(startTime, startDateString)
+      const combinedEndDateTime = combineDateTime(endTime, endDateString)
+      combinedDatesTimes.push({
+        startDate: combinedStartDateTime,
+        endDate: combinedEndDateTime,
+      })
+    }
+  } else if (dates instanceof Date) {
+    const date = formatDate(dates)
+    const combinedStartDateTime = combineDateTime(startTime, date)
+    const combinedEndDateTime = combineDateTime(endTime, date)
+    combinedDatesTimes.push({
+      startDate: combinedStartDateTime,
+      endDate: combinedEndDateTime,
+    })
   }
+  return combinedDatesTimes
+}
+
+const checkIfCollide = (datesInDB, datesToCheck) => {
+  for (const dateToCheck of datesToCheck) {
+    const proposedStartDate = DateTime.fromISO(dateToCheck.startDate)
+    const proposedEndDate = DateTime.fromISO(dateToCheck.endDate)
+
+    for (const dateInDB of datesInDB) {
+      const startDate = DateTime.fromISO(dateInDB.startDate)
+      const endDate = DateTime.fromISO(dateInDB.endDate)
+
+      if (
+        (proposedStartDate <= endDate && proposedEndDate >= startDate) ||
+        proposedStartDate.equals(endDate) ||
+        proposedEndDate.equals(startDate)
+      ) {
+        if (
+          !proposedStartDate.equals(endDate) &&
+          !proposedEndDate.equals(startDate)
+        ) {
+          return true // Collision/overlap found
+        }
+      }
+    }
+  }
+
+  return false // No collision/overlap found
 }
 
 const combineDateTime = (timeString, dateString) => {
@@ -51,4 +105,34 @@ const combineDateTime = (timeString, dateString) => {
   return combinedDateTime.toString()
 }
 
-export { formatDate, formatDates, formatDatesDb }
+const getDatesBetween = (startDateString, endDateString) => {
+  const startDate = DateTime.fromFormat(startDateString, 'dd.MM.yyyy')
+  const endDate = DateTime.fromFormat(endDateString, 'dd.MM.yyyy')
+
+  const datesArray = []
+  let currentDate = startDate
+
+  while (currentDate <= endDate) {
+    datesArray.push(currentDate.toFormat('dd.MM.yyyy'))
+    currentDate = currentDate.plus({ days: 1 })
+  }
+
+  return datesArray
+}
+
+const reccuranceHelper = (dates) => {
+  if (Array.isArray(dates) && dates.length === 2) {
+    const [startDate, endDate] = dates
+    const formattedStartDate = formatDate(startDate)
+    const formattedEndDate = formatDate(endDate)
+    if (formattedStartDate === formattedEndDate) {
+      return false
+    } else {
+      return true
+    }
+  } else if (dates instanceof Date) {
+    return false
+  }
+}
+
+export { formatDatesToDisplay, processDates, checkIfCollide, reccuranceHelper }

@@ -20,17 +20,24 @@ import { ReactComponent as Wave } from '../assets/wave.svg'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useGetPatronByIdQuery } from '../slices/patronsApiSlice'
+import {
+  useGetPatronByIdQuery,
+  useGetPatronsAvailabilityMutation,
+} from '../slices/patronsApiSlice'
 import Calendar from 'react-calendar'
 import '../assets/styles/calendar.css'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import ContactModal from '../components/ContactModal'
+import ConfirmServiceRequestModal from '../components/modals/ConfirmServiceRequestModal'
 import DoubleTimeRangeSlider from '../components/DoubleTimeRangeSlider'
 import SingleTimeRangeSlider from '../components/SingleTimeRangeSlider'
 import Rating from '../components/Rating'
-import { DateTime } from 'luxon'
-import { formatDates, formatDatesDb } from '../utils/dates'
+import {
+  formatDatesToDisplay,
+  processDates,
+  checkIfCollide,
+  reccuranceHelper,
+} from '../utils/dates'
 
 function Patron() {
   const { id: patronId } = useParams()
@@ -44,9 +51,10 @@ function Patron() {
   const [pickedServices, setPickedServices] = useState([])
   const [pickedPets, setPickedPets] = useState([])
   const [recurringService, setRecurringService] = useState(false)
-  const [showContactModal, setShowContactModal] = useState(false)
-  const openContactModal = () => setShowContactModal(true)
-  const closeContactModal = () => setShowContactModal(false)
+  const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
+    useState(false)
+
+  const [patronBusy, setPatronBusy] = useState(false)
 
   const handlePetChange = (petName) => {
     if (pickedPets.includes(petName)) {
@@ -56,7 +64,43 @@ function Patron() {
     }
   }
 
-  const formattedDate = formatDates(date)
+  const openConfirmServiceRequestModal = () =>
+    setShowConfirmServiceRequestModal(true)
+  const closeConfirmServiceRequestModal = () =>
+    setShowConfirmServiceRequestModal(false)
+
+  const formattedDate = formatDatesToDisplay(date)
+
+  const [getPatronsAvailability] = useGetPatronsAvailabilityMutation()
+
+  const checkAvailability = async () => {
+    if (patronId) {
+      try {
+        const bookedServices = await getPatronsAvailability({
+          patronId,
+        }).unwrap()
+        const notAvailableDates = []
+        bookedServices.forEach((service) => {
+          const singleDate = {
+            startDate: service.startDate,
+            endDate: service.endDate,
+          }
+          notAvailableDates.push(singleDate)
+        })
+        const datesToCheck = processDates(
+          startTime,
+          endTime,
+          date,
+          recurringService
+        )
+        // console.log(datesToCheck)
+        const collide = checkIfCollide(notAvailableDates, datesToCheck)
+        console.log(`collide ${collide}`)
+      } catch (error) {
+        console.error('Error checking patron availability.', error)
+      }
+    }
+  }
 
   return (
     <Container>
@@ -169,7 +213,14 @@ function Patron() {
                             type='radio'
                             value={service}
                             checked={service === pickedServices}
-                            onChange={() => setPickedServices(service)}
+                            onChange={() => {
+                              setPickedServices(service)
+                              if (service === 'sitting') {
+                                setRecurringService(false)
+                              } else {
+                                setRecurringService(reccuranceHelper(date))
+                              }
+                            }}
                           />
                         ))}
                       </ul>
@@ -178,41 +229,64 @@ function Patron() {
                     <div className='text-center mt-3 d-flex flex-column'>
                       <Calendar
                         selectRange={true}
-                        className='my-3 mx-auto'
+                        className='mt-3 mb-4 mx-auto'
                         onChange={(newDates) => {
-                          const range = formatDates(newDates)
-                          if (range.match(/(.*) - (.*)/gi)) {
+                          const range = formatDatesToDisplay(newDates)
+                          if (
+                            range.match(/(.*) - (.*)/gi) &&
+                            pickedServices !== 'sitting'
+                          ) {
                             setRecurringService(true)
                           } else {
                             setRecurringService(false)
                           }
                           setDate(newDates)
+                          checkAvailability()
+                        }}
+                        tileDisabled={({ date }) => {
+                          // Disable all dates before the current date
+                          const currentDate = new Date()
+                          currentDate.setHours(0, 0, 0, 0)
+                          return date < currentDate
                         }}
                         value={date}
                       />
+                      <div>
+                        {pickedServices !== 'sitting' ? (
+                          <SingleTimeRangeSlider
+                            setStartTime={setStartTime}
+                            setEndTime={setEndTime}
+                          />
+                        ) : (
+                          <DoubleTimeRangeSlider
+                            setStartTime={setStartTime}
+                            setEndTime={setEndTime}
+                          />
+                        )}
+                      </div>
+
                       {pickedServices === 'sitting' ? (
-                        <></>
+                        <>
+                          <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mb-3'>{`${formatDatesToDisplay(
+                            date
+                          )}`}</p>
+                          <span className='mb-5'></span>
+                        </>
                       ) : recurringService ? (
-                        <p className='mb-0 fw-bold '>Reccuring Service</p>
+                        <>
+                          <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mb-3'>{`${formatDatesToDisplay(
+                            date
+                          )}`}</p>
+                          <p className='mb-5 fw-bold '>Reccuring Service</p>
+                        </>
                       ) : (
-                        <></>
+                        <>
+                          <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mb-5'>{`${formatDatesToDisplay(
+                            date
+                          )}`}</p>
+                        </>
                       )}
-                      <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 my-3'>{`${formatDates(
-                        date
-                      )}`}</p>
-                    </div>
-                    <div className='mb-5'>
-                      {pickedServices !== 'sitting' ? (
-                        <SingleTimeRangeSlider
-                          setStartTime={setStartTime}
-                          setEndTime={setEndTime}
-                        />
-                      ) : (
-                        <DoubleTimeRangeSlider
-                          setStartTime={setStartTime}
-                          setEndTime={setEndTime}
-                        />
-                      )}
+                      <Button onClick={checkAvailability}>COLLIDE?</Button>
                     </div>
                   </Row>
                   {/* PANEL AT THE BOTTOM FOR SMALL SCREENS */}
@@ -268,9 +342,13 @@ function Patron() {
                             {startTime} - {endTime}
                           </p>
                           <p>{formattedDate}</p>
-                          <p className='mb-0'>
-                            {recurringService && 'Recurring Service'}
-                          </p>
+                          {pickedServices === 'sitting' ? (
+                            <></>
+                          ) : recurringService ? (
+                            <p className='mb-0 '>Reccuring Service</p>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                       </Col>
                     </Row>
@@ -279,7 +357,7 @@ function Patron() {
                         style={{ width: '300px' }}
                         className='mx-auto fw-bold'
                         onClick={() => {
-                          openContactModal()
+                          openConfirmServiceRequestModal()
                         }}
                       >
                         Send request to {patron.firstName}
@@ -347,15 +425,13 @@ function Patron() {
                       ) : (
                         <p className='mb-0'>{formattedDate}</p>
                       )}
-                      <p className='mb-0'>
-                        {pickedServices === 'sitting' ? (
-                          <></>
-                        ) : recurringService ? (
-                          <p className='mb-0 '>Reccuring Service</p>
-                        ) : (
-                          <></>
-                        )}
-                      </p>
+                      {pickedServices === 'sitting' ? (
+                        <></>
+                      ) : recurringService ? (
+                        <p className='mb-0 '>Reccuring Service</p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -364,8 +440,9 @@ function Patron() {
                     style={{ width: '300px' }}
                     className='mx-auto fw-bold'
                     onClick={() => {
-                      openContactModal()
+                      openConfirmServiceRequestModal()
                     }}
+                    disabled={patronBusy}
                   >
                     Send request to {patron.firstName}
                   </Button>
@@ -373,10 +450,10 @@ function Patron() {
               </Card>
             </Col>
           </Row>
-          <ContactModal
-            showContactModal={showContactModal}
-            closeContactModal={closeContactModal}
-            formatDatesDb={formatDatesDb}
+          <ConfirmServiceRequestModal
+            showConfirmServiceRequestModal={showConfirmServiceRequestModal}
+            closeConfirmServiceRequestModal={closeConfirmServiceRequestModal}
+            // formatDatesDb={formatDatesDb}
             info={patron.firstName}
             startTime={startTime}
             endTime={endTime}

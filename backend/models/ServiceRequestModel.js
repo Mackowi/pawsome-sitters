@@ -48,11 +48,16 @@ ServiceRequestSchema.pre('save', function (next) {
   const startDateTime = DateTime.fromISO(this.startDate)
   const endDateTime = DateTime.fromISO(this.endDate)
   if (this.recurring) {
+    const daysDifference = endDateTime.diff(startDateTime).as('days')
+    const correctedDaysCount = Math.floor(daysDifference + 1)
+
     const startHours = startDateTime.hour
     const startMinutes = startDateTime.minute
     const endHours = endDateTime.hour
     const endMinutes = endDateTime.minute
-    this.duration = endHours - startHours + (endMinutes - startMinutes) / 60
+    this.duration =
+      (endHours - startHours + (endMinutes - startMinutes) / 60) *
+      correctedDaysCount
   } else {
     const daysDifference = endDateTime.diff(startDateTime).as('days')
     const correctedDifference = Math.floor(daysDifference + 1)

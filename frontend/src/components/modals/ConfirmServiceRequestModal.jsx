@@ -1,16 +1,19 @@
 import { Modal, Button } from 'react-bootstrap'
 
-function ContactModal({
-  showContactModal,
-  closeContactModal,
-  formatDatesDb,
+function ConfirmServiceRequestModal({
+  showConfirmServiceRequestModal,
+  closeConfirmServiceRequestModal,
   info,
   startTime,
   endTime,
   date,
 }) {
   return (
-    <Modal show={showContactModal} onHide={closeContactModal} centered>
+    <Modal
+      show={showConfirmServiceRequestModal}
+      onHide={closeConfirmServiceRequestModal}
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title>Request Confirmation</Modal.Title>
       </Modal.Header>
@@ -19,12 +22,15 @@ function ContactModal({
         confirming, you agree to the rules and confirm the request.
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='btn btn-outline-primary' onClick={closeContactModal}>
+        <Button
+          variant='btn btn-outline-primary'
+          onClick={closeConfirmServiceRequestModal}
+        >
           Cancel
         </Button>
         <Button
           variant='primary'
-          onClick={() => formatDatesDb(startTime, endTime, date)}
+          // onClick={() => formatDatesDb(startTime, endTime, date)}
         >
           Confirm
         </Button>
@@ -32,4 +38,4 @@ function ContactModal({
     </Modal>
   )
 }
-export default ContactModal
+export default ConfirmServiceRequestModal

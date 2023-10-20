@@ -13,7 +13,7 @@ import { useRemovePetMutation } from '../../slices/petOwnersApiSlice'
 import { setPetOwnerInfo } from '../../slices/petOwnerSlice'
 import EditPetForm from './EditPetForm'
 import AddPetModal from './AddPetModal'
-import ConfirmModal from '../../components/ConfirmModal'
+import DeletePetModal from '../../components/modals/DeletePetModal'
 import { toast } from 'react-toastify'
 
 function Pets() {
@@ -107,7 +107,7 @@ function Pets() {
         )}
       </Row>
 
-      <ConfirmModal
+      <DeletePetModal
         showConfirmModal={showConfirmModal}
         closeConfirmModal={closeConfirmModal}
         info={petOwnerInfo.pets.length && petOwnerInfo.pets[activePet]}

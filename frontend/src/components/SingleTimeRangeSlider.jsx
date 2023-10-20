@@ -44,16 +44,19 @@ const SingleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
 
   return (
     <div style={style} className='d-flex flex-column'>
-      <p className='text-center fw-bold border-bottom mx-auto mb-5 border-primary'>{`${time[0]} - ${time[1]}`}</p>
-      <Slider
-        range
-        min={0}
-        max={96}
-        step={1}
-        marks={marksBig}
-        onChange={calculateTimePeriod}
-        defaultValue={[48, 56]}
-      />
+      <div className='mb-4 mt-4'>
+        <p>Starting and ending time of service</p>
+        <Slider
+          range
+          min={0}
+          max={96}
+          step={1}
+          marks={marksBig}
+          onChange={calculateTimePeriod}
+          defaultValue={[48, 56]}
+        />
+      </div>
+      <p className='text-center fw-bold border-bottom mx-auto mt-5 border-primary'>{`${time[0]} - ${time[1]}`}</p>
     </div>
   )
 }
