@@ -8,6 +8,7 @@ import {
   Stack,
   Form,
 } from 'react-bootstrap'
+
 import {
   FaCarrot,
   FaCat,
@@ -17,13 +18,14 @@ import {
   FaSchool,
 } from 'react-icons/fa6'
 import { ReactComponent as Wave } from '../assets/wave.svg'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import {
   useGetPatronByIdQuery,
   useGetPatronsAvailabilityMutation,
 } from '../slices/patronsApiSlice'
+import { useAddServiceRequestMutation } from '../slices/petOwnersApiSlice'
 import Calendar from 'react-calendar'
 import '../assets/styles/calendar.css'
 import Loader from '../components/Loader'
@@ -38,12 +40,16 @@ import {
   checkIfCollide,
   reccuranceHelper,
 } from '../utils/dates'
+import { toast } from 'react-toastify'
 
 function Patron() {
+  const navigate = useNavigate()
   const { id: patronId } = useParams()
   const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
   const { data: patron, isLoading, error } = useGetPatronByIdQuery(patronId)
+  const [getPatronsAvailability] = useGetPatronsAvailabilityMutation()
+  const [addServiceRequest] = useAddServiceRequestMutation()
 
   const [startTime, setStartTime] = useState('12:00')
   const [endTime, setEndTime] = useState('14:00')
@@ -51,10 +57,9 @@ function Patron() {
   const [pickedServices, setPickedServices] = useState([])
   const [pickedPets, setPickedPets] = useState([])
   const [recurringService, setRecurringService] = useState(false)
+  const [serviceOverlap, setServiceOverlap] = useState(false)
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
-
-  const [patronBusy, setPatronBusy] = useState(false)
 
   const handlePetChange = (petName) => {
     if (pickedPets.includes(petName)) {
@@ -64,41 +69,50 @@ function Patron() {
     }
   }
 
-  const openConfirmServiceRequestModal = () =>
-    setShowConfirmServiceRequestModal(true)
-  const closeConfirmServiceRequestModal = () =>
-    setShowConfirmServiceRequestModal(false)
-
-  const formattedDate = formatDatesToDisplay(date)
-
-  const [getPatronsAvailability] = useGetPatronsAvailabilityMutation()
-
   const checkAvailability = async () => {
-    if (patronId) {
-      try {
-        const bookedServices = await getPatronsAvailability({
-          patronId,
-        }).unwrap()
-        const notAvailableDates = []
-        bookedServices.forEach((service) => {
-          const singleDate = {
-            startDate: service.startDate,
-            endDate: service.endDate,
+    try {
+      const bookedServices = await getPatronsAvailability({
+        patronId,
+      }).unwrap()
+      const notAvailableDates = []
+      bookedServices.forEach((service) => {
+        const singleDate = {
+          startDate: service.startDate,
+          endDate: service.endDate,
+        }
+        notAvailableDates.push(singleDate)
+      })
+      const datesToCheck = processDates(
+        startTime,
+        endTime,
+        date,
+        recurringService
+      )
+      for (let i = 0; i < datesToCheck.length; i++) {
+        const serviceRequest = {
+          petOwner: petOwnerInfo._id,
+          patron: patronId,
+          service: pickedServices,
+          pets: pickedPets,
+          startDate: datesToCheck[i].startDate,
+          endDate: datesToCheck[i].endDate,
+        }
+        try {
+          await addServiceRequest(serviceRequest).unwrap()
+          if (checkIfCollide(notAvailableDates, datesToCheck)) {
+            toast.success(
+              'Service request has been sent, but it needs to be confirmed by Patron due to service overlap.'
+            )
+          } else {
+            toast.success('Service request has been sent')
           }
-          notAvailableDates.push(singleDate)
-        })
-        const datesToCheck = processDates(
-          startTime,
-          endTime,
-          date,
-          recurringService
-        )
-        // console.log(datesToCheck)
-        const collide = checkIfCollide(notAvailableDates, datesToCheck)
-        console.log(`collide ${collide}`)
-      } catch (error) {
-        console.error('Error checking patron availability.', error)
+          navigate('/dashboard')
+        } catch (error) {
+          toast.error(error?.data?.message || error?.error)
+        }
       }
+    } catch (error) {
+      toast.error(error)
     }
   }
 
@@ -241,10 +255,9 @@ function Patron() {
                             setRecurringService(false)
                           }
                           setDate(newDates)
-                          checkAvailability()
                         }}
+                        // Disable all dates before the current date
                         tileDisabled={({ date }) => {
-                          // Disable all dates before the current date
                           const currentDate = new Date()
                           currentDate.setHours(0, 0, 0, 0)
                           return date < currentDate
@@ -286,7 +299,6 @@ function Patron() {
                           )}`}</p>
                         </>
                       )}
-                      <Button onClick={checkAvailability}>COLLIDE?</Button>
                     </div>
                   </Row>
                   {/* PANEL AT THE BOTTOM FOR SMALL SCREENS */}
@@ -341,7 +353,7 @@ function Patron() {
                           <p>
                             {startTime} - {endTime}
                           </p>
-                          <p>{formattedDate}</p>
+                          <p>{formatDatesToDisplay(date)}</p>
                           {pickedServices === 'sitting' ? (
                             <></>
                           ) : recurringService ? (
@@ -357,7 +369,7 @@ function Patron() {
                         style={{ width: '300px' }}
                         className='mx-auto fw-bold'
                         onClick={() => {
-                          openConfirmServiceRequestModal()
+                          setShowConfirmServiceRequestModal(true)
                         }}
                       >
                         Send request to {patron.firstName}
@@ -421,9 +433,9 @@ function Patron() {
                         {startTime} - {endTime}
                       </p>
                       {recurringService ? (
-                        <p>{formattedDate}</p>
+                        <p>{formatDatesToDisplay(date)}</p>
                       ) : (
-                        <p className='mb-0'>{formattedDate}</p>
+                        <p className='mb-0'>{formatDatesToDisplay(date)}</p>
                       )}
                       {pickedServices === 'sitting' ? (
                         <></>
@@ -440,9 +452,8 @@ function Patron() {
                     style={{ width: '300px' }}
                     className='mx-auto fw-bold'
                     onClick={() => {
-                      openConfirmServiceRequestModal()
+                      setShowConfirmServiceRequestModal(true)
                     }}
-                    disabled={patronBusy}
                   >
                     Send request to {patron.firstName}
                   </Button>
@@ -452,12 +463,11 @@ function Patron() {
           </Row>
           <ConfirmServiceRequestModal
             showConfirmServiceRequestModal={showConfirmServiceRequestModal}
-            closeConfirmServiceRequestModal={closeConfirmServiceRequestModal}
-            // formatDatesDb={formatDatesDb}
-            info={patron.firstName}
-            startTime={startTime}
-            endTime={endTime}
-            date={date}
+            setShowConfirmServiceRequestModal={
+              setShowConfirmServiceRequestModal
+            }
+            checkAvailability={checkAvailability}
+            info={patron}
           />
         </>
       )}

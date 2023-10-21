@@ -23,10 +23,6 @@ const ServiceRequestSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please pick end date'],
   },
-  recurring: {
-    type: Boolean,
-    required: [true, 'Please specify recurrence'],
-  },
   duration: {
     type: String,
   },
@@ -47,21 +43,16 @@ const ServiceRequestSchema = new mongoose.Schema({
 ServiceRequestSchema.pre('save', function (next) {
   const startDateTime = DateTime.fromISO(this.startDate)
   const endDateTime = DateTime.fromISO(this.endDate)
-  if (this.recurring) {
-    const daysDifference = endDateTime.diff(startDateTime).as('days')
-    const correctedDaysCount = Math.floor(daysDifference + 1)
 
-    const startHours = startDateTime.hour
-    const startMinutes = startDateTime.minute
-    const endHours = endDateTime.hour
-    const endMinutes = endDateTime.minute
-    this.duration =
-      (endHours - startHours + (endMinutes - startMinutes) / 60) *
-      correctedDaysCount
-  } else {
+  if (this.service === 'sitting') {
+    // Calculate the number of full days
     const daysDifference = endDateTime.diff(startDateTime).as('days')
     const correctedDifference = Math.floor(daysDifference + 1)
     this.duration = correctedDifference
+  } else {
+    // Calculate the difference in hours
+    const hoursDifference = endDateTime.diff(startDateTime).as('hours')
+    this.duration = hoursDifference
   }
   next()
 })

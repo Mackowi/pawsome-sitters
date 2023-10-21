@@ -1,4 +1,4 @@
-import { PETOWNERS_URL } from '../constants'
+import { PETOWNERS_URL, SERVICE_REQUESTS_URL } from '../constants'
 import { apiSlice } from './apiSlice'
 
 export const petOwnersApiSlice = apiSlice.injectEndpoints({
@@ -52,6 +52,13 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    addServiceRequest: builder.mutation({
+      query: (data) => ({
+        url: `${SERVICE_REQUESTS_URL}`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 })
 
@@ -63,4 +70,5 @@ export const {
   useAddPetMutation,
   useRemovePetMutation,
   useUpdatePetMutation,
+  useAddServiceRequestMutation,
 } = petOwnersApiSlice

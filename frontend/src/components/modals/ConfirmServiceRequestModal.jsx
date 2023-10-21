@@ -2,35 +2,36 @@ import { Modal, Button } from 'react-bootstrap'
 
 function ConfirmServiceRequestModal({
   showConfirmServiceRequestModal,
-  closeConfirmServiceRequestModal,
+  setShowConfirmServiceRequestModal,
+  checkAvailability,
   info,
-  startTime,
-  endTime,
-  date,
 }) {
   return (
     <Modal
       show={showConfirmServiceRequestModal}
-      onHide={closeConfirmServiceRequestModal}
+      onHide={() => setShowConfirmServiceRequestModal(false)}
       centered
     >
       <Modal.Header closeButton>
         <Modal.Title>Request Confirmation</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        You're sending a service request to {<strong>{info}</strong>}. By
-        confirming, you agree to the rules and confirm the request.
+        You're sending a service request to {<strong>{info.firstName}</strong>}.
+        By confirming, you agree to the rules and confirm the request.
       </Modal.Body>
       <Modal.Footer>
         <Button
           variant='btn btn-outline-primary'
-          onClick={closeConfirmServiceRequestModal}
+          onClick={() => setShowConfirmServiceRequestModal(false)}
         >
           Cancel
         </Button>
         <Button
           variant='primary'
-          // onClick={() => formatDatesDb(startTime, endTime, date)}
+          onClick={() => {
+            checkAvailability()
+            setShowConfirmServiceRequestModal(false)
+          }}
         >
           Confirm
         </Button>

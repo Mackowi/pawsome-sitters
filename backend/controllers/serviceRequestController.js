@@ -19,7 +19,7 @@ import asyncHandler from '../middleware/asyncHandler.js'
 // access: Private
 const getPatronServiceRequests = asyncHandler(async (req, res) => {
   const { patronId } = req.body
-  console.log(req.body)
+
   const servReq = await ServiceRequest.find({ patron: patronId })
   if (!servReq) {
     res.status(404)
@@ -29,14 +29,15 @@ const getPatronServiceRequests = asyncHandler(async (req, res) => {
   res.status(200).json(servReq)
 })
 
-// desc: Create all serv req
+// desc: Create serv req
 // route: POST /api/service
 // access: Private
 const createServiceRequest = asyncHandler(async (req, res) => {
   const servReqData = req.body
 
-  // check availability in patron
+  console.log(servReqData)
 
+  // check patron's request for duplicates
   const servReqExist = await ServiceRequest.findOne(servReqData)
   if (servReqExist) {
     res.status(400)
