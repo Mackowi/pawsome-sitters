@@ -5,6 +5,7 @@ function ConfirmServiceRequestModal({
   setShowConfirmServiceRequestModal,
   checkAvailability,
   info,
+  submitHandler,
 }) {
   return (
     <Modal
@@ -30,6 +31,7 @@ function ConfirmServiceRequestModal({
         <Button
           variant='primary'
           onClick={() => {
+            submitHandler()
             checkAvailability()
             setShowConfirmServiceRequestModal(false)
           }}

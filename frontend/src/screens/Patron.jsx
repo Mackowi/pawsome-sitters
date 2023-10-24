@@ -21,6 +21,8 @@ import { ReactComponent as Wave } from '../assets/wave.svg'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import { serviceRequestSchema } from '../validationSchemas'
 import {
   useGetPatronByIdQuery,
   useGetPatronsAvailabilityMutation,
@@ -55,25 +57,22 @@ function Patron() {
   const [startTime, setStartTime] = useState(getCurrentHour())
   const [endTime, setEndTime] = useState(getCurrentHour(2))
   const [date, setDate] = useState(new Date())
-  const [pickedServices, setPickedServices] = useState([])
-  const [pickedPets, setPickedPets] = useState([])
   const [recurringService, setRecurringService] = useState(false)
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
 
-  const handlePetChange = (petName) => {
-    if (pickedPets.includes(petName)) {
-      setPickedPets(pickedPets.filter((name) => name !== petName))
-    } else {
-      setPickedPets([...pickedPets, petName])
-    }
+  const submitHandler = async () => {
+    console.log('submit handler')
+    // console.log(values)
+    // console.log(errors)
+    // console.log(touched)
   }
 
   const checkAvailability = async () => {
-    if (!pickedServices.length) {
+    if (!values.service) {
       toast.error('Please pick a service ')
       return
-    } else if (!pickedPets.length) {
+    } else if (!values.pets.length) {
       toast.error('Please pick a pet')
       return
     }
@@ -100,8 +99,8 @@ function Patron() {
         const serviceRequest = {
           petOwner: petOwnerInfo._id,
           patron: patronId,
-          service: pickedServices,
-          pets: pickedPets,
+          service: values.service,
+          pets: values.pets,
           startDate: datesToCheck[i].startDate,
           endDate: datesToCheck[i].endDate,
         }
@@ -123,6 +122,16 @@ function Patron() {
       toast.error(error)
     }
   }
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        pets: [petOwnerInfo.pets[0].name],
+        service: 'walking',
+      },
+      validationSchema: serviceRequestSchema,
+      onSubmit: submitHandler,
+    })
 
   return (
     <Container>
@@ -206,47 +215,78 @@ function Patron() {
                       <Wave />
                       <p className='wave-text fw-bold fs-4 '>Service details</p>
                     </div>
-                    <h4>Select your pets </h4>
-                    <div className='my-4'>
-                      <ul className='list-unstyled d-flex gap-5 justify-content-center'>
-                        {petOwnerInfo.pets.map((pet) => (
-                          <Form.Check
-                            key={pet.name}
-                            inline
-                            label={pet.name}
-                            name={pet.name}
-                            type='checkbox'
-                            value={pet.name}
-                            checked={pickedPets.includes(pet.name)}
-                            onChange={() => handlePetChange(pet.name)}
-                          />
-                        ))}
-                      </ul>
-                    </div>
-                    <h4>Select the type of service</h4>
-                    <div className='my-4'>
-                      <ul className='list-unstyled d-flex justify-content-center'>
-                        {patron.service.map((service) => (
-                          <Form.Check
-                            key={service}
-                            inline
-                            label={service}
-                            name={service}
-                            type='radio'
-                            value={service}
-                            checked={service === pickedServices}
-                            onChange={() => {
-                              setPickedServices(service)
-                              if (service === 'sitting') {
-                                setRecurringService(false)
-                              } else {
-                                setRecurringService(reccuranceHelper(date))
-                              }
-                            }}
-                          />
-                        ))}
-                      </ul>
-                    </div>
+                    {/* <Button
+                      onClick={() => {
+                        console.log(values)
+                        console.log(errors)
+                      }}
+                    >
+                      Test
+                    </Button> */}
+                    <Form noValidate onSubmit={handleSubmit} autoComplete='off'>
+                      <Form.Group>
+                        <Form.Label className='h4'>Select your pets</Form.Label>
+                        <div className='mt-4 mb-5'>
+                          <ul className='list-unstyled d-flex gap-5 justify-content-center'>
+                            {petOwnerInfo.pets.map((pet) => (
+                              <Form.Check
+                                inline
+                                key={pet.name}
+                                label={pet.name}
+                                name='pets'
+                                type='checkbox'
+                                value={pet.name}
+                                checked={
+                                  values.pets.includes(pet.name) ? true : false
+                                }
+                                // onChange={() => handlePetChange(pet.name)}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={touched.pets && !!errors.pets}
+                              />
+                            ))}
+                          </ul>
+                          <Form.Control.Feedback type='invalid'>
+                            {errors.pets}
+                          </Form.Control.Feedback>
+                        </div>
+                      </Form.Group>
+
+                      <Form.Group>
+                        <Form.Label className='h4'>
+                          Select the type of service
+                        </Form.Label>
+                        <div className='mt-4 mb-5'>
+                          <ul className='list-unstyled d-flex justify-content-center'>
+                            {patron.service.map((service) => (
+                              <Form.Check
+                                inline
+                                key={service}
+                                label={service}
+                                name='service'
+                                type='radio'
+                                value={service}
+                                checked={
+                                  values.service === service ? true : false
+                                }
+                                onChange={(e) => {
+                                  handleChange(e)
+                                  if (e.target.value === 'sitting') {
+                                    setRecurringService(false)
+                                  } else {
+                                    setRecurringService(reccuranceHelper(date))
+                                  }
+                                }}
+                                isInvalid={touched.service && !!errors.service}
+                              />
+                            ))}
+                          </ul>
+                          <Form.Control.Feedback type='invalid'>
+                            {errors.service}
+                          </Form.Control.Feedback>
+                        </div>
+                      </Form.Group>
+                    </Form>
                     <h4>Select time range of the service</h4>
                     <div className='text-center mt-3 d-flex flex-column'>
                       <Calendar
@@ -256,7 +296,7 @@ function Patron() {
                           const range = formatDatesToDisplay(newDates)
                           if (
                             range.match(/(.*) - (.*)/gi) &&
-                            pickedServices !== 'sitting'
+                            values.service !== 'sitting'
                           ) {
                             setRecurringService(true)
                           } else {
@@ -273,7 +313,7 @@ function Patron() {
                         value={date}
                       />
                       <div>
-                        {pickedServices !== 'sitting' ? (
+                        {values.service !== 'sitting' ? (
                           <SingleTimeRangeSlider
                             setStartTime={setStartTime}
                             setEndTime={setEndTime}
@@ -286,7 +326,7 @@ function Patron() {
                         )}
                       </div>
 
-                      {pickedServices === 'sitting' ? (
+                      {values.service === 'sitting' ? (
                         <>
                           <p className='text-center fw-bold border-bottom mx-auto border-primary border-2 mb-3'>{`${formatDatesToDisplay(
                             date
@@ -328,14 +368,14 @@ function Patron() {
                         <p>{patron.address.city}</p>
                       </Col>
                     </Row>
-                    {pickedPets.length > 0 && (
+                    {values.pets.length > 0 && (
                       <Row className='pb-4 border-bottom'>
                         <Col className='d-flex justify-content-between align-items-start'>
                           <h5 className='mb-0'>
-                            {pickedPets.length > 1 ? 'Pets:' : 'Pet:'}
+                            {values.pets.length > 1 ? 'Pets:' : 'Pet:'}
                           </h5>
                           <Stack direction='horizontal' gap={1}>
-                            {pickedPets.map((pet) => (
+                            {values.pets.map((pet) => (
                               <Badge bg='primary' key={pet}>
                                 {pet}
                               </Badge>
@@ -348,8 +388,8 @@ function Patron() {
                       <Col className='d-flex justify-content-between align-items-start'>
                         <h5 className='mb-0'>Service:</h5>
                         <Stack direction='horizontal' gap={1}>
-                          <Badge bg='secondary' key={pickedServices}>
-                            {pickedServices}
+                          <Badge bg='secondary' key={values.service}>
+                            {values.service}
                           </Badge>
                         </Stack>
                       </Col>
@@ -362,7 +402,7 @@ function Patron() {
                             {startTime} - {endTime}
                           </p>
                           <p>{formatDatesToDisplay(date)}</p>
-                          {pickedServices === 'sitting' ? (
+                          {values.service === 'sitting' ? (
                             <></>
                           ) : recurringService ? (
                             <p className='mb-0 '>Reccuring Service</p>
@@ -407,14 +447,14 @@ function Patron() {
                     <p>{patron.address.city}</p>
                   </Col>
                 </Row>
-                {pickedPets.length > 0 && (
+                {values.pets.length > 0 && (
                   <Row className='pb-4 border-bottom'>
                     <Col className='d-flex justify-content-between align-items-start'>
                       <h5 className='mb-0'>
-                        {pickedPets.length > 1 ? 'Pets:' : 'Pet:'}
+                        {values.pets.length > 1 ? 'Pets:' : 'Pet:'}
                       </h5>
                       <Stack direction='horizontal' gap={1}>
-                        {pickedPets.map((pet) => (
+                        {values.pets.map((pet) => (
                           <Badge bg='primary' key={pet}>
                             {pet}
                           </Badge>
@@ -427,8 +467,8 @@ function Patron() {
                   <Col className='d-flex justify-content-between align-items-start'>
                     <h5 className='mb-0'>Service:</h5>
                     <Stack direction='horizontal' gap={1}>
-                      <Badge bg='secondary' key={pickedServices}>
-                        {pickedServices}
+                      <Badge bg='secondary' key={values.service}>
+                        {values.service}
                       </Badge>
                     </Stack>
                   </Col>
@@ -445,7 +485,7 @@ function Patron() {
                       ) : (
                         <p className='mb-0'>{formatDatesToDisplay(date)}</p>
                       )}
-                      {pickedServices === 'sitting' ? (
+                      {values.service === 'sitting' ? (
                         <></>
                       ) : recurringService ? (
                         <p className='mb-0 '>Reccuring Service</p>
@@ -457,7 +497,7 @@ function Patron() {
                 </Row>
                 <Row>
                   <Button
-                    style={{ width: '300px' }}
+                    style={{ width: '250px' }}
                     className='mx-auto fw-bold'
                     onClick={() => {
                       setShowConfirmServiceRequestModal(true)
@@ -475,7 +515,8 @@ function Patron() {
               setShowConfirmServiceRequestModal
             }
             checkAvailability={checkAvailability}
-            info={{ patron, pickedPets, pickedServices }}
+            submitHandler={submitHandler}
+            info={{ patron }}
           />
         </>
       )}

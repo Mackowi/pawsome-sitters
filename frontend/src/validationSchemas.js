@@ -65,9 +65,17 @@ export const petSchema = yup.object().shape({
   type: yup
     .string()
     .oneOf(['dog', 'cat', 'rabbit'])
-    .required('Please pick you pet type'),
+    .required('Please pick your pet type'),
   name: yup.string().required(),
   gender: yup.string().required(),
   age: yup.number().required(),
   info: yup.string().max(200),
+})
+
+export const serviceRequestSchema = yup.object().shape({
+  pets: yup.array().of(yup.string()).min(1, 'Please pick your pets'),
+  service: yup
+    .string()
+    .oneOf(['walking', 'sitting', 'daycare'])
+    .required('Please pick a service'),
 })
