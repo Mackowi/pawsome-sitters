@@ -1,26 +1,17 @@
 import Slider from 'rc-slider'
-import '../assets/styles/slider.css'
+import '../../assets/styles/slider.css'
 import { useState } from 'react'
+import {
+  timeMarks,
+  getCurrentHour,
+  calculateHourFromKey,
+  calculateValuesForHours,
+} from '../../utils/time'
 
 const SingleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
   const style = { maxWidth: `600px`, marginLeft: 'auto', marginRight: 'auto' }
-  const marksBig = {
-    0: '0:00',
-    8: '2:00',
-    16: '4:00',
-    24: '6:00',
-    32: '8:00',
-    40: '10:00',
-    48: '12:00',
-    56: '14:00',
-    64: '16:00',
-    72: '18:00',
-    80: '20:00',
-    88: '22:00',
-    96: '24:00',
-  }
 
-  const [time, setTime] = useState([`12:00`, '14:00'])
+  const [time, setTime] = useState([getCurrentHour(), getCurrentHour(2)])
 
   const calculateTimePeriod = (value) => {
     const startHour = calculateHourFromKey(value[0])
@@ -28,18 +19,6 @@ const SingleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
     setStartTime(startHour)
     setEndTime(endHour)
     setTime([startHour, endHour])
-  }
-
-  const calculateHourFromKey = (key) => {
-    const minutesInAnHour = 60
-    const stepsInAnHour = minutesInAnHour / 15
-    const hour = Math.floor(key / stepsInAnHour)
-    const minute = (key % stepsInAnHour) * 15
-
-    const formattedHour = hour.toString().padStart(2, '0')
-    const formattedMinute = minute.toString().padStart(2, '0')
-
-    return `${formattedHour}:${formattedMinute}`
   }
 
   return (
@@ -51,9 +30,9 @@ const SingleTimeRangeSlider = ({ setStartTime, setEndTime }) => {
           min={0}
           max={96}
           step={1}
-          marks={marksBig}
+          marks={timeMarks}
           onChange={calculateTimePeriod}
-          defaultValue={[48, 56]}
+          defaultValue={calculateValuesForHours(time)}
         />
       </div>
       <p className='text-center fw-bold border-bottom mx-auto mt-5 border-primary'>{`${time[0]} - ${time[1]}`}</p>

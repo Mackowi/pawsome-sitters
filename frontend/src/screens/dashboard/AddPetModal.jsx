@@ -19,10 +19,10 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
       const res = await addPet(newPet).unwrap()
       dispatch(setPetOwnerInfo({ ...res }))
       toast.success('Pet added')
+      closeAddPetModal()
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }
-    closeAddPetModal()
   }
 
   const {
@@ -213,7 +213,7 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
               Cancel
             </Button>
             <Button
-              disabled={isSubmitting}
+              disabled={isSubmitting || Object.keys(errors).length !== 0}
               type='submit'
               variant='primary'
               onClick={closeAddPetModal}

@@ -16,8 +16,9 @@ function ConfirmServiceRequestModal({
         <Modal.Title>Request Confirmation</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        You're sending a service request to {<strong>{info.firstName}</strong>}.
-        By confirming, you agree to the rules and confirm the request.
+        You're sending a service request to{' '}
+        {<strong>{info.patron.firstName}</strong>}. By confirming, you agree to
+        the rules and confirm the request.
       </Modal.Body>
       <Modal.Footer>
         <Button

@@ -31,15 +31,16 @@ import '../assets/styles/calendar.css'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import ConfirmServiceRequestModal from '../components/modals/ConfirmServiceRequestModal'
-import DoubleTimeRangeSlider from '../components/DoubleTimeRangeSlider'
-import SingleTimeRangeSlider from '../components/SingleTimeRangeSlider'
+import DoubleTimeRangeSlider from '../components/sliders/DoubleTimeRangeSlider'
+import SingleTimeRangeSlider from '../components/sliders/SingleTimeRangeSlider'
 import Rating from '../components/Rating'
 import {
   formatDatesToDisplay,
   processDates,
   checkIfCollide,
   reccuranceHelper,
-} from '../utils/dates'
+} from '../utils/date'
+import { getCurrentHour } from '../utils/time'
 import { toast } from 'react-toastify'
 
 function Patron() {
@@ -51,13 +52,12 @@ function Patron() {
   const [getPatronsAvailability] = useGetPatronsAvailabilityMutation()
   const [addServiceRequest] = useAddServiceRequestMutation()
 
-  const [startTime, setStartTime] = useState('12:00')
-  const [endTime, setEndTime] = useState('14:00')
+  const [startTime, setStartTime] = useState(getCurrentHour())
+  const [endTime, setEndTime] = useState(getCurrentHour(2))
   const [date, setDate] = useState(new Date())
   const [pickedServices, setPickedServices] = useState([])
   const [pickedPets, setPickedPets] = useState([])
   const [recurringService, setRecurringService] = useState(false)
-  const [serviceOverlap, setServiceOverlap] = useState(false)
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
 
@@ -70,6 +70,13 @@ function Patron() {
   }
 
   const checkAvailability = async () => {
+    if (!pickedServices.length) {
+      toast.error('Please pick a service ')
+      return
+    } else if (!pickedPets.length) {
+      toast.error('Please pick a pet')
+      return
+    }
     try {
       const bookedServices = await getPatronsAvailability({
         patronId,
@@ -88,6 +95,7 @@ function Patron() {
         date,
         recurringService
       )
+
       for (let i = 0; i < datesToCheck.length; i++) {
         const serviceRequest = {
           petOwner: petOwnerInfo._id,
@@ -467,7 +475,7 @@ function Patron() {
               setShowConfirmServiceRequestModal
             }
             checkAvailability={checkAvailability}
-            info={patron}
+            info={{ patron, pickedPets, pickedServices }}
           />
         </>
       )}
