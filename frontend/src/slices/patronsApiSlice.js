@@ -47,11 +47,9 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
-    getPatronsAvailability: builder.mutation({
-      query: (data) => ({
-        url: `${SERVICE_REQUESTS_URL}/patron`,
-        method: 'POST',
-        body: data,
+    getPatronsAvailability: builder.query({
+      query: (patronId) => ({
+        url: `${SERVICE_REQUESTS_URL}/${patronId}`,
       }),
       keepUnusedDataFor: 5,
     }),
@@ -65,5 +63,5 @@ export const {
   useCreatePatronMutation,
   useUpdatePatronMutation,
   useGetPatronsInAreaMutation,
-  useGetPatronsAvailabilityMutation,
+  useGetPatronsAvailabilityQuery,
 } = patronsApiSlice

@@ -1,36 +1,38 @@
 import * as yup from 'yup'
 
-// const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/
-// min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
-
 export const registerSchema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email('Please enter a valid email').required(),
-  password: yup.string().min(6).required(),
-  // password: yup.string().min(6).matches(passwordRules, { message: "Please create a stronger password" }).required(),
+  name: yup.string().required('Please enter a name'),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Please enter an email'),
+  password: yup.string().min(6).required('Please enter a password'),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .required(),
+    .required('Please confirm password'),
 })
 
 export const loginSchema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email').required(),
-  password: yup.string().required(),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Please enter an email'),
+  password: yup.string().required('Please enter a password'),
 })
 
 export const patronSchema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  street: yup.string().required(),
-  houseNr: yup.number().required(),
+  firstName: yup.string().required('Please enter first name'),
+  lastName: yup.string().required('Please enter last name'),
+  street: yup.string().required('Please enter street'),
+  houseNr: yup.number().required('Please enter house number'),
   addition: yup.string(),
-  city: yup.string().required(),
-  postcode: yup.string().required(),
-  phone: yup.string().required(),
-  gender: yup.string().required(),
+  city: yup.string().required('Please enter city'),
+  postcode: yup.string().required('Please enter postcode'),
+  phone: yup.string().required('Please enter phone number'),
+  gender: yup.string().required('Please select a gender'),
   photo: yup.string(),
-  description: yup.string().required(),
+  description: yup.string().required('Please enter a description'),
   pets: yup
     .array()
     .of(yup.string().oneOf(['dog', 'cat', 'rabbit']))
@@ -42,19 +44,22 @@ export const patronSchema = yup.object().shape({
 })
 
 export const petOwnerSchema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  street: yup.string().required(),
-  houseNr: yup.number().required(),
+  firstName: yup.string().required('Please enter first name'),
+  lastName: yup.string().required('Please enter last name'),
+  street: yup.string().required('Please enter street'),
+  houseNr: yup.number().required('Please enter house number'),
   addition: yup.string(),
-  city: yup.string().required(),
-  postcode: yup.string().required(),
-  phone: yup.string().required(),
+  city: yup.string().required('Please enter city'),
+  postcode: yup.string().required('Please enter postcode'),
+  phone: yup.string().required('Please enter phone number'),
 })
 
 export const userSchema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email('Please enter a valid email').required(),
+  name: yup.string().required('Please enter a name'),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Please enter an email'),
   password: yup.string().min(6),
   confirmPassword: yup
     .string()
@@ -62,13 +67,10 @@ export const userSchema = yup.object().shape({
 })
 
 export const petSchema = yup.object().shape({
-  type: yup
-    .string()
-    .oneOf(['dog', 'cat', 'rabbit'])
-    .required('Please pick your pet type'),
-  name: yup.string().required(),
-  gender: yup.string().required(),
-  age: yup.number().required(),
+  type: yup.string().required('Please select a pet type'),
+  name: yup.string().required('Please enter a pet name'),
+  gender: yup.string().required('Please select a pet gender'),
+  age: yup.number().required(`Please enter the pet's age`),
   info: yup.string().max(200),
 })
 

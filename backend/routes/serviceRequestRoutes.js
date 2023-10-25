@@ -8,6 +8,6 @@ import {
 const router = express.Router()
 
 router.route('/').all(protect).post(createServiceRequest)
-router.post('/patron', protect, getPatronServiceRequests)
+router.get('/:patronId', protect, getPatronServiceRequests)
 
 export default router

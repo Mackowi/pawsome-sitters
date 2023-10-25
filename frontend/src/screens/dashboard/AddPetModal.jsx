@@ -45,6 +45,9 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
     onSubmit: submitHandler,
   })
 
+  console.log(values)
+  console.log(errors)
+
   return (
     <Modal show={showAddPetModal} onHide={closeAddPetModal}>
       <Modal.Header closeButton>
@@ -91,6 +94,7 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
                     value='dog'
                     checked={values.type === 'dog' ? true : false}
                     onChange={handleChange}
+                    isInvalid={touched.type && !!errors.type}
                   />
                   <Form.Check
                     inline
@@ -105,6 +109,7 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
                     value='cat'
                     checked={values.type === 'cat' ? true : false}
                     onChange={handleChange}
+                    isInvalid={touched.type && !!errors.type}
                   />
                   <Form.Check
                     inline
@@ -119,10 +124,11 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
                     value='rabbit'
                     checked={values.type === 'rabbit' ? true : false}
                     onChange={handleChange}
+                    isInvalid={touched.type && !!errors.type}
                   />
                 </Form.Group>
                 <Form.Control.Feedback type='invalid'>
-                  {errors.name}
+                  {errors.type}
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
@@ -216,7 +222,7 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
               disabled={isSubmitting || Object.keys(errors).length !== 0}
               type='submit'
               variant='primary'
-              onClick={closeAddPetModal}
+              // onClick={closeAddPetModal}
             >
               Create
             </Button>

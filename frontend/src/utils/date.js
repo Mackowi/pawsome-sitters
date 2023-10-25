@@ -66,7 +66,7 @@ const processDates = (startTime, endTime, dates, reccuring) => {
   return combinedDatesTimes
 }
 
-const checkIfCollide = (datesInDB, datesToCheck) => {
+const isOverlapping = (datesInDB, datesToCheck) => {
   for (const dateToCheck of datesToCheck) {
     const proposedStartDate = DateTime.fromISO(dateToCheck.startDate)
     const proposedEndDate = DateTime.fromISO(dateToCheck.endDate)
@@ -135,4 +135,4 @@ const reccuranceHelper = (dates) => {
   }
 }
 
-export { formatDatesToDisplay, processDates, checkIfCollide, reccuranceHelper }
+export { formatDatesToDisplay, processDates, isOverlapping, reccuranceHelper }

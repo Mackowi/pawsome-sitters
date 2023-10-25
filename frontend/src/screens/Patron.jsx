@@ -19,13 +19,13 @@ import {
 } from 'react-icons/fa6'
 import { ReactComponent as Wave } from '../assets/wave.svg'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { serviceRequestSchema } from '../validationSchemas'
 import {
   useGetPatronByIdQuery,
-  useGetPatronsAvailabilityMutation,
+  useGetPatronsAvailabilityQuery,
 } from '../slices/patronsApiSlice'
 import { useAddServiceRequestMutation } from '../slices/petOwnersApiSlice'
 import Calendar from 'react-calendar'
@@ -39,89 +39,85 @@ import Rating from '../components/Rating'
 import {
   formatDatesToDisplay,
   processDates,
-  checkIfCollide,
+  isOverlapping,
   reccuranceHelper,
 } from '../utils/date'
 import { getCurrentHour } from '../utils/time'
 import { toast } from 'react-toastify'
 
 function Patron() {
-  const navigate = useNavigate()
   const { id: patronId } = useParams()
   const { petOwnerInfo } = useSelector((state) => state.petOwner)
 
   const { data: patron, isLoading, error } = useGetPatronByIdQuery(patronId)
-  const [getPatronsAvailability] = useGetPatronsAvailabilityMutation()
+
+  const { data: bookedServicesForPatron } =
+    useGetPatronsAvailabilityQuery(patronId)
+
   const [addServiceRequest] = useAddServiceRequestMutation()
 
   const [startTime, setStartTime] = useState(getCurrentHour())
   const [endTime, setEndTime] = useState(getCurrentHour(2))
   const [date, setDate] = useState(new Date())
   const [recurringService, setRecurringService] = useState(false)
+  const [serviceOverlapping, setServiceOverlapping] = useState(false)
+  const [serviceRequests, setServiceRequests] = useState([])
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
 
+  const navigate = useNavigate()
+
   const submitHandler = async () => {
-    console.log('submit handler')
-    // console.log(values)
-    // console.log(errors)
-    // console.log(touched)
-  }
-
-  const checkAvailability = async () => {
-    if (!values.service) {
-      toast.error('Please pick a service ')
-      return
-    } else if (!values.pets.length) {
-      toast.error('Please pick a pet')
-      return
-    }
     try {
-      const bookedServices = await getPatronsAvailability({
-        patronId,
-      }).unwrap()
-      const notAvailableDates = []
-      bookedServices.forEach((service) => {
-        const singleDate = {
-          startDate: service.startDate,
-          endDate: service.endDate,
-        }
-        notAvailableDates.push(singleDate)
-      })
-      const datesToCheck = processDates(
-        startTime,
-        endTime,
-        date,
-        recurringService
-      )
-
-      for (let i = 0; i < datesToCheck.length; i++) {
-        const serviceRequest = {
-          petOwner: petOwnerInfo._id,
-          patron: patronId,
-          service: values.service,
-          pets: values.pets,
-          startDate: datesToCheck[i].startDate,
-          endDate: datesToCheck[i].endDate,
-        }
-        try {
-          await addServiceRequest(serviceRequest).unwrap()
-          if (checkIfCollide(notAvailableDates, datesToCheck)) {
-            toast.success(
-              'Service request has been sent, but it needs to be confirmed by Patron due to service overlap.'
-            )
-          } else {
-            toast.success('Service request has been sent')
-          }
-          navigate('/dashboard')
-        } catch (error) {
-          toast.error(error?.data?.message || error?.error)
-        }
+      for (let i = 0; i < serviceRequests.length; i++) {
+        await addServiceRequest(serviceRequests[i]).unwrap()
       }
+      if (serviceOverlapping) {
+        toast.success(
+          'Service request has been sent, but it needs to be confirmed by Patron due to service overlap.'
+        )
+      } else {
+        toast.success('Service request has been sent')
+      }
+      window.scrollTo(0, 0)
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 500) // Adjust the delay as needed
     } catch (error) {
-      toast.error(error)
+      toast.error(error?.data?.message || error?.error)
     }
   }
+
+  const checkAvailability = () => {
+    const datesToCheck = processDates(
+      startTime,
+      endTime,
+      date,
+      recurringService
+    )
+    const requests = datesToCheck.map((dateToCheck) => ({
+      petOwner: petOwnerInfo._id,
+      patron: patronId,
+      service: values.service,
+      pets: values.pets,
+      startDate: dateToCheck.startDate,
+      endDate: dateToCheck.endDate,
+    }))
+    setServiceRequests(requests)
+    const overlapping = isOverlapping(bookedServicesForPatron, datesToCheck)
+    if (overlapping) {
+      setServiceOverlapping(true)
+    } else {
+      setServiceOverlapping(false)
+    }
+    return overlapping
+  }
+
+  useEffect(() => {
+    if (bookedServicesForPatron && bookedServicesForPatron.length) {
+      checkAvailability()
+    }
+  }, [bookedServicesForPatron, date, startTime, endTime])
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -215,14 +211,6 @@ function Patron() {
                       <Wave />
                       <p className='wave-text fw-bold fs-4 '>Service details</p>
                     </div>
-                    {/* <Button
-                      onClick={() => {
-                        console.log(values)
-                        console.log(errors)
-                      }}
-                    >
-                      Test
-                    </Button> */}
                     <Form noValidate onSubmit={handleSubmit} autoComplete='off'>
                       <Form.Group>
                         <Form.Label className='h4'>Select your pets</Form.Label>
@@ -412,6 +400,14 @@ function Patron() {
                         </div>
                       </Col>
                     </Row>
+                    {serviceOverlapping && (
+                      <Row>
+                        <Col className='text-center'>
+                          <h5 className='fw-bold'>Services overlap</h5>
+                          <p>Manual confirmation required by patron!</p>
+                        </Col>
+                      </Row>
+                    )}
                     <Row>
                       <Button
                         style={{ width: '300px' }}
@@ -495,6 +491,14 @@ function Patron() {
                     </div>
                   </Col>
                 </Row>
+                {serviceOverlapping && (
+                  <Row>
+                    <Col className='text-center'>
+                      <h5 className='fw-bold'>Services overlap</h5>
+                      <p>Manual confirmation required by patron!</p>
+                    </Col>
+                  </Row>
+                )}
                 <Row>
                   <Button
                     style={{ width: '250px' }}
