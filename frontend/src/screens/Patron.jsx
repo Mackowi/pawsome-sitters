@@ -8,7 +8,6 @@ import {
   Stack,
   Form,
 } from 'react-bootstrap'
-
 import {
   FaCarrot,
   FaCat,

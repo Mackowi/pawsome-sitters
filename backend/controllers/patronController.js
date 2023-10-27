@@ -1,6 +1,5 @@
 import Patron from '../models/PatronModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
-import geocoder from '../utils/geocoder.js'
 import calculateDistance from '../utils/calculateDistance.js'
 
 // desc: Get all patrons

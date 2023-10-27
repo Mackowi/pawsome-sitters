@@ -3,8 +3,12 @@ import { FaRegAddressCard } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 import { patronSchema } from '../../validationSchemas'
-import { useCreatePatronMutation } from '../../slices/patronsApiSlice'
+import {
+  useCreatePatronMutation,
+  useUploadPatronImageMutation,
+} from '../../slices/patronsApiSlice'
 import { useUpdateUserMutation } from '../../slices/usersApiSlice'
 import { setCredentials } from '../../slices/userSlice'
 import { setPatronInfo } from '../../slices/patronSlice'
@@ -17,8 +21,13 @@ function CreatePatronProfile() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [createPatron, { isLoading }] = useCreatePatronMutation()
+  const [createPatron, { isLoading: loadingCreation }] =
+    useCreatePatronMutation()
   const [updateUser] = useUpdateUserMutation()
+  const [uploadPatronImage, { isLoading: loadingUpload }] =
+    useUploadPatronImageMutation()
+
+  const [selectedImageFileName, setSelectedImageFileName] = useState('')
 
   const submitHandler = async () => {
     try {
@@ -34,7 +43,7 @@ function CreatePatronProfile() {
         },
         phone,
         gender,
-        photo,
+        image: selectedImageFileName,
         description,
         acceptedPets: pets,
         service,
@@ -47,6 +56,19 @@ function CreatePatronProfile() {
       navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
+    }
+  }
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData()
+    const ext = e.target.files[0].name.match(/\.\w+/)
+    formData.append('image', e.target.files[0], `${userInfo._id}${ext[0]}`)
+    try {
+      const res = await uploadPatronImage(formData).unwrap()
+      setSelectedImageFileName(res.image)
+      toast.success(res.message)
+    } catch (err) {
+      toast.error(err?.data?.message || err.error)
     }
   }
 
@@ -88,7 +110,6 @@ function CreatePatronProfile() {
     postcode,
     phone,
     gender,
-    photo,
     description,
     pets,
     service,
@@ -96,7 +117,7 @@ function CreatePatronProfile() {
 
   return (
     <Container className='my-5'>
-      {isLoading && <Loader />}
+      {loadingCreation && <Loader />}
       <h3 className='text-center mb-5 text-primary fw-bold'>
         <FaRegAddressCard size={45} className='me-3' />
         Please fill your details
@@ -271,18 +292,22 @@ function CreatePatronProfile() {
           </Col>
         </Row>
 
-        <Form.Group controlId='formFile' className='mb-3'>
+        <Form.Group controlId='photo' className='mb-3'>
           <Form.Label>Photo</Form.Label>
           <Form.Control
             type='file'
-            value={values.file}
-            onChange={handleChange}
+            value={values.photo}
+            onChange={(e) => {
+              handleChange(e)
+              uploadFileHandler(e)
+            }}
             onBlur={handleBlur}
-            isInvalid={touched.file && !!errors.file}
+            isInvalid={touched.photo && !!errors.photo}
           ></Form.Control>
           <Form.Control.Feedback type='invalid'>
-            {errors.file}
+            {errors.photo}
           </Form.Control.Feedback>
+          {loadingUpload && <Loader />}
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='description'>

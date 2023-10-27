@@ -1,4 +1,4 @@
-import { PATRONS_URL, SERVICE_REQUESTS_URL } from '../constants'
+import { PATRONS_URL, SERVICE_REQUESTS_URL, UPLOAD_URL } from '../constants'
 import { apiSlice } from './apiSlice'
 
 export const patronsApiSlice = apiSlice.injectEndpoints({
@@ -53,6 +53,13 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    uploadPatronImage: builder.mutation({
+      query: (data) => ({
+        url: `${UPLOAD_URL}`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 })
 
@@ -64,4 +71,5 @@ export const {
   useUpdatePatronMutation,
   useGetPatronsInAreaMutation,
   useGetPatronsAvailabilityQuery,
+  useUploadPatronImageMutation,
 } = patronsApiSlice

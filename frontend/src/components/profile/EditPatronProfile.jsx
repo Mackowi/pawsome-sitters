@@ -1,8 +1,12 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FaRegAddressCard } from 'react-icons/fa'
+import { useState } from 'react'
 import Loader from '../Loader'
 import { toast } from 'react-toastify'
-import { useUpdatePatronMutation } from '../../slices/patronsApiSlice'
+import {
+  useUpdatePatronMutation,
+  useUploadPatronImageMutation,
+} from '../../slices/patronsApiSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
@@ -14,12 +18,18 @@ import Message from '../Message'
 
 function EditPatronProfile() {
   const { patronInfo } = useSelector((state) => state.patron)
+  const { userInfo } = useSelector((state) => state.user)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [updatePatron, { isLoading, error }] = useUpdatePatronMutation()
+  const [updatePatron, { isLoading: loadingUpdate, error }] =
+    useUpdatePatronMutation()
   const [updateUser] = useUpdateUserMutation()
+  const [uploadPatronImage, { isLoading: loadingUpload }] =
+    useUploadPatronImageMutation()
+
+  const [selectedImageFileName, setSelectedImageFileName] = useState('')
 
   const submitHandler = async () => {
     try {
@@ -35,7 +45,7 @@ function EditPatronProfile() {
         },
         phone,
         gender,
-        photo,
+        image: selectedImageFileName,
         description,
         acceptedPets: pets,
         service,
@@ -52,6 +62,19 @@ function EditPatronProfile() {
       navigate('/dashboard')
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
+    }
+  }
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData()
+    const ext = e.target.files[0].name.match(/\.\w+/)
+    formData.append('image', e.target.files[0], `${userInfo._id}${ext[0]}`)
+    try {
+      const res = await uploadPatronImage(formData).unwrap()
+      setSelectedImageFileName(res.image)
+      toast.success(res.message)
+    } catch (err) {
+      toast.error(err?.data?.message || err.error)
     }
   }
 
@@ -93,7 +116,6 @@ function EditPatronProfile() {
     postcode,
     phone,
     gender,
-    photo,
     description,
     pets,
     service,
@@ -101,7 +123,7 @@ function EditPatronProfile() {
 
   return (
     <Container className='my-5'>
-      {isLoading ? (
+      {loadingUpdate ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>
@@ -283,18 +305,22 @@ function EditPatronProfile() {
               </Col>
             </Row>
 
-            <Form.Group controlId='formFile' className='mb-3'>
-              <Form.Label>Photo</Form.Label>
+            <Form.Group controlId='photo' className='mb-3'>
+              <Form.Label>Change photo</Form.Label>
               <Form.Control
                 type='file'
-                value={values.file}
-                onChange={handleChange}
+                value={values.photo}
+                onChange={(e) => {
+                  handleChange(e)
+                  uploadFileHandler(e)
+                }}
                 onBlur={handleBlur}
-                isInvalid={touched.file && !!errors.file}
+                isInvalid={touched.photo && !!errors.photo}
               ></Form.Control>
               <Form.Control.Feedback type='invalid'>
-                {errors.file}
+                {errors.photo}
               </Form.Control.Feedback>
+              {loadingUpload && <Loader />}
             </Form.Group>
 
             <Form.Group className='mb-3' controlId='description'>
