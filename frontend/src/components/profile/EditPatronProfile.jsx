@@ -97,7 +97,7 @@ function EditPatronProfile() {
       postcode: patronInfo.address.postcode,
       phone: patronInfo.phone,
       gender: patronInfo.gender,
-      photo: patronInfo.photo,
+      image: patronInfo.image,
       description: patronInfo.description,
       pets: patronInfo.acceptedPets,
       service: patronInfo.service,
@@ -305,20 +305,20 @@ function EditPatronProfile() {
               </Col>
             </Row>
 
-            <Form.Group controlId='photo' className='mb-3'>
+            <Form.Group controlId='image' className='mb-3'>
               <Form.Label>Change photo</Form.Label>
               <Form.Control
                 type='file'
-                value={values.photo}
+                value={values.image}
                 onChange={(e) => {
                   handleChange(e)
                   uploadFileHandler(e)
                 }}
                 onBlur={handleBlur}
-                isInvalid={touched.photo && !!errors.photo}
+                isInvalid={touched.image && !!errors.image}
               ></Form.Control>
               <Form.Control.Feedback type='invalid'>
-                {errors.photo}
+                {errors.image}
               </Form.Control.Feedback>
               {loadingUpload && <Loader />}
             </Form.Group>

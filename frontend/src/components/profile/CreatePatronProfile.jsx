@@ -91,7 +91,7 @@ function CreatePatronProfile() {
       postcode: '',
       phone: '',
       gender: '',
-      photo: '',
+      image: '',
       description: '',
       pets: [],
       service: [],
@@ -292,20 +292,20 @@ function CreatePatronProfile() {
           </Col>
         </Row>
 
-        <Form.Group controlId='photo' className='mb-3'>
+        <Form.Group controlId='image' className='mb-3'>
           <Form.Label>Photo</Form.Label>
           <Form.Control
             type='file'
-            value={values.photo}
+            value={values.image}
             onChange={(e) => {
               handleChange(e)
               uploadFileHandler(e)
             }}
             onBlur={handleBlur}
-            isInvalid={touched.photo && !!errors.photo}
+            isInvalid={touched.image && !!errors.image}
           ></Form.Control>
           <Form.Control.Feedback type='invalid'>
-            {errors.photo}
+            {errors.image}
           </Form.Control.Feedback>
           {loadingUpload && <Loader />}
         </Form.Group>
