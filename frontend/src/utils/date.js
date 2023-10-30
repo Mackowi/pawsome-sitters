@@ -84,13 +84,13 @@ const isOverlapping = (datesInDB, datesToCheck) => {
           !proposedStartDate.equals(endDate) &&
           !proposedEndDate.equals(startDate)
         ) {
-          return true // Collision/overlap found
+          return true
         }
       }
     }
   }
 
-  return false // No collision/overlap found
+  return false
 }
 
 const combineDateTime = (timeString, dateString) => {
@@ -135,4 +135,42 @@ const reccuranceHelper = (dates) => {
   }
 }
 
-export { formatDatesToDisplay, processDates, isOverlapping, reccuranceHelper }
+const correctStartDateTime = (startTime, date) => {
+  const now = DateTime.local()
+  if (Array.isArray(date) && date.length === 2) {
+    const formattedDate = formatDate(date[0])
+    const providedDateTime = DateTime.fromFormat(
+      formattedDate,
+      'dd.MM.yyyy'
+    ).set({
+      hour: parseInt(startTime.split(':')[0], 10),
+      minute: parseInt(startTime.split(':')[1], 10),
+    })
+    if (providedDateTime < now) {
+      return false
+    }
+  } else {
+    const formattedDate = formatDate(date)
+    const providedDateTime = DateTime.fromFormat(
+      formattedDate,
+      'dd.MM.yyyy'
+    ).set({
+      hour: parseInt(startTime.split(':')[0], 10),
+      minute: parseInt(startTime.split(':')[1], 10),
+    })
+    if (providedDateTime < now) {
+      console.log('incorrect')
+      return false
+    }
+  }
+  console.log('correct')
+  return true
+}
+
+export {
+  formatDatesToDisplay,
+  processDates,
+  isOverlapping,
+  reccuranceHelper,
+  correctStartDateTime,
+}

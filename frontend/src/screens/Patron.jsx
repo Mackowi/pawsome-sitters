@@ -40,6 +40,7 @@ import {
   processDates,
   isOverlapping,
   reccuranceHelper,
+  correctStartDateTime,
 } from '../utils/date'
 import { getCurrentHour } from '../utils/time'
 import { toast } from 'react-toastify'
@@ -61,6 +62,7 @@ function Patron() {
   const [recurringService, setRecurringService] = useState(false)
   const [serviceOverlapping, setServiceOverlapping] = useState(false)
   const [serviceRequests, setServiceRequests] = useState([])
+  const [wrongStartDateTime, setWrongStartDateTime] = useState(false)
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
 
@@ -81,7 +83,7 @@ function Patron() {
       window.scrollTo(0, 0)
       setTimeout(() => {
         navigate('/dashboard')
-      }, 500) // Adjust the delay as needed
+      }, 500)
     } catch (error) {
       toast.error(error?.data?.message || error?.error)
     }
@@ -116,6 +118,12 @@ function Patron() {
     if (bookedServicesForPatron && bookedServicesForPatron.length) {
       checkAvailability()
     }
+    if (!correctStartDateTime(startTime, date)) {
+      setWrongStartDateTime(true)
+    } else {
+      setWrongStartDateTime(false)
+    }
+    // eslint-disable-next-line
   }, [bookedServicesForPatron, date, startTime, endTime])
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -142,6 +150,7 @@ function Patron() {
                 <Col>
                   <div className='d-flex justify-content-center mb-4'>
                     <img
+                      alt='patron'
                       src={patron.image}
                       style={{ maxWidth: 'auto' }}
                       className='img-fluid'
@@ -299,6 +308,12 @@ function Patron() {
                         }}
                         value={date}
                       />
+                      {wrongStartDateTime && (
+                        <p className='my-1 text-danger'>
+                          Start time of selected service is incorrect! <br></br>
+                          It cannot start before current time.
+                        </p>
+                      )}
                       <div>
                         {values.service !== 'sitting' ? (
                           <SingleTimeRangeSlider
@@ -341,6 +356,7 @@ function Patron() {
                     <Row className='pb-3 border-bottom d-flex align-items-center'>
                       <Col xl={5} className='text-center mb-3'>
                         <img
+                          alt='patron'
                           src={patron.image}
                           style={{ width: '125px', height: '125px' }}
                           className='rounded-circle'
@@ -396,6 +412,13 @@ function Patron() {
                           ) : (
                             <></>
                           )}
+                          {wrongStartDateTime && (
+                            <p className='my-1 text-danger'>
+                              Start time of selected service is incorrect!{' '}
+                              <br></br>
+                              It cannot start before current time.
+                            </p>
+                          )}
                         </div>
                       </Col>
                     </Row>
@@ -428,6 +451,7 @@ function Patron() {
                 <Row className='pb-3 border-bottom d-flex align-items-center'>
                   <Col xl={5} className='text-center mb-3'>
                     <img
+                      alt='patron'
                       src={patron.image}
                       style={{ width: '125px', height: '125px' }}
                       className='rounded-circle'
@@ -505,6 +529,7 @@ function Patron() {
                     onClick={() => {
                       setShowConfirmServiceRequestModal(true)
                     }}
+                    disabled={wrongStartDateTime}
                   >
                     Send request to {patron.firstName}
                   </Button>
