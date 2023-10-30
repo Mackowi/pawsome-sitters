@@ -11,8 +11,8 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     getPetOwner: builder.query({
-      query: (userId) => ({
-        url: `${PETOWNERS_URL}/${userId}`,
+      query: (petOwnerId) => ({
+        url: `${PETOWNERS_URL}/${petOwnerId}`,
         method: 'GET',
       }),
       keepUnusedDataFor: 5,

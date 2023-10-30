@@ -45,4 +45,31 @@ const createServiceRequest = asyncHandler(async (req, res) => {
   res.status(201).json(serviceRequest)
 })
 
-export { createServiceRequest, getPatronServiceRequests }
+// desc: Update serv req
+// route: PUT /api/service
+// access: private
+const updateServiceRequest = asyncHandler(async (req, res) => {
+  console.log('JEBANIE')
+  console.log(req.body)
+  const servReqData = req.body
+
+  // check if serv req exists
+  const servReqExist = await ServiceRequest.findById(servReqData.id)
+  if (!servReqExist) {
+    res.status(400)
+    throw new Error('Not found and service requests')
+  }
+
+  const updatedServReq = await ServiceRequest.findByIdAndUpdate(
+    servReqData.id,
+    servReqData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+
+  res.status(200).json(updatedServReq)
+})
+
+export { createServiceRequest, getPatronServiceRequests, updateServiceRequest }

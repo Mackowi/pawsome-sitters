@@ -46,6 +46,19 @@ const getPetOwnerByUserId = asyncHandler(async (req, res) => {
   res.status(200).json(petOwner)
 })
 
+// desc: Get patron profile of the user
+// route: GET /api/petowners/:id
+// access: Private
+const getPetOwnerById = asyncHandler(async (req, res) => {
+  const petOwner = await PetOwner.findById(req.params.id)
+  if (!petOwner) {
+    res.status(404)
+    throw new Error(`There is no pet owner with this id:${req.params.id}`)
+  }
+
+  res.status(200).json(petOwner)
+})
+
 // desc: Create new petowner
 // route: POST /api/petowners
 // access: Private
@@ -155,6 +168,7 @@ export {
   getPetOwnersPub,
   getPetOwners,
   getPetOwnerByUserId,
+  getPetOwnerById,
   createPetOwner,
   updatePetOwner,
   addPet,

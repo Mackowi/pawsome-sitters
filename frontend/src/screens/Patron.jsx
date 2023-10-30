@@ -103,21 +103,24 @@ function Patron() {
       pets: values.pets,
       startDate: dateToCheck.startDate,
       endDate: dateToCheck.endDate,
+      accepted: serviceOverlapping ? false : true,
+      fulfilled: false,
     }))
     setServiceRequests(requests)
-    const overlapping = isOverlapping(bookedServicesForPatron, datesToCheck)
-    if (overlapping) {
-      setServiceOverlapping(true)
-    } else {
-      setServiceOverlapping(false)
+    if (bookedServicesForPatron && bookedServicesForPatron.length) {
+      const overlapping = isOverlapping(bookedServicesForPatron, datesToCheck)
+      if (overlapping) {
+        setServiceOverlapping(true)
+      } else {
+        setServiceOverlapping(false)
+      }
     }
-    return overlapping
+    return
   }
 
   useEffect(() => {
-    if (bookedServicesForPatron && bookedServicesForPatron.length) {
-      checkAvailability()
-    }
+    checkAvailability()
+
     if (!correctStartDateTime(startTime, date)) {
       setWrongStartDateTime(true)
     } else {
@@ -310,7 +313,7 @@ function Patron() {
                       />
                       {wrongStartDateTime && (
                         <p className='my-1 text-danger'>
-                          Start time of selected service is incorrect! <br></br>
+                          Start time of selected service is incorrect! <br />
                           It cannot start before current time.
                         </p>
                       )}

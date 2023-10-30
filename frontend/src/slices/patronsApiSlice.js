@@ -47,16 +47,23 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    uploadPatronImage: builder.mutation({
+      query: (data) => ({
+        url: `${UPLOAD_URL}`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     getPatronsAvailability: builder.query({
       query: (patronId) => ({
         url: `${SERVICE_REQUESTS_URL}/${patronId}`,
       }),
       keepUnusedDataFor: 5,
     }),
-    uploadPatronImage: builder.mutation({
+    handleServiceRequest: builder.mutation({
       query: (data) => ({
-        url: `${UPLOAD_URL}`,
-        method: 'POST',
+        url: `${SERVICE_REQUESTS_URL}`,
+        method: 'PUT',
         body: data,
       }),
     }),
@@ -72,4 +79,5 @@ export const {
   useGetPatronsInAreaMutation,
   useGetPatronsAvailabilityQuery,
   useUploadPatronImageMutation,
+  useHandleServiceRequestMutation,
 } = patronsApiSlice

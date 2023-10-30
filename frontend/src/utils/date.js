@@ -21,6 +21,11 @@ const formatDatesToDisplay = (dates) => {
   }
 }
 
+const formatDateTimeToDisplay = (dateTime) => {
+  const luxonDate = DateTime.fromISO(dateTime)
+  return luxonDate.toFormat('HH:mm dd.LL.yyyy')
+}
+
 const processDates = (startTime, endTime, dates, reccuring) => {
   const combinedDatesTimes = []
   if (Array.isArray(dates) && dates.length === 2) {
@@ -159,16 +164,15 @@ const correctStartDateTime = (startTime, date) => {
       minute: parseInt(startTime.split(':')[1], 10),
     })
     if (providedDateTime < now) {
-      console.log('incorrect')
       return false
     }
   }
-  console.log('correct')
   return true
 }
 
 export {
   formatDatesToDisplay,
+  formatDateTimeToDisplay,
   processDates,
   isOverlapping,
   reccuranceHelper,

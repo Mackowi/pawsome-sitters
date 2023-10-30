@@ -4,6 +4,7 @@ import {
   createPetOwner,
   updatePetOwner,
   getPetOwnerByUserId,
+  getPetOwnerById,
   addPet,
   updatePet,
   deletePet,
@@ -19,6 +20,7 @@ router
   .post(createPetOwner)
   .put(updatePetOwner)
 router.get('/user', protect, getPetOwnerByUserId)
+router.get('/:id', protect, getPetOwnerById)
 router.route('/pets').all(protect).post(addPet).put(updatePet)
 router.delete('/pets/:id', protect, deletePet)
 

@@ -94,7 +94,7 @@ const getPatronById = asyncHandler(async (req, res) => {
   const patron = await Patron.findById(req.params.id)
   if (!patron) {
     res.status(404)
-    throw new Error(`There is no patron with this id:${patronId}`)
+    throw new Error(`There is no patron with this id:${req.params.id}`)
   }
 
   res.status(200).json(patron)

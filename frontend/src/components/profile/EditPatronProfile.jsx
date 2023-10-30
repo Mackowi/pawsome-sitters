@@ -97,7 +97,7 @@ function EditPatronProfile() {
       postcode: patronInfo.address.postcode,
       phone: patronInfo.phone,
       gender: patronInfo.gender,
-      image: patronInfo.image,
+      image: '',
       description: patronInfo.description,
       pets: patronInfo.acceptedPets,
       service: patronInfo.service,
