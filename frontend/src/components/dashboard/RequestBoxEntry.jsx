@@ -8,8 +8,7 @@ import { toast } from 'react-toastify'
 function RequestBoxEntry({ service, refetch }) {
   const { data: petOwner, isLoading } = useGetPetOwnerQuery(service.petOwner)
 
-  const [handleServiceRequest, { isLoading: loadingUpdate, error }] =
-    useHandleServiceRequestMutation()
+  const [handleServiceRequest] = useHandleServiceRequestMutation()
 
   const submitHandler = async (response) => {
     try {
@@ -35,7 +34,7 @@ function RequestBoxEntry({ service, refetch }) {
               From:{' '}
               {
                 <strong>
-                  {petOwner.firstName} {petOwner.lastName}
+                  {petOwner.firstName} {petOwner.lastName} {service.accepted}
                 </strong>
               }
             </p>

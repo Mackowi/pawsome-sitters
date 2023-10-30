@@ -103,7 +103,7 @@ function Patron() {
       pets: values.pets,
       startDate: dateToCheck.startDate,
       endDate: dateToCheck.endDate,
-      accepted: serviceOverlapping ? false : true,
+      accepted: serviceOverlapping ? null : true,
       fulfilled: false,
     }))
     setServiceRequests(requests)
