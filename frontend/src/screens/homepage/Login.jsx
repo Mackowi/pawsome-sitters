@@ -128,7 +128,7 @@ function Login() {
               <Button
                 disabled={isSubmitting}
                 type='submit'
-                variant='secondary'
+                variant='primary'
                 className='w-50 mx-auto'
               >
                 Login

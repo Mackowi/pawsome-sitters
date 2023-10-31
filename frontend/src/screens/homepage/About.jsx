@@ -5,9 +5,9 @@ import Img3 from '../../assets/images/about3.jpg'
 
 function About() {
   return (
-    <Container className=''>
-      <Row className='py-5'>
-        <h2 className='text-center text-secondary fw-bold mb-4 '>About Us</h2>
+    <Container>
+      <Row className='pt-5'>
+        <h2 className='text-center text-primary fw-bold mb-4 '>About Us</h2>
         <p>
           Welcome to Pawsome Sitters, where our passion for pets drives
           everything we do. We understand that pets are cherished members of the
@@ -37,8 +37,8 @@ function About() {
         </p>
       </Row>
 
-      <Row className='bg-secondary-light py-4 mb-4 rounded-4 px-3 '>
-        <h2 className='text-center text-primary fw-bold mb-4 '>Who Are We</h2>
+      <Row className='bg-primary-light pt-5 mb-5 rounded-4 px-3'>
+        <h2 className='text-center text-primary fw-bold mb-5 '>Who Are We</h2>
         <Row className='mb-4'>
           <Col md={6} className='d-flex flex-column justify-content-center'>
             <h4 className='text-primary text-center text-md-end'>

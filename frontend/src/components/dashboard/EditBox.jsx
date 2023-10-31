@@ -7,7 +7,7 @@ function EditBox() {
   const { userInfo } = useSelector((state) => state.user)
 
   return (
-    <Card className='py-3 my-2 bg-primary-light border-secondary border-2'>
+    <Card className='py-3 my-2 border-primary border-3 bg-primary-light'>
       <Row className='text-center'>
         {userInfo.role === 'petOwner' ? (
           <>
@@ -15,21 +15,21 @@ function EditBox() {
               <FaDog size={30} className='text-primary fw-bold' />
               <h4 className='text-primary fw-bold mb-3'>Pets</h4>
               <Link to='/dashboard/pets'>
-                <Button variant='secondary'>Edit Pets</Button>
+                <Button variant='primary'>Edit Pets</Button>
               </Link>
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
               <FaUserEdit size={30} className='text-primary fw-bold' />
               <h4 className='text-primary fw-bold mb-3'>Profile Settings</h4>
               <Link to='/dashboard/editprofile'>
-                <Button variant='secondary'>Edit Profile</Button>
+                <Button variant='primary'>Edit Profile</Button>
               </Link>
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
               <FaFileAlt size={30} className='text-primary fw-bold' />
               <h4 className='text-primary fw-bold mb-3'>Account Settings</h4>
               <Link to='/dashboard/editaccount'>
-                <Button variant='secondary'>Edit Account</Button>
+                <Button variant='primary'>Edit Account</Button>
               </Link>
             </Col>
           </>
@@ -39,14 +39,14 @@ function EditBox() {
               <FaFileAlt size={30} className='text-primary fw-bold' />
               <h4 className='text-primary fw-bold mb-3'>Account Settings</h4>
               <Link to='/dashboard/editaccount'>
-                <Button variant='secondary'>Edit Account</Button>
+                <Button variant='primary'>Edit Account</Button>
               </Link>
             </Col>
             <Col md={6} className='mb-4 mb-md-0'>
               <FaUserEdit size={30} className='text-primary fw-bold' />
               <h4 className='text-primary fw-bold mb-3'>Profile Settings</h4>
               <Link to='/dashboard/editprofile'>
-                <Button variant='secondary'>Edit Profile</Button>
+                <Button variant='primary'>Edit Profile</Button>
               </Link>
             </Col>
           </>

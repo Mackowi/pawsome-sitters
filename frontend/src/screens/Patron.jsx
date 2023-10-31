@@ -394,7 +394,7 @@ function Patron() {
                       <Col className='d-flex justify-content-between align-items-start'>
                         <h5 className='mb-0'>Service:</h5>
                         <Stack direction='horizontal' gap={1}>
-                          <Badge bg='secondary' key={values.service}>
+                          <Badge bg='primary' key={values.service}>
                             {values.service}
                           </Badge>
                         </Stack>
@@ -489,7 +489,7 @@ function Patron() {
                   <Col className='d-flex justify-content-between align-items-start'>
                     <h5 className='mb-0'>Service:</h5>
                     <Stack direction='horizontal' gap={1}>
-                      <Badge bg='secondary' key={values.service}>
+                      <Badge bg='primary' key={values.service}>
                         {values.service}
                       </Badge>
                     </Stack>

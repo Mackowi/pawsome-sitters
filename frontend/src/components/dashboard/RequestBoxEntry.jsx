@@ -77,7 +77,7 @@ function RequestBoxEntry({ service, refetch }) {
                 Accept
               </Button>
               <Button
-                variant='secondary'
+                variant='primary-outline'
                 onClick={() => {
                   submitHandler(false)
                 }}

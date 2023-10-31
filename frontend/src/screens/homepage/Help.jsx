@@ -5,7 +5,12 @@ function Help() {
   return (
     <Container>
       <Row className='text-center py-5'>
-        <h2 className='mb-4 text-secondary fw-bold'>Contact Information</h2>
+        <h2 className='mb-4 text-primary fw-bold'>Contact Information</h2>
+        <p className='mb-md-4'>
+          Our dedicated support team is available to address any issues you may
+          encounter. Whether you're a pet owner or a sitter, your satisfaction
+          and the well-being of your furry friends are our priorities.
+        </p>
         <Col md={6} className='fw-bold text-primary fs-5'>
           <p>
             <i>
@@ -22,11 +27,6 @@ function Help() {
             Phone: +1-800-123-4567
           </p>
         </Col>
-        <p className='mb-md-4'>
-          Our dedicated support team is available to address any issues you may
-          encounter. Whether you're a pet owner or a sitter, your satisfaction
-          and the well-being of your furry friends are our priorities.
-        </p>
         <p>
           Feel free to contact us during our business hours, Monday to Friday,
           9:00 AM to 6:00 PM (EST). You can also leave a message outside of
@@ -34,7 +34,9 @@ function Help() {
         </p>
       </Row>
       <Row className='mb-5'>
-        <h2 className='text-center pb-4'>Frequently Asked Questions</h2>
+        <h2 className='text-center pb-4 text-primary'>
+          Frequently Asked Questions
+        </h2>
         <Col md={6}>
           <Accordion defaultActiveKey='0'>
             <Accordion.Item eventKey='0'>

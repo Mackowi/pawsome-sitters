@@ -51,7 +51,9 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
   return (
     <Modal show={showAddPetModal} onHide={closeAddPetModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Adding New Pet</Modal.Title>
+        <Modal.Title className='text-primary fw-bold'>
+          Adding New Pet
+        </Modal.Title>
       </Modal.Header>
       {isLoading ? (
         <Loader />

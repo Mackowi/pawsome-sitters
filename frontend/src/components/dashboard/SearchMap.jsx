@@ -68,14 +68,12 @@ function SearchMap() {
   }
 
   return (
-    <Card className='my-2 bg-primary-light border-primary border-2 search-map'>
+    <Card className='my-2 bg-primary-light border-primary border-3 search-map'>
       <Row className='p-3'>
         <Col>
-          <Card className='pt-2 bg-secondary-light border-primary border-2'>
-            <h2 className=' text-primary fw-bold text-center'>
-              <FaMapMarkedAlt className='mb-2' /> Find Patrons
-            </h2>
-          </Card>
+          <h2 className='pt-2 text-primary fw-bold text-center'>
+            <FaMapMarkedAlt className='mb-2' /> Find Patrons
+          </h2>
         </Col>
       </Row>
 
@@ -87,7 +85,7 @@ function SearchMap() {
               className='list-group search-map-list'
             >
               {patrons &&
-                patrons.map((patron, index) => (
+                patrons.map((patron) => (
                   <div
                     key={patron._id}
                     ref={(el) => (patronRefs.current[patron._id] = el)}
@@ -101,7 +99,7 @@ function SearchMap() {
                     className={`list-group-item list-group-item-action ${
                       selectedPatron === patron._id ||
                       (hoveredPatron === patron._id && selectedPatron === null)
-                        ? 'bg-secondary-light border border-primary border-3'
+                        ? 'border border-primary border-3'
                         : ''
                     }`}
                   >
@@ -125,7 +123,7 @@ function SearchMap() {
                             className='mb-1'
                           >
                             {patron.service.map((serv) => (
-                              <Badge bg='secondary' key={serv}>
+                              <Badge bg='primary' key={serv}>
                                 {serv}
                               </Badge>
                             ))}

@@ -47,12 +47,7 @@ function NavBar() {
     setIsMouseOver(false)
   }
 
-  const navbarClasses = [
-    'sticky-top',
-    'border-secondary',
-    'border-3',
-    'border-bottom',
-  ]
+  const navbarClasses = ['sticky-top']
   if (navOpacity && !isMouseOver) {
     navbarClasses.push('nav-opacity')
   } else if (navOpacity && isMouseOver) {

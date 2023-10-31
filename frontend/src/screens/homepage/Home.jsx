@@ -25,10 +25,7 @@ function HomeScreen() {
                 Connect with local sitters for dog walking, sitting, and
                 daycare. Your pet's happiness is our priority!
               </p>
-              <Link
-                to='/register'
-                className='btn btn-secondary d-block fw-bold'
-              >
+              <Link to='/register' className='btn btn-primary d-block fw-bold'>
                 Join Us
               </Link>
             </Col>
@@ -98,7 +95,7 @@ function HomeScreen() {
         </Container>
       </section>
 
-      <section className='reviews bg-secondary-light '>
+      <section className='reviews bg-primary text-white'>
         <Container className='py-4 text-center px-3'>
           <Row>
             <h2>Satisfaction Assured</h2>
@@ -107,7 +104,7 @@ function HomeScreen() {
               devoted, skilled pet sitter
             </p>
           </Row>
-          <Row className='text-primary my-3 fw-bold'>
+          <Row className=' my-3 fw-bold'>
             <Col md={4}>
               <h1>97%</h1>
               <p>5-star reviews</p>
@@ -205,7 +202,7 @@ function HomeScreen() {
           <Row className='px-3'>
             <Link
               to='/about'
-              className='btn btn-lg btn-secondary mb-5 w-50 mx-auto'
+              className='btn btn-lg btn-outline-light mb-5 w-50 mx-auto'
             >
               Read more
             </Link>

@@ -45,7 +45,7 @@ function Pets() {
 
   return (
     <Container className='py-5'>
-      <Row className='border border-2 border-secondary bg-secondary-light p-3 '>
+      <Row className='border border-2 border-primary p-3 rounded-4'>
         <h2 className='text-center text-primary fw-bold mt-3 mt-md-0'>
           <FaPaw className='mb-1' /> Your Pets
         </h2>

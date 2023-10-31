@@ -146,7 +146,7 @@ function Register() {
               <Button
                 disabled={isSubmitting}
                 type='submit'
-                variant='secondary'
+                variant='primary'
                 className='w-50 mx-auto'
               >
                 Register

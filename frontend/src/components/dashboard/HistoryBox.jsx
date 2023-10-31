@@ -52,7 +52,7 @@ function HistoryBox() {
   ]
 
   return (
-    <Card className='my-2 p-3 bg-secondary-light history-box border-primary border-2'>
+    <Card className='my-2 p-3 bg-primary-light history-box border-primary border-3'>
       <h2 className='pb-1 text-primary fw-bold text-center'>
         <FaHistory className='mb-1' /> Past Services
       </h2>

@@ -18,9 +18,7 @@ function Patrons() {
           <Container>
             <Row className='text-center'>
               <Col md={6}>
-                <h3 className='text-secondary fw-bold mb-5 pt-5'>
-                  Our Patrons
-                </h3>
+                <h3 className='text-primary fw-bold mb-5 pt-5'>Our Patrons</h3>
                 <ul className='list-group list-unstyled'>
                   {patrons.map((patron) => (
                     <li key={patron._id}>

@@ -23,7 +23,7 @@ function RequestBox() {
   }, [bookedServicesForPatron])
 
   return (
-    <Card className='p-3 my-2 border-primary bg-secondary-light border-2 request-box text-center'>
+    <Card className='p-3 my-2 border-primary bg-primary-light border-2 request-box text-center'>
       <h2 className='pb-1 text-primary fw-bold'>
         <FaPersonCircleQuestion className='mb-2' /> Pending Requests
       </h2>

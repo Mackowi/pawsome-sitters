@@ -1,10 +1,10 @@
 import { Card, Button } from 'react-bootstrap'
 import { FaDog, FaHouseUser } from 'react-icons/fa'
 
-function RoleCoser({ setRole }) {
+function RoleChoser({ setRole }) {
   return (
     <>
-      <Card className='bg-secondary-light mt-5 text-center choice-card mx-auto'>
+      <Card className='bg-primary-light mt-5 text-center choice-card mx-auto'>
         <Card.Body>
           <Card.Title>
             <h4>Are you pet owner or patron?</h4>
@@ -31,4 +31,4 @@ function RoleCoser({ setRole }) {
     </>
   )
 }
-export default RoleCoser
+export default RoleChoser
