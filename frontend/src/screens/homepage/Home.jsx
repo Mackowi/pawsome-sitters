@@ -10,6 +10,7 @@ import {
   FaMapMarkerAlt,
 } from 'react-icons/fa'
 import HomeScreenCarousel from '../../components/HomeScreenCarousel'
+import Map from '../../assets/images/map.png'
 import { Link } from 'react-router-dom'
 
 function HomeScreen() {
@@ -155,13 +156,11 @@ function HomeScreen() {
               </Link>
             </Col>
             <Col md={6}>
-              <iframe
-                title='map'
-                src='https://maps.google.com/maps?width=100%25&amp;height=400&amp;hl=en&amp;q=52.3730796,4.8924534+(Amsterdam)&amp;t=&amp;z=11&amp;ie=UTF8&amp;iwloc=B&amp;output=embed'
-                className='w-100'
-                height='400'
-                loading='lazy'
-              ></iframe>
+              <img
+                src={Map}
+                alt='map with services'
+                className='img-fluid rounded-2'
+              />
             </Col>
           </Row>
         </Container>

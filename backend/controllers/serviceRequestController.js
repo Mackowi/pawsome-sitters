@@ -49,8 +49,6 @@ const createServiceRequest = asyncHandler(async (req, res) => {
 // route: PUT /api/service
 // access: private
 const updateServiceRequest = asyncHandler(async (req, res) => {
-  console.log('JEBANIE')
-  console.log(req.body)
   const servReqData = req.body
 
   // check if serv req exists

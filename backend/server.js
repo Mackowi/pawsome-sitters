@@ -11,8 +11,10 @@ import patronRoutes from './routes/patronRoutes.js'
 import petOwnerRoutes from './routes/petOwnerRoutes.js'
 import serviceRequestRoutes from './routes/serviceRequestRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import setupServiceWatcher from './utils/serviceWatcher.js'
 
 connectDB()
+setupServiceWatcher()
 
 const port = process.env.PORT || 6000
 
