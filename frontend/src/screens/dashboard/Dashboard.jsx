@@ -21,19 +21,12 @@ function Dashboard() {
 
   return (
     <Container>
-      <Row className='mt-3'>
-        <Col>
-          <MessageBox />
-        </Col>
-      </Row>
       {userInfo.role === 'patron' ? (
-        <>
-          <Row>
-            <Col>
-              <RequestBox></RequestBox>
-            </Col>
-          </Row>
-        </>
+        <Row className='mt-3'>
+          <Col>
+            <RequestBox />
+          </Col>
+        </Row>
       ) : (
         <>
           <Row>
@@ -48,6 +41,11 @@ function Dashboard() {
           </Row>
         </>
       )}
+      <Row>
+        <Col>
+          <MessageBox />
+        </Col>
+      </Row>
       <Row className='mb-3'>
         <Col>
           <EditBox />

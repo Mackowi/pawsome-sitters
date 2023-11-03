@@ -2,25 +2,6 @@ import PetOwner from '../models/PetOwnerModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
 
 // desc: Get all pet owners
-// route: GET /api/petowners/public
-// access: Public
-const getPetOwnersPub = asyncHandler(async (req, res) => {
-  const petOwners = await PetOwner.find(
-    {},
-    {
-      address: 0,
-      phone: 0,
-    }
-  )
-  if (!petOwners) {
-    res.status(404)
-    throw new Error('Not found any pet owners')
-  }
-
-  res.status(200).json(petOwners)
-})
-
-// desc: Get all pet owners
 // route: GET /api/petowners
 // access: Private
 const getPetOwners = asyncHandler(async (req, res) => {
@@ -113,8 +94,8 @@ const addPet = asyncHandler(async (req, res) => {
   res.status(201).json(petOwner)
 })
 
-// desc: Update pet data
-// route: PUT /api/petowners/pets/:id
+// desc: Delete pet data
+// route: DELETE /api/petowners/pets/:id
 // access: Private
 const deletePet = asyncHandler(async (req, res) => {
   const petId = req.params.id
@@ -165,7 +146,6 @@ const updatePet = asyncHandler(async (req, res) => {
 })
 
 export {
-  getPetOwnersPub,
   getPetOwners,
   getPetOwnerByUserId,
   getPetOwnerById,

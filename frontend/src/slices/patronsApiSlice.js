@@ -56,7 +56,7 @@ export const patronsApiSlice = apiSlice.injectEndpoints({
     }),
     getPatronsAvailability: builder.query({
       query: (patronId) => ({
-        url: `${SERVICE_REQUESTS_URL}/${patronId}`,
+        url: `${SERVICE_REQUESTS_URL}/patron/${patronId}`,
       }),
       keepUnusedDataFor: 5,
     }),

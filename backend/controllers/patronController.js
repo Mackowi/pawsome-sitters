@@ -3,33 +3,6 @@ import asyncHandler from '../middleware/asyncHandler.js'
 import calculateDistance from '../utils/calculateDistance.js'
 
 // desc: Get all patrons
-// route: GET /api/patrons/public
-// access: Public
-const getPatronsPub = asyncHandler(async (req, res) => {
-  const patrons = await Patron.find(
-    {},
-    {
-      address: 0,
-      phone: 0,
-      gender: 0,
-      reviews: 0,
-      acceptedPets: 0,
-      service: 0,
-      avgRating: 0,
-      ratingCount: 0,
-      createdAt: 0,
-      updatedAt: 0,
-    }
-  )
-  if (!patrons) {
-    res.status(404)
-    throw new Error('Not found any patrons')
-  }
-
-  res.status(200).json(patrons)
-})
-
-// desc: Get all patrons
 // route: GET /api/patrons
 // access: Private
 const getPatrons = asyncHandler(async (req, res) => {
@@ -135,7 +108,6 @@ const updatePatron = asyncHandler(async (req, res) => {
 })
 
 export {
-  getPatronsPub,
   getPatrons,
   getPatronById,
   getPatronByUserId,

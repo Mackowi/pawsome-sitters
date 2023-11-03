@@ -59,6 +59,12 @@ export const petOwnersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getPetOwnerServiceRequests: builder.query({
+      query: (petOwnerId) => ({
+        url: `${SERVICE_REQUESTS_URL}/petowner/${petOwnerId}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 })
 
@@ -71,4 +77,5 @@ export const {
   useRemovePetMutation,
   useUpdatePetMutation,
   useAddServiceRequestMutation,
+  useGetPetOwnerServiceRequestsQuery,
 } = petOwnersApiSlice

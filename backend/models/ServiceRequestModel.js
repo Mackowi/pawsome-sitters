@@ -38,6 +38,9 @@ const ServiceRequestSchema = new mongoose.Schema({
   fulfilled: {
     type: Boolean,
   },
+  reviewed: {
+    type: Boolean,
+  },
 })
 
 ServiceRequestSchema.pre('save', function (next) {

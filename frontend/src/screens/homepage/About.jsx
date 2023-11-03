@@ -6,7 +6,7 @@ import Img3 from '../../assets/images/about3.jpg'
 function About() {
   return (
     <Container>
-      <Row className='pt-5'>
+      <Row className='py-5'>
         <h2 className='text-center text-primary fw-bold mb-4 '>About Us</h2>
         <p>
           Welcome to Pawsome Sitters, where our passion for pets drives
@@ -37,11 +37,11 @@ function About() {
         </p>
       </Row>
 
-      <Row className='bg-primary-light pt-5 mb-5 rounded-4 px-3'>
+      <Row className='bg-primary-light py-5 mb-5 rounded-4 px-3'>
         <h2 className='text-center text-primary fw-bold mb-5 '>Who Are We</h2>
         <Row className='mb-4'>
           <Col md={6} className='d-flex flex-column justify-content-center'>
-            <h4 className='text-primary text-center text-md-end'>
+            <h4 className='text-primary text-center text-md-end fw-bold'>
               Our Collective Passion
             </h4>
             <p className=' text-center text-md-end'>
@@ -60,7 +60,7 @@ function About() {
             md={6}
             className='d-flex flex-column justify-content-center order-md-2'
           >
-            <h4 className='text-primary text-center text-md-start'>
+            <h4 className='text-primary text-center text-md-start fw-bold'>
               Why We Do It
             </h4>
             <p className='text-center text-md-start'>
@@ -76,7 +76,7 @@ function About() {
         </Row>
         <Row className='mb-2'>
           <Col md={6} className='d-flex flex-column justify-content-center'>
-            <h4 className='text-primary text-center text-md-end'>
+            <h4 className='text-primary text-center text-md-end fw-bold'>
               Our commitment
             </h4>
             <p className='text-center text-md-end'>

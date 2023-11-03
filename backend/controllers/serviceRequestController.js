@@ -1,24 +1,24 @@
 import ServiceRequest from '../models/ServiceRequestModel.js'
 import asyncHandler from '../middleware/asyncHandler.js'
 
-// // desc: Get all serv req
-// // route: GET /api/service
-// // access: Private/Admin
-// const getServiceRequests = asyncHandler(async (req, res) => {
-//   const servReq = await ServiceRequest.find({})
-//   if (!servReq) {
-//     res.status(404)
-//     throw new Error('Not found any service requests')
-//   }
-
-//   res.status(200).json(servReq)
-// })
-
 // desc: Get serv req for patron
-// route: GET /api/service/:patronId
+// route: GET /api/service/patron/:patronId
 // access: Private
 const getPatronServiceRequests = asyncHandler(async (req, res) => {
   const servReq = await ServiceRequest.find({ patron: req.params.patronId })
+  if (!servReq) {
+    res.status(404)
+    throw new Error('Not found any service requests')
+  }
+
+  res.status(200).json(servReq)
+})
+
+// desc: Get serv req for patron
+// route: GET /api/service/petowner/:petOwnerId
+// access: Private
+const getPetOwnerServiceRequests = asyncHandler(async (req, res) => {
+  const servReq = await ServiceRequest.find({ petOwner: req.params.petOwnerId })
   if (!servReq) {
     res.status(404)
     throw new Error('Not found any service requests')
@@ -70,4 +70,9 @@ const updateServiceRequest = asyncHandler(async (req, res) => {
   res.status(200).json(updatedServReq)
 })
 
-export { createServiceRequest, getPatronServiceRequests, updateServiceRequest }
+export {
+  createServiceRequest,
+  getPatronServiceRequests,
+  getPetOwnerServiceRequests,
+  updateServiceRequest,
+}

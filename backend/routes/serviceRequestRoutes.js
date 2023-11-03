@@ -3,6 +3,7 @@ import { protect } from '../middleware/authMiddleware.js'
 import {
   createServiceRequest,
   getPatronServiceRequests,
+  getPetOwnerServiceRequests,
   updateServiceRequest,
 } from '../controllers/serviceRequestController.js'
 
@@ -13,6 +14,7 @@ router
   .all(protect)
   .post(createServiceRequest)
   .put(updateServiceRequest)
-router.get('/:patronId', protect, getPatronServiceRequests)
+router.get('/patron/:patronId', protect, getPatronServiceRequests)
+router.get('/petowner/:petOwnerId', protect, getPetOwnerServiceRequests)
 
 export default router

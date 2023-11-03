@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  getPatronsPub,
   getPatrons,
   getPatronById,
   getPatronByUserId,
@@ -12,7 +11,6 @@ import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.get('/public', getPatronsPub)
 router
   .route('/')
   .get(protect, getPatrons)
