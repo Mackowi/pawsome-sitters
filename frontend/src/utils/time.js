@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, Interval } from 'luxon'
 
 const timeMarks = {
   0: '0:00',
@@ -46,9 +46,45 @@ const calculateValuesForHours = (hours) => {
   return result
 }
 
+const calculateTimeLeft = (serviceStartTime) => {
+  const now = DateTime.local()
+  const startTime = DateTime.fromISO(serviceStartTime)
+  const interval = Interval.fromDateTimes(now, startTime)
+
+  if (interval.invalid) {
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    }
+  }
+
+  const { days, hours, minutes, seconds } = interval
+    .toDuration(['days', 'hours', 'minutes', 'seconds'])
+    .toObject()
+
+  return {
+    days: days,
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+  }
+}
+
+const formatTimeLeft = (time) => {
+  const { hours, minutes, seconds } = time
+  const roundedSeconds = Math.floor(seconds)
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${roundedSeconds.toString().padStart(2, '0')}`
+}
+
 export {
   timeMarks,
   getCurrentHour,
   calculateHourFromKey,
   calculateValuesForHours,
+  calculateTimeLeft,
+  formatTimeLeft,
 }

@@ -29,7 +29,7 @@ function Dashboard() {
         </Row>
       ) : (
         <>
-          <Row>
+          <Row className='mt-3'>
             <Col>
               <SearchMap />
             </Col>
@@ -41,11 +41,6 @@ function Dashboard() {
           </Row>
         </>
       )}
-      <Row>
-        <Col>
-          <MessageBox />
-        </Col>
-      </Row>
       <Row className='mb-3'>
         <Col>
           <EditBox />

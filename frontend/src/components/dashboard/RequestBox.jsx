@@ -4,11 +4,14 @@ import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { useGetPatronsAvailabilityQuery } from '../../slices/patronsApiSlice'
 import RequestBoxEntry from './RequestBoxEntry'
+import { compareStartDates, formatDateTimeToDisplay } from '../../utils/date'
+import CountdownTimer from './CountdownTimer'
 
 function RequestBox() {
   const { patronInfo } = useSelector((state) => state.patron)
 
   const [pendingRequests, setPendingRequests] = useState([])
+  const [upcomingService, setUpcomingService] = useState(null)
 
   const { data: bookedServicesForPatron, refetch } =
     useGetPatronsAvailabilityQuery(patronInfo._id)
@@ -18,27 +21,63 @@ function RequestBox() {
       const requestsToAccept = bookedServicesForPatron.filter(
         (request) => request.accepted === null
       )
+      console.log(bookedServicesForPatron)
       setPendingRequests(requestsToAccept)
+      const upcomingServices = bookedServicesForPatron.filter(
+        (request) => request.accepted === true
+      )
+      const sortedServices = upcomingServices.slice().sort(compareStartDates)
+      setUpcomingService(sortedServices[0])
     }
   }, [bookedServicesForPatron])
 
   return (
     <Card className='p-3 my-2 border-primary bg-primary-light border-3 request-box text-center'>
-      <h2 className='pb-1 text-primary fw-bold'>
+      <h2 className='text-primary fw-bold'>
         <FaBusinessTime className='mb-2' /> Upcoming service
       </h2>
-      <Row className='text-start d-flex justify-content-center mb-1 '>
-        <Col>
-          <h1>Requuest bla bla</h1>
-        </Col>
-      </Row>
-      <h2 className='pb-1 text-primary fw-bold'>
+      {upcomingService ? (
+        <Row className='mx-5 mb-1'>
+          <Card className='p-3 text-start d-flex '>
+            <div className='d-flex justify-content-around mb-3'>
+              <h5>
+                Type of service: <strong>{upcomingService.service}</strong>
+              </h5>
+              <h5>
+                {upcomingService.pets.length > 1 ? (
+                  <span>
+                    Pets: <strong>{upcomingService.pets.join(', ')}</strong>
+                  </span>
+                ) : (
+                  <span>
+                    Pet: <strong>{upcomingService.pets[0]}</strong>
+                  </span>
+                )}
+              </h5>
+            </div>
+            <p className='text-center mb-0'>
+              Beggining of service:{' '}
+              {formatDateTimeToDisplay(upcomingService.startDate)}
+            </p>
+            <p className='text-center mb-0'>
+              End of service: {formatDateTimeToDisplay(upcomingService.endDate)}
+            </p>
+            <p className='mb-0 d-flex justify-content-center'>
+              Service is starting in:
+              <CountdownTimer serviceStartTime={upcomingService.startDate} />
+            </p>
+          </Card>
+        </Row>
+      ) : (
+        <h5 className='text-center '>You have no upcoming service</h5>
+      )}
+      <h2 className='text-primary fw-bold mt-3'>
         <FaPersonCircleQuestion className='mb-2' /> Pending Requests
       </h2>
-      <Row className='text-start d-flex justify-content-center mb-1 '>
-        <Col>
-          {pendingRequests.length ? (
-            <div className='list-group request-box-list'>
+      {pendingRequests.length ? (
+        <Row className='mx-5'>
+          <Card className='px-0'>
+            <div className='list-group request-box-list '>
               {pendingRequests.map((service, index) => (
                 <RequestBoxEntry
                   key={index}
@@ -47,11 +86,11 @@ function RequestBox() {
                 />
               ))}
             </div>
-          ) : (
-            <h5 className='text-center my-3'>There are no requests to check</h5>
-          )}
-        </Col>
-      </Row>
+          </Card>
+        </Row>
+      ) : (
+        <h5 className='text-center'>There are no requests to check</h5>
+      )}
     </Card>
   )
 }

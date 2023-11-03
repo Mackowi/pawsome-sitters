@@ -170,6 +170,12 @@ const correctStartDateTime = (startTime, date) => {
   return true
 }
 
+const compareStartDates = (a, b) => {
+  const dateA = new Date(a.startDate)
+  const dateB = new Date(b.startDate)
+  return dateA - dateB
+}
+
 export {
   formatDatesToDisplay,
   formatDateTimeToDisplay,
@@ -177,4 +183,5 @@ export {
   isOverlapping,
   reccuranceHelper,
   correctStartDateTime,
+  compareStartDates,
 }

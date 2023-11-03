@@ -40,6 +40,7 @@ const ServiceRequestSchema = new mongoose.Schema({
   },
   reviewed: {
     type: Boolean,
+    default: false,
   },
 })
 

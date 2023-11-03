@@ -209,8 +209,11 @@ function SearchMap() {
                     }}
                   >
                     <Popup>
-                      <Link to={`/patrons/${patron._id}`}>
-                        <p>{patron.firstName}'s profile</p>
+                      <Link
+                        to={`/patrons/${patron._id}`}
+                        style={{ color: 'black' }}
+                      >
+                        <p>Check {patron.firstName} profile</p>
                       </Link>
                     </Popup>
                   </Marker>
