@@ -330,3 +330,10 @@ button.bg-primary-light:focus {
 a.text-primary-light:hover, a.text-primary-light:focus {
   color: $primary_light_t2 !important;
 }
+
+/* MD breakpoint*/
+@media (min-width: 768px) {
+  /* CUSTOM WIDTHS */
+  .w-md-25 { width: 25%!important; }
+  .w-md-15 { width: 15%!important; }
+}

@@ -32,18 +32,18 @@ function RequestBox() {
   }, [bookedServicesForPatron])
 
   return (
-    <Card className='p-3 my-2 border-primary bg-primary-light border-3 request-box text-center'>
+    <Card className='p-3 my-2 border-primary bg-primary-light border-3  text-center'>
       <h2 className='text-primary fw-bold'>
         <FaBusinessTime className='mb-2' /> Upcoming service
       </h2>
       {upcomingService ? (
         <Row className='mx-5 mb-1'>
-          <Card className='p-3 text-start d-flex '>
-            <div className='d-flex justify-content-around mb-3'>
-              <h5>
+          <Card className='p-3 text-center d-flex '>
+            <div className='d-flex justify-content-around mt-3 gap-2'>
+              <h5 className='border border-primary border-3 rounded-2 py-2 p-md-3'>
                 Type of service: <strong>{upcomingService.service}</strong>
               </h5>
-              <h5>
+              <h5 className='border border-primary border-3 rounded-2 py-2 p-md-3'>
                 {upcomingService.pets.length > 1 ? (
                   <span>
                     Pets: <strong>{upcomingService.pets.join(', ')}</strong>
@@ -55,12 +55,17 @@ function RequestBox() {
                 )}
               </h5>
             </div>
-            <p className='text-center mb-0'>
-              Beggining of service:{' '}
-              {formatDateTimeToDisplay(upcomingService.startDate)}
+            <p className='text-center mb-0 mt-3'>
+              Begining of service:{' '}
+              <span className='fw-bold'>
+                {formatDateTimeToDisplay(upcomingService.startDate)}
+              </span>
             </p>
             <p className='text-center mb-0'>
-              End of service: {formatDateTimeToDisplay(upcomingService.endDate)}
+              End of service:{' '}
+              <span className='fw-bold'>
+                {formatDateTimeToDisplay(upcomingService.endDate)}
+              </span>
             </p>
             <p className='mb-0 d-flex justify-content-center'>
               Service is starting in:
@@ -76,8 +81,8 @@ function RequestBox() {
       </h2>
       {pendingRequests.length ? (
         <Row className='mx-5'>
-          <Card className='px-0'>
-            <div className='list-group request-box-list '>
+          <Card className='px-0 '>
+            <div className='list-group request-box-list'>
               {pendingRequests.map((service, index) => (
                 <RequestBoxEntry
                   key={index}

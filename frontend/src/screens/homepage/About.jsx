@@ -37,14 +37,14 @@ function About() {
         </p>
       </Row>
 
-      <Row className='bg-primary-light py-5 mb-5 rounded-4 px-3'>
-        <h2 className='text-center text-primary fw-bold mb-5 '>Who Are We</h2>
+      <Row className='bg-primary py-5 mb-5 rounded-4 px-3'>
+        <h2 className='text-center text-white fw-bold mb-5 '>Who Are We</h2>
         <Row className='mb-4'>
           <Col md={6} className='d-flex flex-column justify-content-center'>
-            <h4 className='text-primary text-center text-md-end fw-bold'>
+            <h4 className='text-white text-center text-md-end fw-bold'>
               Our Collective Passion
             </h4>
-            <p className=' text-center text-md-end'>
+            <p className='text-white text-center text-md-end'>
               We're united by the goal of enhancing the lives of pets and pet
               owners alike. Pawsome Sitters is more than a service it's a
               community driven by compassion and a commitment to the well-being
@@ -60,10 +60,10 @@ function About() {
             md={6}
             className='d-flex flex-column justify-content-center order-md-2'
           >
-            <h4 className='text-primary text-center text-md-start fw-bold'>
+            <h4 className='text-white text-center text-md-start fw-bold'>
               Why We Do It
             </h4>
-            <p className='text-center text-md-start'>
+            <p className='text-white text-center text-md-start'>
               From wagging tails to contented purrs, the joy pets bring is
               unmatched. We're driven to ensure pets continue to spread
               happiness, while owners have peace of mind knowing their
@@ -76,10 +76,10 @@ function About() {
         </Row>
         <Row className='mb-2'>
           <Col md={6} className='d-flex flex-column justify-content-center'>
-            <h4 className='text-primary text-center text-md-end fw-bold'>
+            <h4 className='text-white text-center text-md-end fw-bold'>
               Our commitment
             </h4>
-            <p className='text-center text-md-end'>
+            <p className='text-white text-center text-md-end'>
               With backgrounds spanning entrepreneurship, animal advocacy, and
               technology, we've woven a tapestry of expertise. Our commitment to
               pet welfare is unwavering, making Pawsome Sitters a testament to

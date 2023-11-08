@@ -18,7 +18,7 @@ function CountdownTimer({ serviceStartTime }) {
   }, [serviceStartTime])
 
   return (
-    <span className='ms-1 text-decoration-underline fw-bold'>
+    <span className='ms-1 text-decoration-underline fw-bold text-primary'>
       {formatTimeLeft(timeLeft)}
     </span>
   )

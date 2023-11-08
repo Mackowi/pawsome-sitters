@@ -1,9 +1,10 @@
-import { Button } from 'react-bootstrap'
+import { Col, Row, Button } from 'react-bootstrap'
 import { useGetPetOwnerQuery } from '../../slices/petOwnersApiSlice'
 import { useHandleServiceRequestMutation } from '../../slices/patronsApiSlice'
 import Loader from '../../components/Loader'
 import { formatDateTimeToDisplay } from '../../utils/date'
 import { toast } from 'react-toastify'
+import { FaCarrot, FaCat, FaDog } from 'react-icons/fa6'
 
 function RequestBoxEntry({ service, refetch }) {
   const { data: petOwner, isLoading } = useGetPetOwnerQuery(service.petOwner)
@@ -28,10 +29,10 @@ function RequestBoxEntry({ service, refetch }) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className='list-group-item list-group-item-action'>
-          <div className='d-flex w-100 justify-content-between align-items-center'>
-            <div>
-              <p className=''>
+        <Col className='list-group-item list-group-item-action p-3 p-md-4 request-box border-primary border-2'>
+          <Row className='gap-2'>
+            <div className='d-flex justify-content-around align-items-center'>
+              <p>
                 From:{' '}
                 {
                   <strong>
@@ -39,28 +40,42 @@ function RequestBoxEntry({ service, refetch }) {
                   </strong>
                 }
               </p>
-              <div className='d-flex gap-3 align-items-center'>
+              <div className='d-flex align-items-center gap-2'>
                 <p className='mb-0'>Pets:</p>
-                {service.pets.map((petName) => {
-                  const pet = petOwner.pets.find((pet) => pet.name === petName)
-                  return (
-                    <div
-                      key={petName}
-                      className='border border-primary border-3 p-2 rounded-2'
-                    >
-                      {pet && (
-                        <p className='mb-0'>
-                          {pet.name} - {pet.type}
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
+                <div className='d-flex gap-3 align-items-center flex-column flex-md-row'>
+                  {service.pets.map((petName) => {
+                    const pet = petOwner.pets.find(
+                      (pet) => pet.name === petName
+                    )
+                    return (
+                      <div
+                        key={petName}
+                        className='border border-primary border-3 p-2 rounded-2'
+                      >
+                        {pet && (
+                          <div
+                            className='d-flex gap-2 mx-2 align-items-center fw-bold'
+                            key={petName}
+                          >
+                            {pet.type === 'dog' ? (
+                              <FaDog />
+                            ) : pet.type === 'cat' ? (
+                              <FaCat />
+                            ) : (
+                              <FaCarrot />
+                            )}
+                            <p className='mb-0'>{pet.name}</p>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-            <div className='d-flex flex-column'>
+            <div className='d-flex flex-column '>
               <small>
-                Start:{' '}
+                Beginning:{' '}
                 <strong>{formatDateTimeToDisplay(service.startDate)}</strong>
               </small>
               <small>
@@ -68,9 +83,9 @@ function RequestBoxEntry({ service, refetch }) {
                 End: <strong>{formatDateTimeToDisplay(service.endDate)}</strong>
               </small>
             </div>
-            <div className='d-flex gap-2 '>
+            <div className='d-flex justify-content-around justify-content-md-around'>
               <Button
-                className='fw-bold'
+                className='fw-bold w-md-25'
                 onClick={() => {
                   submitHandler(true)
                 }}
@@ -78,7 +93,7 @@ function RequestBoxEntry({ service, refetch }) {
                 Accept
               </Button>
               <Button
-                className='btn btn-outline-primary fw-bold'
+                className='btn btn-outline-primary fw-bold w-md-25 border-3'
                 variant='primary-outline'
                 onClick={() => {
                   submitHandler(false)
@@ -87,9 +102,9 @@ function RequestBoxEntry({ service, refetch }) {
                 Decline
               </Button>
             </div>
-          </div>
+          </Row>
           <div className='d-flex w-75 justify-content-between'></div>
-        </div>
+        </Col>
       )}
     </>
   )
