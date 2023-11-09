@@ -1,6 +1,6 @@
 import { Row, Col, Card, Form, Button, Badge } from 'react-bootstrap'
 import { FaHistory } from 'react-icons/fa'
-import Rating from './Rating'
+import Rating from './RatingStars'
 import { useState } from 'react'
 import { useGetPetOwnerServiceRequestsQuery } from '../../slices/petOwnersApiSlice'
 import { useCreateReviewMutation } from '../../slices/reviewsApiSlice'
@@ -11,6 +11,7 @@ import { useFormik } from 'formik'
 import { reviewSchema } from '../../validationSchemas'
 import { toast } from 'react-toastify'
 import Loader from '../../components/Loader'
+import { DateTime } from 'luxon'
 
 function HistoryBox() {
   const { petOwnerInfo } = useSelector((state) => state.petOwner)
@@ -71,8 +72,9 @@ function HistoryBox() {
   })
 
   if (petOwnerServiceRequests) {
+    const now = DateTime.local()
     const servicesToReview = petOwnerServiceRequests.filter(
-      (service) => !service.reviewed
+      (service) => !service.reviewed && DateTime.fromISO(service.endDate) < now
     )
     if (!servicesToReview.length) {
       return <></>

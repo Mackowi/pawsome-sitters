@@ -46,7 +46,7 @@ ReviewSchema.statics.getAverageRating = async function (patrondId) {
   ])
   try {
     const patron = await this.model('Patron').findByIdAndUpdate(patrondId, {
-      avgRating: obj[0].avgRating,
+      avgRating: obj[0].avgRating.toFixed(1),
     })
   } catch (error) {
     console.log(error)

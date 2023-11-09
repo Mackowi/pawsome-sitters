@@ -1,7 +1,7 @@
 import { FaStar, FaRegStar } from 'react-icons/fa'
 import { useState } from 'react'
 
-function Rating({ rating, setRating }) {
+function RatingStars({ rating, setRating }) {
   const [hoverRating, setHoverRating] = useState(0)
 
   const handleMouse = (starNr, e) => {
@@ -43,4 +43,4 @@ function Rating({ rating, setRating }) {
     </div>
   )
 }
-export default Rating
+export default RatingStars

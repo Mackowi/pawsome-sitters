@@ -26,6 +26,11 @@ const formatDateTimeToDisplay = (dateTime) => {
   return luxonDate.toFormat('HH:mm dd.LL.yyyy')
 }
 
+const formatDateToDisplay = (dateTime) => {
+  const luxonDate = DateTime.fromISO(dateTime)
+  return luxonDate.toFormat('dd.LL.yyyy')
+}
+
 const processDates = (startTime, endTime, dates, reccuring) => {
   const combinedDatesTimes = []
   if (Array.isArray(dates) && dates.length === 2) {
@@ -184,4 +189,5 @@ export {
   reccuranceHelper,
   correctStartDateTime,
   compareStartDates,
+  formatDateToDisplay,
 }
