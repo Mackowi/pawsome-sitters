@@ -11,6 +11,7 @@ import patronRoutes from './routes/patronRoutes.js'
 import petOwnerRoutes from './routes/petOwnerRoutes.js'
 import serviceRequestRoutes from './routes/serviceRequestRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import reviewRoutes from './routes/reviewRoutes.js'
 import setupServiceWatcher from './utils/serviceWatcher.js'
 
 connectDB()
@@ -29,6 +30,7 @@ app.use('/api/patrons', patronRoutes)
 app.use('/api/petowners', petOwnerRoutes)
 app.use('/api/service', serviceRequestRoutes)
 app.use('/api/upload', uploadRoutes)
+app.use('/api/reviews', reviewRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

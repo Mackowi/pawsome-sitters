@@ -45,9 +45,6 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
     onSubmit: submitHandler,
   })
 
-  console.log(values)
-  console.log(errors)
-
   return (
     <Modal show={showAddPetModal} onHide={closeAddPetModal}>
       <Modal.Header closeButton>
@@ -224,7 +221,6 @@ function AddPetModal({ showAddPetModal, closeAddPetModal }) {
               disabled={isSubmitting || Object.keys(errors).length !== 0}
               type='submit'
               variant='primary'
-              // onClick={closeAddPetModal}
             >
               Create
             </Button>

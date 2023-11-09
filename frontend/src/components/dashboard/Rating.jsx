@@ -1,9 +1,8 @@
 import { FaStar, FaRegStar } from 'react-icons/fa'
 import { useState } from 'react'
 
-function Rating() {
+function Rating({ rating, setRating }) {
   const [hoverRating, setHoverRating] = useState(0)
-  const [rating, setRating] = useState(0)
 
   const handleMouse = (starNr, e) => {
     if (e.type === 'mouseenter') {

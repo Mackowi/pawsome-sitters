@@ -14,7 +14,7 @@ const getPatronServiceRequests = asyncHandler(async (req, res) => {
   res.status(200).json(servReq)
 })
 
-// desc: Get serv req for patron
+// desc: Get serv req for pet owner
 // route: GET /api/service/petowner/:petOwnerId
 // access: Private
 const getPetOwnerServiceRequests = asyncHandler(async (req, res) => {

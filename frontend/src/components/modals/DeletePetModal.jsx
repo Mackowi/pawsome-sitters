@@ -7,7 +7,7 @@ function DeletePetModal({
   confirmRemoval,
 }) {
   return (
-    <Modal show={showConfirmModal} onHide={closeConfirmModal}>
+    <Modal show={showConfirmModal} onHide={closeConfirmModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>Pet Removal</Modal.Title>
       </Modal.Header>

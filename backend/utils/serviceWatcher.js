@@ -1,16 +1,17 @@
 import cron from 'node-cron'
 import ServiceRequest from '../models/ServiceRequestModel.js'
+import { DateTime } from 'luxon'
 
 const setupServiceWatcher = () => {
   console.log(`Service Watcher is running`.magenta.underline)
   //  cron job that runs every minute
   cron.schedule('* * * * *', async () => {
-    const now = new Date()
+    const now = DateTime.local()
     try {
       // Find unfulfilled service requests where the end date and time are in the past
       const unfulfilledRequests = await ServiceRequest.find({
         fulfilled: false,
-        endDate: { $lt: now },
+        startDate: { $lt: now },
       })
       // Update the fulfilled status of the found service requests
       for (const request of unfulfilledRequests) {

@@ -12,12 +12,17 @@ export const ReviewSchema = new mongoose.Schema(
       required: true,
       ref: 'Petowner',
     },
+    serviceRequest: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'ServiceRequest',
+    },
     rating: {
       type: Number,
       required: true,
       default: 0,
     },
-    comment: {
+    description: {
       type: String,
       required: true,
     },
@@ -48,13 +53,23 @@ ReviewSchema.statics.getAverageRating = async function (patrondId) {
   }
 }
 
-// call get average cost after save
+// call getAverageRating after save
 ReviewSchema.post('save', function () {
   this.constructor.getAverageRating(this.patron)
 })
 
-// call get average cost after removal
+// call getAverageRating after removal
 ReviewSchema.pre('removed', function () {
+  this.constructor.getAverageRating(this.patron)
+})
+
+// update reviewed field in serviceRequest entry
+ReviewSchema.post('save', async function () {
+  await this.model('ServiceRequest').findOneAndUpdate(
+    { _id: this.serviceRequest },
+    { $set: { reviewed: true } }
+  )
+  // call the getAverageRating method
   this.constructor.getAverageRating(this.patron)
 })
 

@@ -89,20 +89,6 @@ const PatronSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
-    serviceRequests: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ServiceRequest',
-        required: true,
-      },
-    ],
-    reviews: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review',
-        required: true,
-      },
-    ],
   },
   { timestamps: true }
 )
@@ -119,6 +105,9 @@ PatronSchema.pre('save', async function (next) {
 })
 
 PatronSchema.pre('findOneAndUpdate', async function (next) {
+  if (!this._update.address) {
+    return
+  }
   const addressString = `${this._update.address.street} ${this._update.address.houseNr}${this._update.address.addition} ${this._update.address.city} ${this._update.address.postcode}`
   try {
     const location = await geocoder.geocode(addressString)
@@ -143,15 +132,15 @@ PatronSchema.statics.countRatings = async function (patron) {
   }
 }
 
-// // call get average cost after save
-// PatronSchema.post('save', function () {
-//   this.constructor.countRatings(this)
-// })
+// call get average cost after save
+PatronSchema.post('save', function () {
+  this.constructor.countRatings(this)
+})
 
-// // call get average cost after removal
-// PatronSchema.pre('removed', function () {
-//   this.constructor.countRatings(this)
-// })
+// call get average cost after removal
+PatronSchema.pre('removed', function () {
+  this.constructor.countRatings(this)
+})
 
 const Patron = mongoose.model('Patron', PatronSchema)
 

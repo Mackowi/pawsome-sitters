@@ -21,13 +21,14 @@ function RequestBox() {
       const requestsToAccept = bookedServicesForPatron.filter(
         (request) => request.accepted === null
       )
-      console.log(bookedServicesForPatron)
       setPendingRequests(requestsToAccept)
       const upcomingServices = bookedServicesForPatron.filter(
-        (request) => request.accepted === true
+        (request) => request.accepted === true && request.fulfilled !== true
       )
-      const sortedServices = upcomingServices.slice().sort(compareStartDates)
-      setUpcomingService(sortedServices[0])
+      const sortedUpcomingServices = upcomingServices
+        .slice()
+        .sort(compareStartDates)
+      setUpcomingService(sortedUpcomingServices[0])
     }
   }, [bookedServicesForPatron])
 

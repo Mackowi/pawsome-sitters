@@ -81,3 +81,8 @@ export const serviceRequestSchema = yup.object().shape({
     .oneOf(['walking', 'sitting', 'daycare'])
     .required('Please pick a service'),
 })
+
+export const reviewSchema = yup.object().shape({
+  description: yup.string().required('Please fill the description'),
+  rating: yup.number().required(`Please select rating for the review`),
+})
