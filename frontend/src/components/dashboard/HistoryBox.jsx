@@ -27,6 +27,10 @@ function HistoryBox() {
   const closeConfirmReviewModal = () => setShowConfirmReviewModal(false)
 
   const submitHandler = async () => {
+    if (!rating) {
+      toast.error('Please select rating by clicking on the star symbols.')
+      return
+    }
     try {
       const service = petOwnerServiceRequests.find(
         (req) => req._id === selectedService
@@ -65,6 +69,15 @@ function HistoryBox() {
     validationSchema: reviewSchema,
     onSubmit: submitHandler,
   })
+
+  if (petOwnerServiceRequests) {
+    const servicesToReview = petOwnerServiceRequests.filter(
+      (service) => !service.reviewed
+    )
+    if (!servicesToReview.length) {
+      return <></>
+    }
+  }
 
   return (
     <>

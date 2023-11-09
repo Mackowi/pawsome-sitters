@@ -27,7 +27,6 @@ function ConfirmReviewModal({
         <Button
           variant='primary'
           onClick={() => {
-            console.log('sending review...')
             submitHandler()
             closeConfirmReviewModal()
           }}
