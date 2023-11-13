@@ -11,12 +11,6 @@ function ReviewsBox() {
 
   const { data: reviews, isLoading } = useGetPatronReviewsQuery(patronInfo._id)
 
-  useEffect(() => {
-    if (reviews) {
-      reviews.forEach((review) => {})
-    }
-  }, [reviews, isLoading])
-
   return (
     <>
       {isLoading ? (

@@ -26,6 +26,7 @@ import {
   useGetPatronByIdQuery,
   useGetPatronsAvailabilityQuery,
 } from '../slices/patronsApiSlice'
+import { useGetPatronReviewsQuery } from '../slices/reviewsApiSlice'
 import { useAddServiceRequestMutation } from '../slices/petOwnersApiSlice'
 import Calendar from 'react-calendar'
 import '../assets/styles/calendar.css'
@@ -35,6 +36,7 @@ import ConfirmServiceRequestModal from '../components/modals/ConfirmServiceReque
 import DoubleTimeRangeSlider from '../components/sliders/DoubleTimeRangeSlider'
 import SingleTimeRangeSlider from '../components/sliders/SingleTimeRangeSlider'
 import Rating from '../components/Rating'
+import ReviewsModal from '../components/modals/ReviewsModal'
 import {
   formatDatesToDisplay,
   processDates,
@@ -54,6 +56,9 @@ function Patron() {
   const { data: bookedServicesForPatron } =
     useGetPatronsAvailabilityQuery(patronId)
 
+  const { data: reviews, isLoading: reviewsLoading } =
+    useGetPatronReviewsQuery(patronId)
+
   const [addServiceRequest] = useAddServiceRequestMutation()
 
   const [startTime, setStartTime] = useState(getCurrentHour())
@@ -63,8 +68,10 @@ function Patron() {
   const [serviceOverlapping, setServiceOverlapping] = useState(false)
   const [serviceRequests, setServiceRequests] = useState([])
   const [wrongStartDateTime, setWrongStartDateTime] = useState(false)
+
   const [showConfirmServiceRequestModal, setShowConfirmServiceRequestModal] =
     useState(false)
+  const [showReviewsModal, setShowReviewsModal] = useState(false)
 
   const navigate = useNavigate()
 
@@ -207,9 +214,21 @@ function Patron() {
                     </Col>
                   </Row>
                   <Row className='mt-5'>
-                    <Col className='d-flex justify-content-center'>
-                      <h4 className='mt-1 me-2'>Rating: </h4>
-                      <Rating view={true} avgRating={patron.avgRating} />
+                    <Col className='d-flex flex-column align-items-center'>
+                      <div className='d-flex'>
+                        <h4 className='mt-1 me-2'>Rating: </h4>
+                        <Rating view={true} avgRating={patron.avgRating} />
+                      </div>
+                      <h5
+                        className='text-decoration-underline reviews-link'
+                        onClick={() => setShowReviewsModal(true)}
+                      >
+                        {reviewsLoading ? (
+                          <Loader />
+                        ) : (
+                          `Based on ${reviews.length} reviews`
+                        )}
+                      </h5>
                     </Col>
                   </Row>
                   <Row className='text-center'>
@@ -548,6 +567,11 @@ function Patron() {
             checkAvailability={checkAvailability}
             submitHandler={submitHandler}
             info={{ patron }}
+          />
+          <ReviewsModal
+            showReviewsModal={showReviewsModal}
+            setShowReviewsModal={setShowReviewsModal}
+            reviews={reviews}
           />
         </>
       )}
